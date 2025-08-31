@@ -24,7 +24,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="BepInEx.Core" Version="5.*" />
-		<PackageReference Include="RiskOfRain2.GameLibs" Version="1.3.6-r.0" />
+		<PackageReference Include="RiskOfRain2.GameLibs" Version="1.3.9-r.0" />
 		<PackageReference Include="UnityEngine.Modules" Version="2021.3.33" />
 	</ItemGroup>
 
@@ -46,6 +46,9 @@
 	  </Reference>
 	  <Reference Include="R2API.Core">
 	    <HintPath>..\libs\R2API.Core.dll</HintPath>
+	  </Reference>
+	  <Reference Include="R2API.DamageType">
+	    <HintPath>..\libs\R2API.DamageType.dll</HintPath>
 	  </Reference>
 	  <Reference Include="R2API.Language">
 	    <HintPath>..\libs\R2API.Language.dll</HintPath>

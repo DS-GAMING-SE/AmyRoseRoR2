@@ -14,6 +14,9 @@ namespace Amy.Survivors.Amy
 
         public static GameObject bombExplosionEffect;
 
+        public static GameObject amyBoostFlashEffect;
+        public static GameObject amyBoostAuraEffect;
+
         // networked hit sounds
         public static NetworkSoundEventDef swordHitSoundEvent;
 
@@ -41,6 +44,13 @@ namespace Amy.Survivors.Amy
 
             swordSwingEffect = _assetBundle.LoadEffect("HenrySwordSwingEffect", true);
             swordHitImpactEffect = _assetBundle.LoadEffect("ImpactHenrySlash");
+
+            amyBoostFlashEffect = HedgehogUtils.Assets.CreateNewBoostFlash("AmyBoostFlash", 1, 1f,
+                new Color(1, 1, 1), AmySurvivor.amyColor, new Color(0.5f, 0.07f, 0.3f), AmySurvivor.amyColor);
+
+
+            amyBoostAuraEffect = HedgehogUtils.Assets.CreateNewBoostAura("AmyBoostAura", 1, 0.4f,
+                new Color(1, 1, 1), AmySurvivor.amyColor, new Color(0.5f, 0.07f, 0.3f), AmySurvivor.amyColor);
         }
 
         private static void CreateBombExplosionEffect()

@@ -21,6 +21,7 @@ namespace Amy
     [BepInDependency("com.bepis.r2api.skins", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.bepis.r2api.sound", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency(HedgehogUtils.HedgehogUtilsPlugin.PluginGUID, BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency("com.bepis.r2api.damagetype", BepInDependency.DependencyFlags.HardDependency)]
 
     [BepInDependency("com.weliveinasociety.CustomEmotesAPI", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency(LookingGlass.PluginInfo.PLUGIN_GUID, BepInDependency.DependencyFlags.SoftDependency)]

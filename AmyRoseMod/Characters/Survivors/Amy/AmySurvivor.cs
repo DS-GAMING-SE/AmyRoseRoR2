@@ -214,6 +214,10 @@ namespace Amy.Survivors.Amy
             Skills.AddSkillsToFamily(passiveGenericSkill.skillFamily, passiveSkillDef1);*/
             #endregion
         }
+        public static SteppedSkillDef primaryMelee;
+        public static SkillDef secondarySmash;
+        public static AmySkillDefs.AmyBoostSkillDef utilityBoost;
+        public static SkillDef specialMultilock;
 
         //if this is your first look at skilldef creation, take a look at Secondary first
         private void AddPrimarySkills()
@@ -222,21 +226,21 @@ namespace Amy.Survivors.Amy
 
             //the primary skill is created using a constructor for a typical primary
             //it is also a SteppedSkillDef. Custom Skilldefs are very useful for custom behaviors related to casting a skill. see ror2's different skilldefs for reference
-            SteppedSkillDef primarySkillDef1 = Skills.CreateSkillDef<SteppedSkillDef>(new SkillDefInfo
+            primaryMelee = Skills.CreateSkillDef<SteppedSkillDef>(new SkillDefInfo
                 (
-                    "HenrySlash",
-                    AMY_PREFIX + "PRIMARY_SLASH_NAME",
-                    AMY_PREFIX + "PRIMARY_SLASH_DESCRIPTION",
+                    "AmyPrimaryHammer",
+                    AMY_PREFIX + "PRIMARY_HAMMER_NAME",
+                    AMY_PREFIX + "PRIMARY_HAMMER_DESCRIPTION",
                     assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
-                    new EntityStates.SerializableEntityStateType(typeof(SkillStates.SlashCombo)),
+                    new EntityStates.SerializableEntityStateType(typeof(SkillStates.PrimaryHammer)),
                     "Weapon",
                     true
                 ));
-            //custom Skilldefs can have additional fields that you can set manually
-            primarySkillDef1.stepCount = 2;
-            primarySkillDef1.stepGraceDuration = 0.5f;
+            primaryMelee.stepCount = 4;
+            primaryMelee.stepGraceDuration = 0.5f;
+            //primaryMelee.keywordTokens = new string[] { "KEYWORD_AGILE", HedgehogUtils.Language.launchKeywordToken };
 
-            Skills.AddPrimarySkills(bodyPrefab, primarySkillDef1);
+            Skills.AddPrimarySkills(bodyPrefab, primaryMelee);
         }
 
         private void AddSecondarySkills()
@@ -244,17 +248,17 @@ namespace Amy.Survivors.Amy
             Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, SkillSlot.Secondary);
 
             //here is a basic skill def with all fields accounted for
-            SkillDef secondarySkillDef1 = Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef secondarySmash = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "HenryGun",
-                skillNameToken = AMY_PREFIX + "SECONDARY_GUN_NAME",
-                skillDescriptionToken = AMY_PREFIX + "SECONDARY_GUN_DESCRIPTION",
-                keywordTokens = new string[] { "KEYWORD_AGILE" },
+                skillNameToken = AMY_PREFIX + "SECONDARY_HAMMER_SMASH_NAME",
+                skillDescriptionToken = AMY_PREFIX + "SECONDARY_HAMMER_SMASH_DESCRIPTION",
+                //keywordTokens = new string[] { HedgehogUtils.Language.launchKeywordToken },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Shoot)),
-                activationStateMachineName = "Weapon2",
-                interruptPriority = EntityStates.InterruptPriority.Skill,
+                activationStateMachineName = "Weapon",
+                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
                 baseRechargeInterval = 1f,
                 baseMaxStock = 1,
@@ -266,17 +270,17 @@ namespace Amy.Survivors.Amy
                 resetCooldownTimerOnUse = false,
                 fullRestockOnAssign = true,
                 dontAllowPastMaxStocks = false,
-                mustKeyPress = false,
-                beginSkillCooldownOnSkillEnd = false,
+                mustKeyPress = true,
+                beginSkillCooldownOnSkillEnd = true,
 
                 isCombatSkill = true,
-                canceledFromSprinting = false,
-                cancelSprintingOnActivation = false,
+                canceledFromSprinting = true,
+                cancelSprintingOnActivation = true,
                 forceSprintDuringState = false,
 
             });
 
-            Skills.AddSecondarySkills(bodyPrefab, secondarySkillDef1);
+            Skills.AddSecondarySkills(bodyPrefab, secondarySmash);
         }
 
         private void AddUtiitySkills()
@@ -284,23 +288,23 @@ namespace Amy.Survivors.Amy
             Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, SkillSlot.Utility);
 
             //here's a skilldef of a typical movement skill.
-            SkillDef utilitySkillDef1 = Skills.CreateSkillDef(new SkillDefInfo
+            utilityBoost = Skills.CreateSkillDef<AmySkillDefs.AmyBoostSkillDef>(new SkillDefInfo
             {
-                skillName = "HenryRoll",
-                skillNameToken = AMY_PREFIX + "UTILITY_ROLL_NAME",
-                skillDescriptionToken = AMY_PREFIX + "UTILITY_ROLL_DESCRIPTION",
+                skillName = "AmyBoost",
+                skillNameToken = AMY_PREFIX + "UTILITY_BOOST_NAME",
+                skillDescriptionToken = AMY_PREFIX + "UTILITY_BOOST_DESCRIPTION",
                 skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
 
-                activationState = new EntityStates.SerializableEntityStateType(typeof(Roll)),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(Boost)),
                 activationStateMachineName = "Body",
                 interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
-                baseRechargeInterval = 4f,
+                baseRechargeInterval = 0f,
                 baseMaxStock = 1,
 
-                rechargeStock = 1,
+                rechargeStock = 0,
                 requiredStock = 1,
-                stockToConsume = 1,
+                stockToConsume = 0,
 
                 resetCooldownTimerOnUse = false,
                 fullRestockOnAssign = true,
@@ -313,8 +317,12 @@ namespace Amy.Survivors.Amy
                 cancelSprintingOnActivation = false,
                 forceSprintDuringState = true,
             });
+            utilityBoost.boostIdleState = new EntityStates.SerializableEntityStateType(typeof(BoostIdle));
+            utilityBoost.brakeState = new EntityStates.SerializableEntityStateType(typeof(Brake));
+            utilityBoost.boostHUDColor = amyColor;
+            //utilityBoost.hammerSwingState = new EntityStates.SerializableEntityStateType(typeof(BoostIdle));
 
-            Skills.AddUtilitySkills(bodyPrefab, utilitySkillDef1);
+            Skills.AddUtilitySkills(bodyPrefab, utilityBoost);
         }
 
         private void AddSpecialSkills()
@@ -322,11 +330,11 @@ namespace Amy.Survivors.Amy
             Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, SkillSlot.Special);
 
             //a basic skill. some fields are omitted and will just have default values
-            SkillDef specialSkillDef1 = Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef specialMultilock = Skills.CreateSkillDef(new SkillDefInfo
             {
-                skillName = "HenryBomb",
-                skillNameToken = AMY_PREFIX + "SPECIAL_BOMB_NAME",
-                skillDescriptionToken = AMY_PREFIX + "SPECIAL_BOMB_DESCRIPTION",
+                skillName = "AmyMultiLock",
+                skillNameToken = AMY_PREFIX + "SPECIAL_MULTILOCK_NAME",
+                skillDescriptionToken = AMY_PREFIX + "SPECIAL_MULTILOCK_DESCRIPTION",
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ThrowBomb)),
@@ -334,13 +342,13 @@ namespace Amy.Survivors.Amy
                 activationStateMachineName = "Weapon2", interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,
-                baseRechargeInterval = 10f,
+                baseRechargeInterval = 8f,
 
                 isCombatSkill = true,
-                mustKeyPress = false,
+                mustKeyPress = true,
             });
 
-            Skills.AddSpecialSkills(bodyPrefab, specialSkillDef1);
+            Skills.AddSpecialSkills(bodyPrefab, specialMultilock);
         }
         #endregion skills
         

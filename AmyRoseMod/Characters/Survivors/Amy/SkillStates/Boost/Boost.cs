@@ -29,5 +29,14 @@ namespace Amy.Survivors.Amy.SkillStates
             }
             base.OnExit();
         }
+        public override GameObject GetFlashPrefab()
+        {
+            return AmyAssets.amyBoostFlashEffect;
+        }
+
+        public override GameObject GetAuraPrefab()
+        {
+            return AmyAssets.amyBoostAuraEffect;
+        }
     }
 }

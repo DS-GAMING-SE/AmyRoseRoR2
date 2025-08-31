@@ -1,6 +1,7 @@
 ﻿using Amy.Modules;
 using Amy.Survivors.Amy.Achievements;
 using LookingGlass.LookingGlassLanguage;
+using R2API;
 using System;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
@@ -49,23 +50,23 @@ namespace Amy.Survivors.Amy
             #endregion
 
             #region Primary
-            Language.Add(prefix + "PRIMARY_SLASH_NAME", "Sword");
-            Language.Add(prefix + "PRIMARY_SLASH_DESCRIPTION", Tokens.agilePrefix + $"Swing forward for <style=cIsDamage>{100f * AmyStaticValues.swordDamageCoefficient}% damage</style>.");
+            Language.Add(prefix + "PRIMARY_HAMMER_NAME", "Piko Piko Hammer");
+            Language.Add(prefix + "PRIMARY_HAMMER_DESCRIPTION", Tokens.agilePrefix + $"{Tokens.UtilityText("Launching")}. Swing your hammer for <style=cIsDamage>{100f * AmyStaticValues.primaryHammerDamageCoefficient}% damage</style>.");
             #endregion
 
             #region Secondary
-            Language.Add(prefix + "SECONDARY_GUN_NAME", "Handgun");
-            Language.Add(prefix + "SECONDARY_GUN_DESCRIPTION", Tokens.agilePrefix + $"Fire a handgun for <style=cIsDamage>{100f * AmyStaticValues.gunDamageCoefficient}% damage</style>.");
+            Language.Add(prefix + "SECONDARY_HAMMER_SMASH_NAME", $"Piko Piko Smash {Tokens.wipIcon}");
+            Language.Add(prefix + "SECONDARY_HAMMER_SMASH_DESCRIPTION", $"{Tokens.UtilityText("Launching")}. Charge a hammer swing dealing {Tokens.DamageValueText(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient,AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient)}. If airborne, quickly descend, {Tokens.DamageText("attack")} the ground where you land, and {Tokens.UtilityText("rebound upwards")}.");
             #endregion
 
             #region Utility
-            Language.Add(prefix + "UTILITY_ROLL_NAME", "Roll");
-            Language.Add(prefix + "UTILITY_ROLL_DESCRIPTION", "Roll a short distance, gaining <style=cIsUtility>300 armor</style>. <style=cIsUtility>You cannot be hit during the roll.</style>");
+            LanguageAPI.Add(prefix + "UTILITY_BOOST_NAME", "Boost");
+            LanguageAPI.Add(prefix + "UTILITY_BOOST_DESCRIPTION", $"Spend boost meter to <style=cIsUtility>move {100f * AmyStaticValues.boostListedSpeedCoefficient}% faster</style> than normal. If airborne, do a short <style=cIsUtility>mid-air dash</style>.\nPress the primary skill to begin a {Tokens.UtilityText("hammer-spin ") + Tokens.wipIcon}, repeatedly dealing {Tokens.DamageValueText(AmyStaticValues.boostHammerSpinDamageCoefficient)}. Running out of boost meter while hammer-spinning will make you {Tokens.RedText("dizzy")}.");
             #endregion
 
             #region Special
-            Language.Add(prefix + "SPECIAL_BOMB_NAME", "Bomb");
-            Language.Add(prefix + "SPECIAL_BOMB_DESCRIPTION", $"Throw a bomb for <style=cIsDamage>{100f * AmyStaticValues.bombDamageCoefficient}% damage</style>.");
+            Language.Add(prefix + "SPECIAL_MULTILOCK_NAME", $"Multi-Lock {Tokens.wipIcon}");
+            Language.Add(prefix + "SPECIAL_MULTILOCK_DESCRIPTION", $"Enter {Tokens.UtilityText("target painting mode")}, then bounce between targets dealing {Tokens.DamageValueText(AmyStaticValues.specialMultiLockDamageCoefficient)}. Can target up to {AmyStaticValues.specialMultiLockMaxTargets}.");
             #endregion
 
             #region Achievements

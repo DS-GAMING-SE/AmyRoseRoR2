@@ -36,7 +36,7 @@ namespace Amy.Survivors.Amy
                 RegisterLookingGlassBuff(en, boostBuff, "Amy Boost", $"Gain <style=cIsUtility>+{AmyStaticValues.boostArmor} armor</style>. Gain <style=cIsUtility>+{AmyStaticValues.boostListedSpeedCoefficient * 100}% movement speed</style>.");
             }
         }
-
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
         private static void RegisterLookingGlassBuff(Language lang, BuffDef buff, string name, string description)
         {
             LookingGlassLanguageAPI.SetupToken(lang, $"NAME_{buff.name}", name);
