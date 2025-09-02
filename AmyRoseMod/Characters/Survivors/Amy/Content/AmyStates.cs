@@ -1,4 +1,5 @@
 ﻿using Amy.Survivors.Amy.SkillStates;
+using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
 
 namespace Amy.Survivors.Amy
 {
@@ -8,7 +9,8 @@ namespace Amy.Survivors.Amy
         {
             Modules.Content.AddEntityState(typeof(PrimaryHammer));
 
-            Modules.Content.AddEntityState(typeof(Shoot));
+            Modules.Content.AddEntityState(typeof(HammerSmashCharge));
+            Modules.Content.AddEntityState(typeof(HammerSmashGrounded));
 
             Modules.Content.AddEntityState(typeof(Boost));
             Modules.Content.AddEntityState(typeof(BoostIdle));

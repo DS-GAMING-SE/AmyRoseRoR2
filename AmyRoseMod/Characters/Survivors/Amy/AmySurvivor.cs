@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using AmyRoseMod.Modules;
+using AmyRoseMod.Characters.Survivors.Amy.Content;
+using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
 
 namespace Amy.Survivors.Amy
 {
@@ -108,6 +110,7 @@ namespace Amy.Survivors.Amy
 
             AmyAssets.Init(assetBundle);
             AmyBuffs.Init(assetBundle);
+            AmyDamageTypes.Initialize();
 
             InitializeEntityStateMachines();
             InitializeSkills();
@@ -158,7 +161,7 @@ namespace Amy.Survivors.Amy
             AddPassiveSkill();
             AddPrimarySkills();
             AddSecondarySkills();
-            AddUtiitySkills();
+            AddUtilitySkills();
             AddSpecialSkills();
         }
 
@@ -170,8 +173,8 @@ namespace Amy.Survivors.Amy
             bodyPrefab.GetComponent<SkillLocator>().passiveSkill = new SkillLocator.PassiveSkill
             {
                 enabled = true,
-                skillNameToken = AMY_PREFIX + "PASSIVE_NAME",
-                skillDescriptionToken = AMY_PREFIX + "PASSIVE_DESCRIPTION",
+                skillNameToken = HedgehogUtils.Language.momentumPassiveNameToken,
+                skillDescriptionToken = HedgehogUtils.Language.momentumPassiveDescriptionToken,
                 icon = assetBundle.LoadAsset<Sprite>("texPassiveIcon"),
             };
             #region Multiple Passives
@@ -215,7 +218,7 @@ namespace Amy.Survivors.Amy
             #endregion
         }
         public static SteppedSkillDef primaryMelee;
-        public static SkillDef secondarySmash;
+        public static AmySkillDefs.AmyHammerSmashSkillDef secondarySmash;
         public static AmySkillDefs.AmyBoostSkillDef utilityBoost;
         public static SkillDef specialMultilock;
 
@@ -232,13 +235,13 @@ namespace Amy.Survivors.Amy
                     AMY_PREFIX + "PRIMARY_HAMMER_NAME",
                     AMY_PREFIX + "PRIMARY_HAMMER_DESCRIPTION",
                     assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
-                    new EntityStates.SerializableEntityStateType(typeof(SkillStates.PrimaryHammer)),
+                    new EntityStates.SerializableEntityStateType(typeof(PrimaryHammer)),
                     "Weapon",
                     true
                 ));
             primaryMelee.stepCount = 4;
             primaryMelee.stepGraceDuration = 0.5f;
-            //primaryMelee.keywordTokens = new string[] { "KEYWORD_AGILE", HedgehogUtils.Language.launchKeywordToken };
+            primaryMelee.keywordTokens = new string[] { "KEYWORD_AGILE", HedgehogUtils.Language.launchKeyword };
 
             Skills.AddPrimarySkills(bodyPrefab, primaryMelee);
         }
@@ -248,19 +251,19 @@ namespace Amy.Survivors.Amy
             Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, SkillSlot.Secondary);
 
             //here is a basic skill def with all fields accounted for
-            SkillDef secondarySmash = Skills.CreateSkillDef(new SkillDefInfo
+            secondarySmash = Skills.CreateSkillDef<AmySkillDefs.AmyHammerSmashSkillDef>(new SkillDefInfo
             {
-                skillName = "HenryGun",
+                skillName = "AmySecondaryHammerSmash",
                 skillNameToken = AMY_PREFIX + "SECONDARY_HAMMER_SMASH_NAME",
                 skillDescriptionToken = AMY_PREFIX + "SECONDARY_HAMMER_SMASH_DESCRIPTION",
-                //keywordTokens = new string[] { HedgehogUtils.Language.launchKeywordToken },
+                keywordTokens = new string[] { HedgehogUtils.Language.launchKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
 
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Shoot)),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(HammerSmashCharge)),
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
-                baseRechargeInterval = 1f,
+                baseRechargeInterval = 5f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -279,11 +282,12 @@ namespace Amy.Survivors.Amy
                 forceSprintDuringState = false,
 
             });
+            secondarySmash.aerialActivationState = new EntityStates.SerializableEntityStateType(typeof(HammerSmashCharge));
 
             Skills.AddSecondarySkills(bodyPrefab, secondarySmash);
         }
 
-        private void AddUtiitySkills()
+        private void AddUtilitySkills()
         {
             Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, SkillSlot.Utility);
 
@@ -332,7 +336,7 @@ namespace Amy.Survivors.Amy
             //a basic skill. some fields are omitted and will just have default values
             SkillDef specialMultilock = Skills.CreateSkillDef(new SkillDefInfo
             {
-                skillName = "AmyMultiLock",
+                skillName = "AmySpecialMultiLock",
                 skillNameToken = AMY_PREFIX + "SPECIAL_MULTILOCK_NAME",
                 skillDescriptionToken = AMY_PREFIX + "SPECIAL_MULTILOCK_DESCRIPTION",
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),

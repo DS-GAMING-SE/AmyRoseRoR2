@@ -24,29 +24,24 @@ namespace Amy.Survivors.Amy
         {
             string prefix = AmySurvivor.AMY_PREFIX;
 
-            string desc = "Amy is a skilled fighter who makes use of a wide arsenal of weaponry to take down his foes.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
+            string desc = $"{Tokens.wipIcon} Amy is a skilled fighter who makes use of a wide arsenal of weaponry to take down his foes.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
              + "< ! > Sword is a good all-rounder while Boxing Gloves are better for laying a beatdown on more powerful foes." + Environment.NewLine + Environment.NewLine
              + "< ! > Pistol is a powerful anti air, with its low cooldown and high damage." + Environment.NewLine + Environment.NewLine
              + "< ! > Roll has a lingering armor buff that helps to use it aggressively." + Environment.NewLine + Environment.NewLine
              + "< ! > Bomb can be used to wipe crowds with ease." + Environment.NewLine + Environment.NewLine;
 
-            string outro = "..and so she left, ?????.";
-            string outroFailure = "..and so she vanished, ?????.";
+            string outro = $"..and so she left, {Tokens.wipIcon}.";
+            string outroFailure = $"..and so she vanished, {Tokens.wipIcon}.";
 
             Language.Add(prefix + "NAME", "Amy");
             Language.Add(prefix + "DESCRIPTION", desc);
-            Language.Add(prefix + "SUBTITLE", "?????");
-            Language.Add(prefix + "LORE", "sample lore");
+            Language.Add(prefix + "SUBTITLE", $"{Tokens.wipIcon} ??? {Tokens.wipIcon}");
+            Language.Add(prefix + "LORE", $"{Tokens.wipIcon}");
             Language.Add(prefix + "OUTRO_FLAVOR", outro);
             Language.Add(prefix + "OUTRO_FAILURE", outroFailure);
 
             #region Skins
             Language.Add(prefix + "MASTERY_SKIN_NAME", "Alternate");
-            #endregion
-
-            #region Passive
-            Language.Add(prefix + "PASSIVE_NAME", "Momentum");
-            Language.Add(prefix + "PASSIVE_DESCRIPTION", "<style=cIsUtility>Build up speed</style> by <style=cIsUtility>running down hill</style> to move up to <style=cIsUtility>100% faster</style>. <style=cIsHealth>Lose speed by running up hill to move up to 33% slower.</style>\nIf <style=cIsUtility>flying</style>, <style=cIsUtility>build up speed</style> by <style=cIsUtility>moving in a straight line.</style>");
             #endregion
 
             #region Primary
@@ -55,8 +50,8 @@ namespace Amy.Survivors.Amy
             #endregion
 
             #region Secondary
-            Language.Add(prefix + "SECONDARY_HAMMER_SMASH_NAME", $"Piko Piko Smash {Tokens.wipIcon}");
-            Language.Add(prefix + "SECONDARY_HAMMER_SMASH_DESCRIPTION", $"{Tokens.UtilityText("Launching")}. Charge a hammer swing dealing {Tokens.DamageValueText(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient,AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient)}. If airborne, quickly descend, {Tokens.DamageText("attack")} the ground where you land, and {Tokens.UtilityText("rebound upwards")}.");
+            Language.Add(prefix + "SECONDARY_HAMMER_SMASH_NAME", $"Piko Piko Smash");
+            Language.Add(prefix + "SECONDARY_HAMMER_SMASH_DESCRIPTION", $"{Tokens.UtilityText("Launching")}. Charge a hammer swing dealing {Tokens.DamageValueText(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient,AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient)}. If airborne {Tokens.wipIcon}, quickly descend, {Tokens.DamageText("attack")} the ground where you land, and {Tokens.UtilityText("rebound upwards")}.");
             #endregion
 
             #region Utility

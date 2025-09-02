@@ -55,11 +55,11 @@ namespace Amy.Survivors.Amy
             //some fields omitted that aren't commonly changed. will be set to default values
             AISkillDriver shootDriver = master.AddComponent<AISkillDriver>();
             //Selection Conditions
-            shootDriver.customName = "Use Secondary Shoot";
+            shootDriver.customName = "Use Secondary Smash";
             shootDriver.skillSlot = SkillSlot.Secondary;
             shootDriver.requireSkillReady = true;
             shootDriver.minDistance = 0;
-            shootDriver.maxDistance = 25;
+            shootDriver.maxDistance = 8;
             shootDriver.selectionRequiresTargetLoS = false;
             shootDriver.selectionRequiresOnGround = false;
             shootDriver.selectionRequiresAimTarget = false;
@@ -77,12 +77,12 @@ namespace Amy.Survivors.Amy
             
             AISkillDriver rollDriver = master.AddComponent<AISkillDriver>();
             //Selection Conditions
-            rollDriver.customName = "Use Utility Roll";
+            rollDriver.customName = "Use Utility Boost";
             rollDriver.skillSlot = SkillSlot.Utility;
             rollDriver.requireSkillReady = true;
             rollDriver.minDistance = 8;
-            rollDriver.maxDistance = 20;
-            rollDriver.selectionRequiresTargetLoS = true;
+            rollDriver.maxDistance = 30;
+            rollDriver.selectionRequiresTargetLoS = false;
             rollDriver.selectionRequiresOnGround = false;
             rollDriver.selectionRequiresAimTarget = false;
             rollDriver.maxTimesSelected = -1;
@@ -99,19 +99,19 @@ namespace Amy.Survivors.Amy
 
             AISkillDriver bombDriver = master.AddComponent<AISkillDriver>();
             //Selection Conditions
-            bombDriver.customName = "Use Special bomb";
+            bombDriver.customName = "Use Special Multi-Lock";
             bombDriver.skillSlot = SkillSlot.Special;
             bombDriver.requireSkillReady = true;
-            bombDriver.minDistance = 0;
+            bombDriver.minDistance = 5;
             bombDriver.maxDistance = 20;
-            bombDriver.selectionRequiresTargetLoS = false;
+            bombDriver.selectionRequiresTargetLoS = true;
             bombDriver.selectionRequiresOnGround = false;
-            bombDriver.selectionRequiresAimTarget = false;
+            bombDriver.selectionRequiresAimTarget = true;
             bombDriver.maxTimesSelected = -1;
 
             //Behavior
             bombDriver.moveTargetType = AISkillDriver.TargetType.CurrentEnemy;
-            bombDriver.activationRequiresTargetLoS = false;
+            bombDriver.activationRequiresTargetLoS = true;
             bombDriver.activationRequiresAimTargetLoS = false;
             bombDriver.activationRequiresAimConfirmation = false;
             bombDriver.movementType = AISkillDriver.MovementType.ChaseMoveTarget;

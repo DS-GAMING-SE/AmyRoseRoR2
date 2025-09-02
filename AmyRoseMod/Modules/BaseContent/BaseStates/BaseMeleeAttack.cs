@@ -1,4 +1,6 @@
-﻿using EntityStates;
+﻿using Amy.Survivors.Amy;
+using EntityStates;
+using R2API;
 using RoR2;
 using RoR2.Audio;
 using RoR2.Skills;
@@ -21,6 +23,7 @@ namespace Amy.Modules.BaseStates
         protected float pushForce = 300f;
         protected Vector3 bonusForce = Vector3.zero;
         protected float baseDuration = 1f;
+        protected int maximumOverlapTargets = -1;
 
         protected float attackStartPercentTime = 0.2f;
         protected float attackEndPercentTime = 0.4f;
@@ -58,22 +61,6 @@ namespace Amy.Modules.BaseStates
             StartAimMode(0.5f + duration, false);
 
             PlayAttackAnimation();
-
-            attack = new OverlapAttack();
-            attack.damageType = damageType;
-            attack.attacker = gameObject;
-            attack.inflictor = gameObject;
-            attack.teamIndex = GetTeam();
-            attack.damage = damageCoefficient * damageStat;
-            attack.procCoefficient = procCoefficient;
-            attack.hitEffectPrefab = hitEffectPrefab;
-            attack.forceVector = bonusForce;
-            attack.pushAwayForce = pushForce;
-            attack.hitBoxGroup = FindHitBoxGroup(hitboxGroupName);
-            attack.isCrit = RollCrit();
-            attack.impactSound = impactSound;
-
-            ModifyOverlapAttack(attack);
         }
 
         protected virtual void ModifyOverlapAttack(OverlapAttack attack)
@@ -139,7 +126,7 @@ namespace Amy.Modules.BaseStates
             }
         }
 
-        private void EnterAttack()
+        protected virtual void EnterAttack()
         {
             hasFired = true;
             Util.PlayAttackSpeedSound(swingSoundString, gameObject, attackSpeedStat);
@@ -149,7 +136,39 @@ namespace Amy.Modules.BaseStates
             if (isAuthority)
             {
                 AddRecoil(-1f * attackRecoil, -2f * attackRecoil, -0.5f * attackRecoil, 0.5f * attackRecoil);
+                PrepareAttackStats();
+                PushForceToTargetedLaunch();
+                CreateOverlap();
             }
+        }
+
+        protected virtual void PrepareAttackStats()
+        {
+
+        }
+
+        protected virtual void PushForceToTargetedLaunch()
+        {
+
+        }
+
+        protected void CreateOverlap()
+        {
+            attack = new OverlapAttack();
+            attack.damageType = damageType;
+            attack.attacker = gameObject;
+            attack.inflictor = gameObject;
+            attack.teamIndex = GetTeam();
+            attack.damage = damageCoefficient * damageStat;
+            attack.procCoefficient = procCoefficient;
+            attack.hitEffectPrefab = hitEffectPrefab;
+            attack.forceVector = bonusForce;
+            attack.pushAwayForce = pushForce;
+            attack.hitBoxGroup = FindHitBoxGroup(hitboxGroupName);
+            attack.isCrit = RollCrit();
+            attack.impactSound = impactSound;
+
+            ModifyOverlapAttack(attack);
         }
 
         public override void FixedUpdate()

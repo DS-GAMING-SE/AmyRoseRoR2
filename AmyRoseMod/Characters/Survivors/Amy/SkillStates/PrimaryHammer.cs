@@ -1,4 +1,5 @@
 ﻿using Amy.Modules.BaseStates;
+using AmyRoseMod.Characters.Survivors.Amy.Content;
 using R2API;
 using RoR2;
 using System;
@@ -8,15 +9,10 @@ namespace Amy.Survivors.Amy.SkillStates
 {
     public class PrimaryHammer : BaseMeleeAttack
     {
-        // 0 makes launches perfectly straight, 1 makes them go in the direction of the attack
+        // 0 makes launches perfectly straight where you aim, 1 makes them go in the direction of the attack's swing animation (based on what Amy's animations will be)
         public float launchDirectionLerp;
         public override void OnEnter()
         {
-            PrepareAttackStats();
-            if (pushForce != 0 && base.characterDirection)
-            {
-                DecideLaunchDirection();
-            }
             PrepareAnimationStats();
 
             swingSoundString = "HenrySwordSwing";
@@ -29,44 +25,12 @@ namespace Amy.Survivors.Amy.SkillStates
             impactSound = AmyAssets.swordHitSoundEvent.index;
 
             base.OnEnter();
+            base.StartAimMode(duration * 1.5f);
         }
 
-        protected virtual void PrepareAttackStats()
-        {
-            hitboxGroupName = "SwordGroup";
-
-            damageType = DamageTypeCombo.GenericPrimary;
-            damageType.AddModdedDamageType(HedgehogUtils.Launch.DamageTypes.launchOnKill);
-            damageCoefficient = AmyStaticValues.primaryHammerDamageCoefficient;
-            procCoefficient = 1f;
-            pushForce = AmyStaticValues.primaryHammerLaunchForce;
-            bonusForce = Vector3.zero;
-            launchDirectionLerp = 0.5f;
-        }
-
-        protected virtual void DecideLaunchDirection()
-        {
-            if (swingIndex == 0) // left
-            {
-                bonusForce = Vector3.Lerp(base.characterDirection.forward, Vector3.Cross(base.characterDirection.forward, Vector3.up), launchDirectionLerp).normalized * pushForce;
-            }
-            if (swingIndex == 1) // right
-            {
-                bonusForce = Vector3.Lerp(base.characterDirection.forward, Vector3.Cross(base.characterDirection.forward, Vector3.down), launchDirectionLerp).normalized * pushForce;
-            }
-            if (swingIndex == 2) // up
-            {
-                bonusForce = Vector3.Lerp(base.characterDirection.forward, Vector3.up, launchDirectionLerp).normalized * pushForce;
-            }
-            if (swingIndex == 3) // down
-            {
-                bonusForce = Vector3.Lerp(base.characterDirection.forward, Vector3.down, launchDirectionLerp).normalized * pushForce;
-            }
-            pushForce = 0f;
-        }
         protected virtual void PrepareAnimationStats()
         {
-            baseDuration = 1.1f;
+            baseDuration = 0.9f;
 
             //0-1 multiplier of baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
@@ -74,11 +38,57 @@ namespace Amy.Survivors.Amy.SkillStates
             attackEndPercentTime = 0.4f;
 
             //this is the point at which the attack can be interrupted by itself, continuing a combo
-            earlyExitPercentTime = 0.6f;
+            earlyExitPercentTime = 0.75f;
 
-            hitStopDuration = 0.012f;
+            hitStopDuration = 0.05f;
             attackRecoil = 0.5f;
-            hitHopVelocity = 4f;
+            hitHopVelocity = 6f;
+        }
+
+        protected override void PrepareAttackStats()
+        {
+            base.PrepareAttackStats();
+            hitboxGroupName = "SwordGroup";
+
+            damageType = DamageTypeCombo.GenericPrimary;
+            damageType.AddModdedDamageType(HedgehogUtils.Launch.DamageTypes.launchOnKill);
+            damageCoefficient = AmyStaticValues.primaryHammerDamageCoefficient;
+            procCoefficient = 1f;
+            pushForce = AmyStaticValues.primaryHammerLaunchForce;
+            launchDirectionLerp = 0.5f;
+            maximumOverlapTargets = 4;
+        }
+
+        protected override void PushForceToTargetedLaunch()
+        {
+            if (pushForce != 0 && base.characterDirection)
+            {
+                Vector3 aim = base.inputBank ? base.inputBank.aimDirection : base.characterDirection.forward;
+                aim.y = 0;
+                DecideLaunchDirection(aim.normalized);
+                pushForce = 0f;
+            }
+        }
+
+        protected virtual void DecideLaunchDirection(Vector3 aim)
+        {
+            if (swingIndex == 0) // left
+            {
+                bonusForce = Vector3.Lerp(aim, Vector3.Cross(aim, Vector3.up), launchDirectionLerp).normalized * pushForce;
+            }
+            if (swingIndex == 1) // right
+            {
+                bonusForce = Vector3.Lerp(aim, Vector3.Cross(aim, Vector3.down), launchDirectionLerp).normalized * pushForce;
+            }
+            if (swingIndex == 2) // up
+            {
+                bonusForce = Vector3.Lerp(aim, Vector3.up, launchDirectionLerp).normalized * pushForce;
+            }
+            if (swingIndex == 3) // down
+            {
+                bonusForce = Vector3.Lerp(aim, Vector3.down, launchDirectionLerp).normalized * pushForce;
+                damageType.AddModdedDamageType(AmyDamageTypes.angleUpKnockbackIfGrounded);
+            }
         }
 
         protected override void PlayAttackAnimation()
