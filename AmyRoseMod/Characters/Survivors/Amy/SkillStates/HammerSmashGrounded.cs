@@ -1,5 +1,6 @@
 ﻿using Amy.Modules.BaseStates;
 using AmyRoseMod.Characters.Survivors.Amy.Content;
+using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
 using EntityStates;
 using R2API;
 using RoR2;
@@ -39,9 +40,9 @@ namespace Amy.Survivors.Amy.SkillStates
             attackEndPercentTime = 0.3f;
 
             //this is the point at which the attack can be interrupted by itself, continuing a combo
-            earlyExitPercentTime = 0.8f;
+            earlyExitPercentTime = 0.75f;
 
-            hitStopDuration = Mathf.Lerp(0.1f, 0.15f, charge);
+            hitStopDuration = Mathf.Lerp(0.2f, 0.27f, charge);
             attackRecoil = 1f;
             hitHopVelocity = 6f;
         }
@@ -49,10 +50,10 @@ namespace Amy.Survivors.Amy.SkillStates
         protected override void PrepareAttackStats()
         {
             base.PrepareAttackStats();
-            hitboxGroupName = "SwordGroup";
+            hitboxGroupName = "LargeSwing";
 
             damageType = DamageTypeCombo.GenericSecondary;
-            damageType.AddModdedDamageType(HedgehogUtils.Launch.DamageTypes.launch);
+            damageType.AddModdedDamageType(AmyDamageTypes.launchNoAutoAim);
             damageCoefficient = Mathf.Lerp(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient, AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient, charge);
             procCoefficient = charge == 1 ? AmyStaticValues.secondaryHammerChargeMaximumProcCoefficient : AmyStaticValues.secondaryHammerChargeMinimumProcCoefficient;
             pushForce = AmyStaticValues.secondaryHammerLaunchForce;

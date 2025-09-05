@@ -43,9 +43,9 @@ namespace Amy.Survivors.Amy
 
             public static EntityState DetermineNextState(GenericSkill skillSlot, SerializableEntityStateType grounded, SerializableEntityStateType aerial)
             {
-                if (skillSlot.characterBody && skillSlot.characterBody.characterMotor && !skillSlot.characterBody.characterMotor.isGrounded)
+                if (skillSlot.characterBody.characterMotor.isGrounded || HedgehogUtils.Helpers.Flying(skillSlot.gameObject, out _))
                 {
-                    EntityState entityState = EntityStateCatalog.InstantiateState(ref aerial);
+                    EntityState entityState = EntityStateCatalog.InstantiateState(ref grounded);
                     ISkillState skillState = entityState as ISkillState;
                     if (skillState != null)
                     {
@@ -55,7 +55,7 @@ namespace Amy.Survivors.Amy
                 }
                 else
                 {
-                    EntityState entityState = EntityStateCatalog.InstantiateState(ref grounded);
+                    EntityState entityState = EntityStateCatalog.InstantiateState(ref aerial);
                     ISkillState skillState = entityState as ISkillState;
                     if (skillState != null)
                     {

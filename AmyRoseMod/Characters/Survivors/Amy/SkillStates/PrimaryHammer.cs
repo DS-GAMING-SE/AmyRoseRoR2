@@ -40,15 +40,15 @@ namespace Amy.Survivors.Amy.SkillStates
             //this is the point at which the attack can be interrupted by itself, continuing a combo
             earlyExitPercentTime = 0.75f;
 
-            hitStopDuration = 0.05f;
+            hitStopDuration = 0.08f;
             attackRecoil = 0.5f;
-            hitHopVelocity = 6f;
+            hitHopVelocity = 8.5f;
         }
 
         protected override void PrepareAttackStats()
         {
             base.PrepareAttackStats();
-            hitboxGroupName = "SwordGroup";
+            hitboxGroupName = swingIndex < 2 ? "HorizontalSwing" : "VerticalSwing";
 
             damageType = DamageTypeCombo.GenericPrimary;
             damageType.AddModdedDamageType(HedgehogUtils.Launch.DamageTypes.launchOnKill);

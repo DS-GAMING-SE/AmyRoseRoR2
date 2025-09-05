@@ -61,13 +61,16 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected virtual void ReachedMaxCharge()
         {
-            EffectManager.SimpleMuzzleFlash(AmyAssets.swordHitImpactEffect, base.gameObject, "Head", true);
+            EffectManager.SimpleMuzzleFlash(AmyAssets.swordHitImpactEffect, base.gameObject, "Head", false);
         }
 
         protected virtual void SetNextStateToSmash()
         {
-            HammerSmashGrounded state = EntityStateCatalog.InstantiateState(typeof(HammerSmashGrounded)) as HammerSmashGrounded;
-            state.charge = charge;
+            HammerSmashGrounded state = (HammerSmashGrounded)EntityStateCatalog.InstantiateState(typeof(HammerSmashGrounded));
+            if (state != null)
+            {
+                state.charge = charge;
+            }
             this.outer.SetNextState(state);
         }
 

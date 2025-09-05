@@ -23,6 +23,16 @@ namespace AmyRoseMod.Modules
                     HedgehogUtils.Boost.BoostLogic.BoostStats(self, stats, AmyStaticValues.boostListedSpeedCoefficient);
                     stats.armorAdd += AmyStaticValues.boostArmor;
                 }
+
+                if (self.HasBuff(AmyBuffs.hammerSmashSpeedBuff))
+                {
+                    stats.moveSpeedMultAdd += AmyStaticValues.secondaryHammerAirJumpBuffSpeedCoefficient;
+                }
+
+                if (self.HasBuff(AmyBuffs.dizzyDebuff))
+                {
+                    stats.armorAdd -= AmyStaticValues.dizzyDebuffArmorReduction;
+                }
             }
         }
     }

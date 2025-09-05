@@ -11,6 +11,8 @@ namespace Amy.Survivors.Amy
 
             Modules.Content.AddEntityState(typeof(HammerSmashCharge));
             Modules.Content.AddEntityState(typeof(HammerSmashGrounded));
+            Modules.Content.AddEntityState(typeof(HammerSmashChargeAerial));
+            Modules.Content.AddEntityState(typeof(HammerSmashAerial));
 
             Modules.Content.AddEntityState(typeof(Boost));
             Modules.Content.AddEntityState(typeof(BoostIdle));

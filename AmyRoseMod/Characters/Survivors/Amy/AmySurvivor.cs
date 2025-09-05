@@ -134,7 +134,10 @@ namespace Amy.Survivors.Amy
         public void AddHitboxes()
         {
             //example of how to create a HitBoxGroup. see summary for more details
-            Prefabs.SetupHitBoxGroup(characterModelObject, "SwordGroup", "SwordHitbox");
+            Prefabs.SetupHitBoxGroup(characterModelObject, "HorizontalSwing", "HorizontalSwingHitbox");
+            Prefabs.SetupHitBoxGroup(characterModelObject, "VerticalSwing", "VerticalSwingHitbox");
+            Prefabs.SetupHitBoxGroup(characterModelObject, "LargeSwing", "LargeSwingHitbox");
+            Prefabs.SetupHitBoxGroup(characterModelObject, "Stomp", "StompHitbox");
         }
 
         public override void InitializeEntityStateMachines() 
@@ -282,7 +285,7 @@ namespace Amy.Survivors.Amy
                 forceSprintDuringState = false,
 
             });
-            secondarySmash.aerialActivationState = new EntityStates.SerializableEntityStateType(typeof(HammerSmashCharge));
+            secondarySmash.aerialActivationState = new EntityStates.SerializableEntityStateType(typeof(HammerSmashChargeAerial));
 
             Skills.AddSecondarySkills(bodyPrefab, secondarySmash);
         }
@@ -360,6 +363,7 @@ namespace Amy.Survivors.Amy
         public override void InitializeSkins()
         {
             ModelSkinController skinController = prefabCharacterModel.gameObject.AddComponent<ModelSkinController>();
+            ModelSkinController displaySkinController = displayPrefab.gameObject.AddComponent<ModelSkinController>();
             ChildLocator childLocator = prefabCharacterModel.GetComponent<ChildLocator>();
 
             CharacterModel.RendererInfo[] defaultRendererinfos = prefabCharacterModel.baseRendererInfos;
@@ -425,6 +429,7 @@ namespace Amy.Survivors.Amy
             #endregion
 
             skinController.skins = skins.ToArray();
+            displaySkinController.skins = skins.ToArray();
         }
         #endregion skins
 

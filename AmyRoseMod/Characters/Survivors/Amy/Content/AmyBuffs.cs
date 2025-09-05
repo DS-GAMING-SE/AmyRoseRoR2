@@ -15,6 +15,12 @@ namespace Amy.Survivors.Amy
     {
         public static BuffDef boostBuff;
 
+        public static BuffDef hammerSmashSpeedBuff;
+
+        public static BuffDef hammerSpinSpeedBuff;
+
+        public static BuffDef dizzyDebuff;
+
         public static void Init(AssetBundle assetBundle)
         {
             boostBuff = Modules.Content.CreateAndAddBuff("bdAmyRoseBoost",
@@ -22,6 +28,24 @@ namespace Amy.Survivors.Amy
                 AmySurvivor.amyColor,
                 false,
                 false);
+
+            hammerSmashSpeedBuff = Modules.Content.CreateAndAddBuff("bdAmyRoseHammerSmashSpeed",
+                LegacyResourcesAPI.Load<BuffDef>("BuffDefs/CloakSpeed").iconSprite,
+                AmySurvivor.amyColor,
+                false,
+                false);
+
+            hammerSpinSpeedBuff = Modules.Content.CreateAndAddBuff("bdAmyRoseHammerSpinSpeed",
+                LegacyResourcesAPI.Load<BuffDef>("BuffDefs/CloakSpeed").iconSprite,
+                AmySurvivor.amyColor,
+                false,
+                false);
+
+            dizzyDebuff = Modules.Content.CreateAndAddBuff("bdAmyRoseDizzy",
+                LegacyResourcesAPI.Load<BuffDef>("BuffDefs/Slow60").iconSprite,
+                Color.white,
+                false,
+                true);
 
             if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(LookingGlass.PluginInfo.PLUGIN_GUID))
             {

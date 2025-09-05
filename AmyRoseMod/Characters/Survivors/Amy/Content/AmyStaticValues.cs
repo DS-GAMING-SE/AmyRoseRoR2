@@ -4,16 +4,17 @@ namespace Amy.Survivors.Amy
 {
     public static class AmyStaticValues
     {
-        public const float gunDamageCoefficient = 4.2f;
-
         public const float bombDamageCoefficient = 16f;
         #region Primary Hammer
+
         public const float primaryHammerDamageCoefficient = 3f;
 
         public const float primaryHammerLaunchForce = 250f;
+
         #endregion
 
         #region Secondary Hammer Smash
+
         public const float secondaryHammerChargeMinimumDamageCoefficient = 6.5f;
 
         public const float secondaryHammerChargeMaximumDamageCoefficient = 10f;
@@ -25,22 +26,54 @@ namespace Amy.Survivors.Amy
         public const float secondaryHammerBaseChargeTime = 2.5f;
 
         public const float secondaryHammerLaunchForce = 400f;
+
+        #region Air Version
+
+        public const float secondaryHammerAirFallDistanceForMaxCharge = 33f;
+
+        public const float secondaryHammerAirFallAcceleration = 40f;
+
+        public const float secondaryHammerAirFallMaxSpeed = 60f;
+
+        public const float secondaryHammerAirFallMaxFallDuration = 4f;
+
+        public const float secondaryHammerAirJumpHeightMultiplier = 3f;
+
+        public const float secondaryHammerAirJumpMaxLerpFromUp = 0.3f;
+
+        public const float secondaryHammerAirJumpBuffSpeedCoefficient = 0.2f;
+
+        public const float secondaryHammerAirJumpBuffDuration = 3f;
+
+        public const float secondaryHammerAirSmashRadius = 7f;
+
+
+        #endregion
         #endregion
 
         #region Utility Boost
+
         public const float boostListedSpeedCoefficient = 0.35f;
 
         public const float boostArmor = 50;
-        #endregion
 
-        #region Utility Boost Hammer-Spin
+        #region Hammer-Spin
+
         public const float boostHammerSpinDamageCoefficient = 1.2f;
+
+        public const float dizzyDuration = 3f;
+
+        public const float dizzyDebuffArmorReduction = 30f;
+
+        #endregion
         #endregion
 
         #region Special Multi-Lock
+
         public const float specialMultiLockDamageCoefficient = 8f;
 
         public const int specialMultiLockMaxTargets = 5;
+
         #endregion
     }
 }
