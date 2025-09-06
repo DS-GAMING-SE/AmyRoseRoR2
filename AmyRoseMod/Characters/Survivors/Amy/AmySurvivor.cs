@@ -127,6 +127,7 @@ namespace Amy.Survivors.Amy
             AddHitboxes();
             bodyPrefab.AddComponent<HedgehogUtils.Miscellaneous.MomentumPassive>();
             bodyPrefab.AddComponent<HedgehogUtils.Boost.BoostLogic>();
+            bodyPrefab.AddComponent<HedgehogUtils.Miscellaneous.StayOnGround>();
             //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
             //anything else here
         }
@@ -288,6 +289,10 @@ namespace Amy.Survivors.Amy
             secondarySmash.aerialActivationState = new EntityStates.SerializableEntityStateType(typeof(HammerSmashChargeAerial));
 
             Skills.AddSecondarySkills(bodyPrefab, secondarySmash);
+
+            SkillDef secondarySmashExperiment = HedgehogUtils.Helpers.CopySkillDef<SkillDef>(secondarySmash);
+            secondarySmashExperiment.activationState = new EntityStates.SerializableEntityStateType(typeof(HammerSmashChargeExperiment));
+            Skills.AddSecondarySkills(bodyPrefab, secondarySmashExperiment);
         }
 
         private void AddUtilitySkills()

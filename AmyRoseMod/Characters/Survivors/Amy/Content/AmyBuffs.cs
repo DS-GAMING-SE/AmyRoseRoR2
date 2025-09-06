@@ -58,6 +58,9 @@ namespace Amy.Survivors.Amy
             if (Language.languagesByName.TryGetValue("en", out RoR2.Language en))
             {
                 RegisterLookingGlassBuff(en, boostBuff, "Amy Boost", $"Gain <style=cIsUtility>+{AmyStaticValues.boostArmor} armor</style>. Gain <style=cIsUtility>+{AmyStaticValues.boostListedSpeedCoefficient * 100}% movement speed</style>.");
+                RegisterLookingGlassBuff(en, hammerSmashSpeedBuff, "Amy Smash Speed", $"Gain <style=cIsUtility>+{AmyStaticValues.secondaryHammerAirJumpBuffSpeedCoefficient}% movement speed</style>.");
+                RegisterLookingGlassBuff(en, hammerSpinSpeedBuff, "Amy Spin Speed", $"Gain <style=cIsUtility>+{AmyStaticValues.boostHammerSpinBuffSpeedCoefficient}% movement speed</style>.");
+                RegisterLookingGlassBuff(en, dizzyDebuff, "Amy Dizzy", $"Reduce <style=cIsDamage>armor by{AmyStaticValues.dizzyDebuffArmorReduction}</style>.");
             }
         }
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]

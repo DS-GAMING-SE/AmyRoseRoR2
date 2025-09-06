@@ -29,6 +29,11 @@ namespace AmyRoseMod.Modules
                     stats.moveSpeedMultAdd += AmyStaticValues.secondaryHammerAirJumpBuffSpeedCoefficient;
                 }
 
+                if (self.HasBuff(AmyBuffs.hammerSpinSpeedBuff))
+                {
+                    stats.moveSpeedMultAdd += self.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff) * AmyStaticValues.boostHammerSpinBuffSpeedCoefficient;
+                }
+
                 if (self.HasBuff(AmyBuffs.dizzyDebuff))
                 {
                     stats.armorAdd -= AmyStaticValues.dizzyDebuffArmorReduction;
