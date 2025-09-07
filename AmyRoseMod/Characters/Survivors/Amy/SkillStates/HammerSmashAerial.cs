@@ -15,7 +15,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
     public class HammerSmashAerial : BaseSkillState
     {
         public float charge;
-        public bool shouldAttack;
 
         public float baseHitStopDuration;
         protected float hitStopDuration;
@@ -25,7 +24,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected bool hasJumped;
 
-        public BlastAttack blastAttack;
+        public OverlapAttack overlapAttack;
+        public HealthComponent targetToIgnore;
 
         public override void OnEnter()
         {
@@ -39,24 +39,25 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             {
                 base.characterBody.AddTimedBuff(AmyBuffs.hammerSmashSpeedBuff, AmyStaticValues.secondaryHammerAirJumpBuffDuration);
             }
-            if (base.isAuthority && shouldAttack)
+            if (base.isAuthority)
             {
-                blastAttack = new BlastAttack();
-                blastAttack.damageType = DamageTypeCombo.GenericSecondary | DamageType.Stun1s;
-                blastAttack.baseDamage = damageStat * Mathf.Lerp(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient, AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient, charge);
-                blastAttack.radius = AmyStaticValues.secondaryHammerAirSmashRadius;
-                blastAttack.position = base.characterBody.footPosition;
-                blastAttack.crit = RollCrit();
-                blastAttack.procCoefficient = charge == 1 ? 1.5f : 1f;
-                blastAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
-                blastAttack.inflictor = base.gameObject;
-                blastAttack.attacker = base.gameObject;
-                blastAttack.falloffModel = BlastAttack.FalloffModel.None;
-                blastAttack.teamIndex = base.teamComponent.teamIndex;
-                blastAttack.baseForce = 200f;
-                blastAttack.bonusForce = Vector3.up * 500f;
-                PrepareBlastAttack();
-                blastAttack.Fire();
+                overlapAttack = new OverlapAttack();
+                overlapAttack.damageType = DamageTypeCombo.GenericSecondary | DamageType.Stun1s;
+                overlapAttack.damage = damageStat * Mathf.Lerp(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient, AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient, charge);
+                overlapAttack.hitBoxGroup = FindHitBoxGroup("LargeStomp");
+                overlapAttack.isCrit = RollCrit();
+                overlapAttack.procCoefficient = charge == 1 ? 1.5f : 1f;
+                overlapAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
+                overlapAttack.inflictor = base.gameObject;
+                overlapAttack.attacker = base.gameObject;
+                overlapAttack.teamIndex = GetTeam();
+                overlapAttack.pushAwayForce = 200f;
+                overlapAttack.forceVector = Vector3.up * 500f;
+                if (targetToIgnore)
+                {
+                    overlapAttack.addIgnoredHitList(targetToIgnore);
+                }
+                PrepareAttack();
             }
 
             PlayAttackAnimation();
@@ -67,7 +68,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         }
 
-        public virtual void PrepareBlastAttack()
+        public virtual void PrepareAttack()
         {
 
         }
@@ -83,6 +84,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             if (fixedAge <= hitStopDuration)
             {
                 base.characterMotor.velocity = Vector3.zero;
+                overlapAttack.Fire();
             }
             else if (!hasJumped)
             {

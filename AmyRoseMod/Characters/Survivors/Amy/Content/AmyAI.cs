@@ -80,8 +80,8 @@ namespace Amy.Survivors.Amy
             rollDriver.customName = "Use Utility Boost";
             rollDriver.skillSlot = SkillSlot.Utility;
             rollDriver.requireSkillReady = true;
-            rollDriver.minDistance = 8;
-            rollDriver.maxDistance = 30;
+            rollDriver.minDistance = 15;
+            rollDriver.maxDistance = 40;
             rollDriver.selectionRequiresTargetLoS = false;
             rollDriver.selectionRequiresOnGround = false;
             rollDriver.selectionRequiresAimTarget = false;
@@ -102,7 +102,7 @@ namespace Amy.Survivors.Amy
             bombDriver.customName = "Use Special Multi-Lock";
             bombDriver.skillSlot = SkillSlot.Special;
             bombDriver.requireSkillReady = true;
-            bombDriver.minDistance = 5;
+            bombDriver.minDistance = 8;
             bombDriver.maxDistance = 20;
             bombDriver.selectionRequiresTargetLoS = true;
             bombDriver.selectionRequiresOnGround = false;
@@ -117,7 +117,7 @@ namespace Amy.Survivors.Amy
             bombDriver.movementType = AISkillDriver.MovementType.ChaseMoveTarget;
             bombDriver.moveInputScale = 1;
             bombDriver.aimType = AISkillDriver.AimType.AtMoveTarget;
-            bombDriver.buttonPressType = AISkillDriver.ButtonPressType.Hold;
+            bombDriver.buttonPressType = AISkillDriver.ButtonPressType.TapContinuous;
 
             AISkillDriver chaseDriver = master.AddComponent<AISkillDriver>();
             //Selection Conditions

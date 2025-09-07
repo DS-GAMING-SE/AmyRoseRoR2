@@ -15,9 +15,9 @@ namespace Amy.Survivors.Amy
 
         #region Secondary Hammer Smash
 
-        public const float secondaryHammerChargeMinimumDamageCoefficient = 6.5f;
+        public const float secondaryHammerChargeMinimumDamageCoefficient = 7f;
 
-        public const float secondaryHammerChargeMaximumDamageCoefficient = 10f;
+        public const float secondaryHammerChargeMaximumDamageCoefficient = 14f;
 
         public const float secondaryHammerChargeMinimumProcCoefficient = 1f;
 
@@ -44,8 +44,6 @@ namespace Amy.Survivors.Amy
         public const float secondaryHammerAirJumpBuffSpeedCoefficient = 0.2f;
 
         public const float secondaryHammerAirJumpBuffDuration = 3f;
-
-        public const float secondaryHammerAirSmashRadius = 7f;
 
 
         #endregion

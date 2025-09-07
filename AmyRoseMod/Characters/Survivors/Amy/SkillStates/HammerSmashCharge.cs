@@ -66,12 +66,19 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected virtual void SetNextStateToSmash()
         {
-            HammerSmashGrounded state = (HammerSmashGrounded)EntityStateCatalog.InstantiateState(typeof(HammerSmashGrounded));
-            if (state != null)
+            if (base.characterMotor.isGrounded || HedgehogUtils.Helpers.Flying(base.gameObject, out _))
             {
-                state.charge = charge;
+                HammerSmashGrounded state = (HammerSmashGrounded)EntityStateCatalog.InstantiateState(typeof(HammerSmashGrounded));
+                if (state != null)
+                {
+                    state.charge = charge;
+                }
+                this.outer.SetNextState(state);
             }
-            this.outer.SetNextState(state);
+            else
+            {
+                this.outer.SetNextState(EntityStateCatalog.InstantiateState(typeof(HammerSmashChargeAerial)));
+            }
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()

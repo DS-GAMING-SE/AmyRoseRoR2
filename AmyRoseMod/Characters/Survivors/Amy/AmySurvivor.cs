@@ -34,7 +34,7 @@ namespace Amy.Survivors.Amy
         //used when registering your survivor's language tokens
         public override string survivorTokenPrefix => AMY_PREFIX;
 
-        public static Color amyColor = new Color(1f, 0.4f, 0.9f);
+        public static Color amyColor = new Color(1f, 0.5f, 0.9f);
         
         public override BodyInfo bodyInfo => new BodyInfo
         {
@@ -139,6 +139,8 @@ namespace Amy.Survivors.Amy
             Prefabs.SetupHitBoxGroup(characterModelObject, "VerticalSwing", "VerticalSwingHitbox");
             Prefabs.SetupHitBoxGroup(characterModelObject, "LargeSwing", "LargeSwingHitbox");
             Prefabs.SetupHitBoxGroup(characterModelObject, "Stomp", "StompHitbox");
+            Prefabs.SetupHitBoxGroup(characterModelObject, "LargeStomp", "LargeStompHitbox");
+            Prefabs.SetupHitBoxGroup(characterModelObject, "Spin", "SpinHitbox");
         }
 
         public override void InitializeEntityStateMachines() 
@@ -179,7 +181,7 @@ namespace Amy.Survivors.Amy
                 enabled = true,
                 skillNameToken = HedgehogUtils.Language.momentumPassiveNameToken,
                 skillDescriptionToken = HedgehogUtils.Language.momentumPassiveDescriptionToken,
-                icon = assetBundle.LoadAsset<Sprite>("texPassiveIcon"),
+                icon = assetBundle.LoadAsset<Sprite>("texPassiveMomentumIcon"),
             };
             #region Multiple Passives
             //option 2. a new SkillFamily for a passive, used if you want multiple selectable passives
@@ -222,7 +224,7 @@ namespace Amy.Survivors.Amy
             #endregion
         }
         public static SteppedSkillDef primaryMelee;
-        public static AmySkillDefs.AmyHammerSmashSkillDef secondarySmash;
+        public static SkillDef secondarySmash;
         public static AmySkillDefs.AmyBoostSkillDef utilityBoost;
         public static SkillDef specialMultilock;
 
@@ -238,7 +240,7 @@ namespace Amy.Survivors.Amy
                     "AmyPrimaryHammer",
                     AMY_PREFIX + "PRIMARY_HAMMER_NAME",
                     AMY_PREFIX + "PRIMARY_HAMMER_DESCRIPTION",
-                    assetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                    assetBundle.LoadAsset<Sprite>("texPrimaryHammerSwingIcon"),
                     new EntityStates.SerializableEntityStateType(typeof(PrimaryHammer)),
                     "Weapon",
                     true
@@ -255,19 +257,19 @@ namespace Amy.Survivors.Amy
             Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, SkillSlot.Secondary);
 
             //here is a basic skill def with all fields accounted for
-            secondarySmash = Skills.CreateSkillDef<AmySkillDefs.AmyHammerSmashSkillDef>(new SkillDefInfo
+            secondarySmash = Skills.CreateSkillDef<SkillDef>(new SkillDefInfo
             {
                 skillName = "AmySecondaryHammerSmash",
                 skillNameToken = AMY_PREFIX + "SECONDARY_HAMMER_SMASH_NAME",
                 skillDescriptionToken = AMY_PREFIX + "SECONDARY_HAMMER_SMASH_DESCRIPTION",
                 keywordTokens = new string[] { HedgehogUtils.Language.launchKeyword },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
+                skillIcon = assetBundle.LoadAsset<Sprite>("texSecondaryHammerSmashIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(HammerSmashCharge)),
                 activationStateMachineName = "Weapon",
                 interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
-                baseRechargeInterval = 5f,
+                baseRechargeInterval = 4f,
                 baseMaxStock = 1,
 
                 rechargeStock = 1,
@@ -286,13 +288,8 @@ namespace Amy.Survivors.Amy
                 forceSprintDuringState = false,
 
             });
-            secondarySmash.aerialActivationState = new EntityStates.SerializableEntityStateType(typeof(HammerSmashChargeAerial));
 
             Skills.AddSecondarySkills(bodyPrefab, secondarySmash);
-
-            SkillDef secondarySmashExperiment = HedgehogUtils.Helpers.CopySkillDef<SkillDef>(secondarySmash);
-            secondarySmashExperiment.activationState = new EntityStates.SerializableEntityStateType(typeof(HammerSmashChargeExperiment));
-            Skills.AddSecondarySkills(bodyPrefab, secondarySmashExperiment);
         }
 
         private void AddUtilitySkills()
@@ -305,7 +302,7 @@ namespace Amy.Survivors.Amy
                 skillName = "AmyBoost",
                 skillNameToken = AMY_PREFIX + "UTILITY_BOOST_NAME",
                 skillDescriptionToken = AMY_PREFIX + "UTILITY_BOOST_DESCRIPTION",
-                skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
+                skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityBoostIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(Boost)),
                 activationStateMachineName = "Body",
@@ -347,7 +344,7 @@ namespace Amy.Survivors.Amy
                 skillName = "AmySpecialMultiLock",
                 skillNameToken = AMY_PREFIX + "SPECIAL_MULTILOCK_NAME",
                 skillDescriptionToken = AMY_PREFIX + "SPECIAL_MULTILOCK_DESCRIPTION",
-                skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+                skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialMultiLockIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ThrowBomb)),
                 //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
@@ -378,7 +375,8 @@ namespace Amy.Survivors.Amy
             #region DefaultSkin
             //this creates a SkinDef with all default fields
             SkinDef defaultSkin = Skins.CreateSkinDef("DEFAULT_SKIN",
-                assetBundle.LoadAsset<Sprite>("texMainSkin"),
+                //assetBundle.LoadAsset<Sprite>("texMainSkin"),
+                R2API.Skins.CreateSkinIcon(amyColor, new Color (0.95f, 0.07f, 0.2f), new Color(0.9f, 0.84f, 0.2f), new Color(1f, 0.75f, 0.5f), Color.white),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject);
 
