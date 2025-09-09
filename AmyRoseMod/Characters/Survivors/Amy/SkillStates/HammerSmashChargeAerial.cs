@@ -18,6 +18,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public float startingHeight;
 
+        private float previousAirControl;
+
         public override void OnEnter()
         {
             base.OnEnter();
@@ -44,6 +46,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                     startingHeight = transform.position.y;
                 }
             }
+
+            previousAirControl = characterMotor.airControl;
+            characterMotor.airControl = 0.5f;
+
             if (NetworkServer.active)
             {
                 base.characterBody.AddBuff(JunkContent.Buffs.IgnoreFallDamage);
@@ -84,6 +90,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         public override void OnExit()
         {
             base.OnExit();
+            characterMotor.airControl = previousAirControl;
             base.characterMotor.onHitGroundAuthority -= OnGroundHit;
             if (NetworkServer.active)
             {

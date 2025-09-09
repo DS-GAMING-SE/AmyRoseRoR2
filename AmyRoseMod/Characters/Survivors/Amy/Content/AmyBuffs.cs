@@ -38,7 +38,7 @@ namespace Amy.Survivors.Amy
             hammerSpinSpeedBuff = Modules.Content.CreateAndAddBuff("bdAmyRoseHammerSpinSpeed",
                 LegacyResourcesAPI.Load<BuffDef>("BuffDefs/CloakSpeed").iconSprite,
                 AmySurvivor.amyColor,
-                false,
+                true,
                 false);
 
             dizzyDebuff = Modules.Content.CreateAndAddBuff("bdAmyRoseDizzy",

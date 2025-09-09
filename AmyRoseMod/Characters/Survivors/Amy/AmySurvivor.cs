@@ -226,6 +226,7 @@ namespace Amy.Survivors.Amy
         public static SteppedSkillDef primaryMelee;
         public static SkillDef secondarySmash;
         public static AmySkillDefs.AmyBoostSkillDef utilityBoost;
+        public static SkillDef utilityBoostHammerSpin;
         public static SkillDef specialMultilock;
 
         //if this is your first look at skilldef creation, take a look at Secondary first
@@ -332,6 +333,38 @@ namespace Amy.Survivors.Amy
             //utilityBoost.hammerSwingState = new EntityStates.SerializableEntityStateType(typeof(BoostIdle));
 
             Skills.AddUtilitySkills(bodyPrefab, utilityBoost);
+
+            utilityBoostHammerSpin = Skills.CreateSkillDef<SkillDef>(new SkillDefInfo
+            {
+                skillName = "AmyBoostHammerSpin",
+                skillNameToken = AMY_PREFIX + "UTILITY_HAMMER_SPIN_NAME",
+                skillDescriptionToken = AMY_PREFIX + "UTILITY_HAMMER_SPIN_DESCRIPTION",
+                skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityHammerSpinIcon"),
+
+                activationState = new EntityStates.SerializableEntityStateType(typeof(HammerSpin)),
+                activationStateMachineName = "Body",
+                interruptPriority = EntityStates.InterruptPriority.Pain,
+
+                baseRechargeInterval = 0f,
+                baseMaxStock = 1,
+
+                rechargeStock = 0,
+                requiredStock = 0,
+                stockToConsume = 0,
+
+                resetCooldownTimerOnUse = false,
+                fullRestockOnAssign = true,
+                dontAllowPastMaxStocks = true,
+                mustKeyPress = true,
+                beginSkillCooldownOnSkillEnd = false,
+
+                isCombatSkill = true,
+                canceledFromSprinting = false,
+                cancelSprintingOnActivation = false,
+                forceSprintDuringState = true,
+            });
+
+            utilityBoost.hammerSwingSkillDef = utilityBoostHammerSpin;
         }
 
         private void AddSpecialSkills()
@@ -375,8 +408,7 @@ namespace Amy.Survivors.Amy
             #region DefaultSkin
             //this creates a SkinDef with all default fields
             SkinDef defaultSkin = Skins.CreateSkinDef("DEFAULT_SKIN",
-                //assetBundle.LoadAsset<Sprite>("texMainSkin"),
-                R2API.Skins.CreateSkinIcon(amyColor, new Color (0.95f, 0.07f, 0.2f), new Color(0.9f, 0.84f, 0.2f), new Color(1f, 0.75f, 0.5f), Color.white),
+                assetBundle.LoadAsset<Sprite>("texMainSkinIcon"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject);
 

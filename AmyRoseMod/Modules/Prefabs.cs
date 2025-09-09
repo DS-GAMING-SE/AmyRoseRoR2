@@ -8,6 +8,7 @@ using static RoR2.CharacterAI.AISkillDriver;
 using RoR2.Skills;
 using System;
 using System.Linq;
+using Amy.Survivors.Amy.Components;
 
 namespace Amy.Modules
 {
@@ -202,7 +203,7 @@ namespace Amy.Modules
 
             bodyComponent.baseJumpCount = bodyInfo.jumpCount;
 
-            bodyComponent.sprintingSpeedMultiplier = 1.7f;
+            bodyComponent.sprintingSpeedMultiplier = 1.6f;
 
             bodyComponent.bodyFlags = CharacterBody.BodyFlags.ImmuneToExecutes | CharacterBody.BodyFlags.SprintAnyDirection;
             bodyComponent.rootMotionInMainState = false;
@@ -275,6 +276,11 @@ namespace Amy.Modules
             ModelLocator modelLocator = prefab.GetComponent<ModelLocator>();
             modelLocator.modelTransform = modelTransform;
             modelLocator.modelBaseTransform = modelBaseTransform;
+
+            LeanIntoVelocityModelTransform lean = prefab.AddComponent<LeanIntoVelocityModelTransform>();
+            lean.modelLocator = modelLocator;
+            lean.modelTransform = modelTransform;
+            lean.modelParentTransform = modelTransform.parent;
         }
 
         //private static void SetupRigidbody(GameObject prefab)

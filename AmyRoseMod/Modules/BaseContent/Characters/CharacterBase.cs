@@ -114,7 +114,7 @@ namespace Amy.Modules.Characters
         public float crit = 1f;
 
         //misc stats
-        public float moveSpeed = 8.5f;
+        public float moveSpeed = 8f;
         public float acceleration = 50f;
         public float jumpPower = 18f;
 

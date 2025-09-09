@@ -56,7 +56,10 @@ namespace Amy.Survivors.Amy
 
             #region Utility
             LanguageAPI.Add(prefix + "UTILITY_BOOST_NAME", "Boost");
-            LanguageAPI.Add(prefix + "UTILITY_BOOST_DESCRIPTION", $"Spend boost meter to <style=cIsUtility>move {100f * AmyStaticValues.boostListedSpeedCoefficient}% faster</style> than normal. If airborne, do a short <style=cIsUtility>mid-air dash</style>.\nPress the primary skill to begin a {Tokens.UtilityText("hammer-spin ") + Tokens.wipIcon}, repeatedly dealing {Tokens.DamageValueText(AmyStaticValues.boostHammerSpinDamageCoefficient)}. Running out of boost meter while hammer-spinning will make you {Tokens.RedText("dizzy")}.");
+            LanguageAPI.Add(prefix + "UTILITY_BOOST_DESCRIPTION", $"Spend boost meter to <style=cIsUtility>move {100f * AmyStaticValues.boostListedSpeedCoefficient}% faster</style> than normal. If airborne, do a short <style=cIsUtility>mid-air dash</style>.\nPress the primary skill to begin a {Tokens.UtilityText("hammer-spin")}, dealing {Tokens.DamageValueText(AmyStaticValues.boostHammerSpinDamageCoefficient)} repeatedly. Running out of boost meter while hammer-spinning will make you {Tokens.RedText("dizzy ") + Tokens.wipIcon}.");
+
+            LanguageAPI.Add(prefix + "UTILITY_HAMMER_SPIN_NAME", "Hammer-Spin");
+            LanguageAPI.Add(prefix + "UTILITY_HAMMER_SPIN_DESCRIPTION", $"{Tokens.UtilityText("Launching")}. Spin dealing {Tokens.DamageValueText(AmyStaticValues.boostHammerSpinDamageCoefficient)} repeatedly. Running out of boost meter will make you {Tokens.RedText("dizzy")}.");
             #endregion
 
             #region Special

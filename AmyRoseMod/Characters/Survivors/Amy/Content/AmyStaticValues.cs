@@ -31,15 +31,15 @@ namespace Amy.Survivors.Amy
 
         public const float secondaryHammerAirFallDistanceForMaxCharge = 33f;
 
-        public const float secondaryHammerAirFallAcceleration = 40f;
+        public const float secondaryHammerAirFallAcceleration = 60f;
 
-        public const float secondaryHammerAirFallMaxSpeed = 60f;
+        public const float secondaryHammerAirFallMaxSpeed = 80f;
 
         public const float secondaryHammerAirFallMaxFallDuration = 4f;
 
-        public const float secondaryHammerAirJumpHeightMultiplier = 3f;
+        public const float secondaryHammerAirJumpHeightMultiplier = 2.5f;
 
-        public const float secondaryHammerAirJumpMaxLerpFromUp = 0.3f;
+        public const float secondaryHammerAirJumpMaxLerpFromUp = 0.18f;
 
         public const float secondaryHammerAirJumpBuffSpeedCoefficient = 0.2f;
 
@@ -63,7 +63,11 @@ namespace Amy.Survivors.Amy
 
         public const float boostHammerSpinLaunchForce = 250f;
 
-        public const float boostHammerSpinBuffSpeedCoefficient = 0.06f;
+        public const float boostHammerSpinAttacksPerSecond = 4.5f;
+
+        public const float boostHammerSpinBuffSpeedCoefficient = 0.07f;
+
+        public const float boostHammerSpinBuffPerSecond = 0.7f;
 
         public const int boostHammerSpinBuffMaxStacks = 5;
 

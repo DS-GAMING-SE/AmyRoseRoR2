@@ -16,6 +16,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         protected float chargeTime;
 
         protected float minDuration;
+        protected float minAirDuration;
 
         // 0-1
         public float charge;
@@ -27,17 +28,21 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             get { return (1 / Mathf.Max(chargeTime - minDuration, 0.1f)) * Time.fixedDeltaTime; }
         }
 
+        protected ICharacterFlightParameterProvider flight;
+
         public override void OnEnter()
         {
             base.OnEnter();
             PrepareStats();
             chargeTime = baseChargeTime / characterBody.attackSpeed;
+            flight = base.gameObject.GetComponent<ICharacterFlightParameterProvider>();
         }
 
         protected virtual void PrepareStats()
         {
             baseChargeTime = AmyStaticValues.secondaryHammerBaseChargeTime;
             minDuration = 0.4f;
+            minAirDuration = 0.2f;
         }
 
         public override void FixedUpdate()
@@ -57,6 +62,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                     return;
                 }
             }
+            else if (fixedAge >= minAirDuration && base.isAuthority && inputBank && !inputBank.skill2.down && !base.characterMotor.isGrounded && !HedgehogUtils.Helpers.Flying(flight))
+            {
+                SetNextStateToSmash();
+                return;
+            }
         }
 
         protected virtual void ReachedMaxCharge()
@@ -66,7 +76,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected virtual void SetNextStateToSmash()
         {
-            if (base.characterMotor.isGrounded || HedgehogUtils.Helpers.Flying(base.gameObject, out _))
+            if (base.characterMotor.isGrounded || HedgehogUtils.Helpers.Flying(flight))
             {
                 HammerSmashGrounded state = (HammerSmashGrounded)EntityStateCatalog.InstantiateState(typeof(HammerSmashGrounded));
                 if (state != null)
