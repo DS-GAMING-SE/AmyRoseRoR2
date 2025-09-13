@@ -7,12 +7,15 @@ using UnityEngine;
 using UnityEngine.Networking;
 using HedgehogUtils.Boost;
 using Amy.Survivors.Amy;
+using Amy.Survivors.Amy.Components;
 
 namespace Amy.Survivors.Amy.SkillStates
 {
     public class Boost : HedgehogUtils.Boost.EntityStates.Boost, ISkillState
     {
         protected override BuffDef buff => AmyBuffs.boostBuff;
+
+        public AmyHammerSpinController hammerSpinController;
         public GenericSkill activatorSkillSlot { get; set; }
         protected SkillDef hammerSwingSkillDef;
         public override void OnEnter()
@@ -27,9 +30,10 @@ namespace Amy.Survivors.Amy.SkillStates
             {
                 EntityStateMachine weaponState = EntityStateMachine.FindByCustomName(base.gameObject, "Weapon");
                 if (weaponState) { weaponState.SetNextStateToMain(); }
-
-                if (ApplySkillOverride(this, activatorSkillSlot, base.skillLocator, out SkillDef skillDef))
+                hammerSpinController = base.GetComponent<AmyHammerSpinController>();
+                if (hammerSpinController)
                 {
+                    hammerSpinController.ApplySkillOverride(activatorSkillSlot, out SkillDef skillDef);
                     hammerSwingSkillDef = skillDef;
                 }
             }
@@ -40,10 +44,6 @@ namespace Amy.Survivors.Amy.SkillStates
             if (base.modelLocator)
             {
                 modelLocator.normalizeToFloor = false;
-            }
-            if (base.isAuthority)
-            {
-                RemoveSkillOverride(this, activatorSkillSlot, hammerSwingSkillDef, base.skillLocator);
             }
             base.OnExit();
         }
@@ -65,31 +65,6 @@ namespace Amy.Survivors.Amy.SkillStates
         public override Material GetOverlayMaterial()
         {
             return null;
-        }
-
-        public static bool ApplySkillOverride(object source, GenericSkill activatorSkillSlot, SkillLocator skillLocator, out SkillDef hammerSwingSkillDef)
-        {
-            hammerSwingSkillDef = null;
-            if (activatorSkillSlot && activatorSkillSlot.skillDef is AmySkillDefs.AmyBoostSkillDef)
-            {
-                hammerSwingSkillDef = (activatorSkillSlot.skillDef as AmySkillDefs.AmyBoostSkillDef).hammerSwingSkillDef;
-                if (hammerSwingSkillDef && skillLocator)
-                {
-                    skillLocator.primary.SetSkillOverride(source, hammerSwingSkillDef, GenericSkill.SkillOverridePriority.Contextual);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static bool RemoveSkillOverride(object source, GenericSkill activatorSkillSlot, SkillDef hammerSwingSkillDef, SkillLocator skillLocator)
-        {
-            if (hammerSwingSkillDef && skillLocator)
-            {
-                skillLocator.primary.UnsetSkillOverride(source, hammerSwingSkillDef, GenericSkill.SkillOverridePriority.Contextual);
-                return true;
-            }
-            return false;
         }
     }
 }

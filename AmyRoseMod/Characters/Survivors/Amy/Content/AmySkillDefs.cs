@@ -15,16 +15,16 @@ namespace Amy.Survivors.Amy
     {
         public interface IAmyBoost
         {
-            SkillDef hammerSwingSkillDef { get; set; }
+            SkillDef hammerSpinSkillDef { get; set; }
         }
         public class AmyBoostSkillDef : HedgehogUtils.Boost.SkillDefs.BoostSkillDef, IAmyBoost
         {
-            public SkillDef hammerSwingSkillDef { get; set; }
+            public SkillDef hammerSpinSkillDef { get; set; }
         }
 
         public class AmyRequiresFormBoostSkillDef : HedgehogUtils.Boost.SkillDefs.RequiresFormBoostSkillDef, IAmyBoost
         {
-            public SkillDef hammerSwingSkillDef { get; set; }
+            public SkillDef hammerSpinSkillDef { get; set; }
         }
     }
 }

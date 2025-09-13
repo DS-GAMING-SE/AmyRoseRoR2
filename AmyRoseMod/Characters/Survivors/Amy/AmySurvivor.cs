@@ -150,7 +150,7 @@ namespace Amy.Survivors.Amy
             Prefabs.ClearEntityStateMachines(bodyPrefab);
 
             //the main "Body" state machine has some special properties
-            Prefabs.AddMainEntityStateMachine(bodyPrefab, "Body", typeof(EntityStates.GenericCharacterMain), typeof(EntityStates.SpawnTeleporterState));
+            Prefabs.AddMainEntityStateMachine(bodyPrefab, "Body", typeof(AmyMain), typeof(EntityStates.SpawnTeleporterState));
             //if you set up a custom main characterstate, set it up here
                 //don't forget to register custom entitystates in your HenryStates.cs
 
@@ -303,6 +303,7 @@ namespace Amy.Survivors.Amy
                 skillName = "AmyBoost",
                 skillNameToken = AMY_PREFIX + "UTILITY_BOOST_NAME",
                 skillDescriptionToken = AMY_PREFIX + "UTILITY_BOOST_DESCRIPTION",
+                keywordTokens = new string[] { AMY_PREFIX + "HAMMER_SPIN_KEYWORD", HedgehogUtils.Language.launchKeyword },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityBoostIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(Boost)),
@@ -364,7 +365,7 @@ namespace Amy.Survivors.Amy
                 forceSprintDuringState = true,
             });
 
-            utilityBoost.hammerSwingSkillDef = utilityBoostHammerSpin;
+            utilityBoost.hammerSpinSkillDef = utilityBoostHammerSpin;
         }
 
         private void AddSpecialSkills()

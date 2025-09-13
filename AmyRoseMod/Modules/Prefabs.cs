@@ -277,7 +277,7 @@ namespace Amy.Modules
             modelLocator.modelTransform = modelTransform;
             modelLocator.modelBaseTransform = modelBaseTransform;
 
-            LeanIntoVelocityModelTransform lean = prefab.AddComponent<LeanIntoVelocityModelTransform>();
+            AmyHammerSpinController lean = prefab.AddComponent<AmyHammerSpinController>();
             lean.modelLocator = modelLocator;
             lean.modelTransform = modelTransform;
             lean.modelParentTransform = modelTransform.parent;

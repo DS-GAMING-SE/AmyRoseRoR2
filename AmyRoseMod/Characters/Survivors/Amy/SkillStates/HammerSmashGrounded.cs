@@ -53,7 +53,8 @@ namespace Amy.Survivors.Amy.SkillStates
             hitboxGroupName = "LargeSwing";
 
             damageType = DamageTypeCombo.GenericSecondary;
-            damageType.AddModdedDamageType(AmyDamageTypes.launchNoAutoAim);
+            damageType.AddModdedDamageType(HedgehogUtils.Launch.DamageTypes.launch);
+            damageType.AddModdedDamageType(HedgehogUtils.Launch.DamageTypes.removeLaunchAutoAim);
             damageCoefficient = Mathf.Lerp(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient, AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient, charge);
             procCoefficient = charge == 1 ? AmyStaticValues.secondaryHammerChargeMaximumProcCoefficient : AmyStaticValues.secondaryHammerChargeMinimumProcCoefficient;
             pushForce = AmyStaticValues.secondaryHammerLaunchForce;

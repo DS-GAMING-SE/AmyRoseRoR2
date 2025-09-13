@@ -6,12 +6,14 @@ using System;
 using UnityEngine;
 using UnityEngine.Networking;
 using HedgehogUtils.Boost;
+using Amy.Survivors.Amy.Components;
 
 namespace Amy.Survivors.Amy.SkillStates
 {
     public class BoostIdle : HedgehogUtils.Boost.EntityStates.BoostIdle
     {
         public SkillDef hammerSwingSkillDef;
+        public AmyHammerSpinController hammerSpinController;
         
         public override void OnEnter()
         {
@@ -26,9 +28,23 @@ namespace Amy.Survivors.Amy.SkillStates
                 EntityStateMachine weaponState = EntityStateMachine.FindByCustomName(base.gameObject, "Weapon");
                 if (weaponState) { weaponState.SetNextStateToMain(); }
 
-                if (Boost.ApplySkillOverride(this, activatorSkillSlot, base.skillLocator, out SkillDef skillDef))
+                hammerSpinController = base.GetComponent<AmyHammerSpinController>();
+                if (hammerSpinController)
                 {
+                    hammerSpinController.ApplySkillOverride(activatorSkillSlot, out SkillDef skillDef);
                     hammerSwingSkillDef = skillDef;
+                }
+            }
+        }
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            if (base.inputBank && hammerSpinController && base.skillLocator && base.skillLocator.primary)
+            {
+                if (inputBank.skill1.justPressed)
+                {
+                    base.skillLocator.primary.ExecuteIfReady();
                 }
             }
         }
@@ -38,10 +54,6 @@ namespace Amy.Survivors.Amy.SkillStates
             if (base.modelLocator)
             {
                 modelLocator.normalizeToFloor = false;
-            }
-            if (base.isAuthority)
-            {
-                Boost.RemoveSkillOverride(this, activatorSkillSlot, hammerSwingSkillDef, base.skillLocator);
             }
             base.OnExit();
         }

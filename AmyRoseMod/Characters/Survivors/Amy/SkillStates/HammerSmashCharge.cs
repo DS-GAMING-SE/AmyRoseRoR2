@@ -87,7 +87,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             }
             else
             {
-                this.outer.SetNextState(EntityStateCatalog.InstantiateState(typeof(HammerSmashChargeAerial)));
+                HammerSmashChargeAerial state = (HammerSmashChargeAerial)EntityStateCatalog.InstantiateState(typeof(HammerSmashChargeAerial));
+                if (state != null)
+                {
+                    state.charge = charge;
+                }
+                this.outer.SetNextState(state);
             }
         }
 

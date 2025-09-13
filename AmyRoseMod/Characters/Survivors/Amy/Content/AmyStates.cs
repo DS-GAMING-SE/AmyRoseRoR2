@@ -7,6 +7,8 @@ namespace Amy.Survivors.Amy
     {
         public static void Init()
         {
+            Modules.Content.AddEntityState(typeof(AmyMain));
+
             Modules.Content.AddEntityState(typeof(PrimaryHammer));
 
             Modules.Content.AddEntityState(typeof(HammerSmashCharge));
@@ -17,6 +19,8 @@ namespace Amy.Survivors.Amy
             Modules.Content.AddEntityState(typeof(Boost));
             Modules.Content.AddEntityState(typeof(BoostIdle));
             Modules.Content.AddEntityState(typeof(Brake));
+
+            Modules.Content.AddEntityState(typeof(HammerSpin));
 
             Modules.Content.AddEntityState(typeof(ThrowBomb));
         }

@@ -50,7 +50,7 @@ namespace Amy.Survivors.Amy.SkillStates
         private HitStopCachedState hitStopCachedState;
         private Vector3 storedVelocity;
 
-        protected LeanIntoVelocityModelTransform lean;
+        protected AmyHammerSpinController hammerSpinController;
         protected BoostLogic boostLogic;
 
         public GenericSkill activatorSkillSlot { get; set; }
@@ -58,7 +58,7 @@ namespace Amy.Survivors.Amy.SkillStates
 
         protected virtual float boostMeterDrain
         {
-            get { return 0.63f; }
+            get { return 0.60f; }
         }
 
         protected float buffStackTimer;
@@ -81,13 +81,14 @@ namespace Amy.Survivors.Amy.SkillStates
             impactSound = AmyAssets.swordHitSoundEvent.index;
 
             base.OnEnter();
-            lean = base.GetComponent<LeanIntoVelocityModelTransform>();
-            if (lean)
+            hammerSpinController = base.GetComponent<AmyHammerSpinController>();
+            if (hammerSpinController)
             {
-                lean.Activate();
+                hammerSpinController.ActivateLean();
             }
 
             boostLogic = base.GetComponent<BoostLogic>();
+            boostLogic.boostBeingUsed = true;
 
             previousAirControl = characterMotor.airControl;
             characterMotor.airControl = 1f;
@@ -95,11 +96,13 @@ namespace Amy.Survivors.Amy.SkillStates
             if (NetworkServer.active)
             {
                 base.characterBody.AddBuff(AmyBuffs.boostBuff);
+                base.characterBody.AddBuff(AmyBuffs.hammerSpinSpeedBuff);
             }
             if (base.isAuthority)
             {
-                if (Boost.ApplySkillOverride(this, activatorSkillSlot, base.skillLocator, out SkillDef skillDef))
+                if (hammerSpinController)
                 {
+                    hammerSpinController.ApplySkillOverride(activatorSkillSlot, out SkillDef skillDef);
                     hammerSpinSkillDef = skillDef;
                 }
             }
@@ -173,7 +176,6 @@ namespace Amy.Survivors.Amy.SkillStates
 
             DrainBoostMeter();
 
-            //to guarantee attack comes out if at high attack speed the stopwatch skips past the firing duration between frames
             if (!hasFired)
             {
                 hasFired = true;
@@ -235,7 +237,7 @@ namespace Amy.Survivors.Amy.SkillStates
                 hitStopCachedState = CreateHitStopCachedState(characterMotor, animator, playbackRateParam);
                 hitPauseTimer = hitStopDuration / base.characterBody.attackSpeed;
                 inHitPause = true;
-                lean.frozen = true;
+                hammerSpinController.leanFrozen = true;
             }
         }
 
@@ -267,7 +269,7 @@ namespace Amy.Survivors.Amy.SkillStates
             ConsumeHitStopCachedState(hitStopCachedState, characterMotor, animator);
             inHitPause = false;
             characterMotor.velocity = storedVelocity;
-            lean.frozen = false;
+            hammerSpinController.leanFrozen = false;
         }
 
         protected void CreateOverlap()
@@ -294,15 +296,16 @@ namespace Amy.Survivors.Amy.SkillStates
 
         public override void OnExit()
         {
-            if (lean) { lean.Deactivate(); }
+            boostLogic.boostDraining = false;
+            boostLogic.boostBeingUsed = false;
+            if (hammerSpinController) 
+            { 
+                hammerSpinController.DeactivateLean();
+            }
             if (NetworkServer.active)
             {
                 base.characterBody.RemoveBuff(AmyBuffs.boostBuff);
                 base.characterBody.SetBuffCount(AmyBuffs.hammerSpinSpeedBuff.buffIndex, 0);
-            }
-            if (base.isAuthority)
-            {
-                Boost.RemoveSkillOverride(this, activatorSkillSlot, hammerSpinSkillDef, base.skillLocator);
             }
             base.characterMotor.airControl = previousAirControl;
             base.OnExit();

@@ -65,11 +65,13 @@ namespace Amy.Survivors.Amy
 
         public const float boostHammerSpinAttacksPerSecond = 4.5f;
 
-        public const float boostHammerSpinBuffSpeedCoefficient = 0.07f;
+        public const float boostHammerSpinAccelerationDivide = 4f;
+
+        public const float boostHammerSpinBuffSpeedCoefficient = 0.1f;
 
         public const float boostHammerSpinBuffPerSecond = 0.7f;
 
-        public const int boostHammerSpinBuffMaxStacks = 5;
+        public const int boostHammerSpinBuffMaxStacks = 6;
 
         public const float dizzyDuration = 3f;
 

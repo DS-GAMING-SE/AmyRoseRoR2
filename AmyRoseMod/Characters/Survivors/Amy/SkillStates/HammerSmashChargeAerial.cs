@@ -20,6 +20,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         private float previousAirControl;
 
+        public float charge;
+
+        private bool attackHit;
+
         public override void OnEnter()
         {
             base.OnEnter();
@@ -50,6 +54,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             previousAirControl = characterMotor.airControl;
             characterMotor.airControl = 0.5f;
 
+            HedgehogUtils.Helpers.EndChrysalis(base.gameObject);
+
             if (NetworkServer.active)
             {
                 base.characterBody.AddBuff(JunkContent.Buffs.IgnoreFallDamage);
@@ -61,22 +67,14 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             base.FixedUpdate();
             if (base.isAuthority)
             {
-                base.characterBody.isSprinting = false;
+                base.characterBody.isSprinting = true;
                 if (base.characterMotor)
                 {
                     base.characterMotor.velocity.y = Mathf.Max(-AmyStaticValues.secondaryHammerAirFallMaxSpeed, base.characterMotor.velocity.y - (AmyStaticValues.secondaryHammerAirFallAcceleration * Time.fixedDeltaTime));
 
                     if (base.characterMotor.velocity.y <= -4)
                     {
-                        BeforeAttackFire();
-                        List<HurtBox> hit = new List<HurtBox>();
-                        if (overlapAttack.Fire(hit))
-                        {
-                            if (hit.Count > 0 && hit[0] && hit[0].healthComponent)
-                            ForgeOnGroundHit();
-                            SetNextStateToSmash(hit[0].healthComponent);
-                            return;
-                        }
+                        AttemptAttack();
                     }
                 }
                 if (fixedAge >= AmyStaticValues.secondaryHammerAirFallMaxFallDuration)
@@ -100,7 +98,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public void OnGroundHit(ref CharacterMotor.HitGroundInfo hitGroundInfo)
         {
-            SetNextStateToSmash(null);
+            if (!attackHit && !AttemptAttack())
+            {
+                SetNextStateToSmash(null);
+            }
         }
 
         public virtual void PrepareAttackStats()
@@ -108,9 +109,24 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         }
 
+        protected virtual bool AttemptAttack()
+        {
+            BeforeAttackFire();
+            List<HurtBox> hit = new List<HurtBox>();
+            if (overlapAttack.Fire(hit))
+            {
+                attackHit = true;
+                if (hit.Count > 0 && hit[0] && hit[0].healthComponent)
+                    ForgeOnGroundHit();
+                SetNextStateToSmash(hit[0].healthComponent);
+                return true;
+            }
+            return false;
+        }
+
         protected virtual void BeforeAttackFire()
         {
-            float charge = CalculateCharge();
+            float charge = Mathf.Min(this.charge + CalculateCharge(), 1f);
             overlapAttack.damage = damageStat * Mathf.Lerp(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient, AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient, charge);
             overlapAttack.procCoefficient = charge == 1 ? AmyStaticValues.secondaryHammerChargeMaximumProcCoefficient : AmyStaticValues.secondaryHammerChargeMinimumProcCoefficient;
         }
@@ -138,7 +154,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             HammerSmashAerial state = (HammerSmashAerial)EntityStateCatalog.InstantiateState(typeof(HammerSmashAerial));
             if (state != null)
             {
-                state.charge = CalculateCharge();
+                state.charge = Mathf.Min(this.charge + CalculateCharge(), 1f);
                 state.targetToIgnore = targetToIgnore;
             }
             this.outer.SetNextState(state);

@@ -38,6 +38,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             if (NetworkServer.active)
             {
                 base.characterBody.AddTimedBuff(AmyBuffs.hammerSmashSpeedBuff, AmyStaticValues.secondaryHammerAirJumpBuffDuration);
+                base.characterBody.AddTimedBuff(JunkContent.Buffs.IgnoreFallDamage, 1);
             }
             if (base.isAuthority)
             {
@@ -112,7 +113,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         protected virtual void Jump()
         {
             PlayJumpAnimation();
-            Vector3 targetDirection = base.inputBank ? Vector3.Lerp(Vector3.up, base.inputBank.moveVector * 3f, base.inputBank.moveVector.magnitude * AmyStaticValues.secondaryHammerAirJumpMaxLerpFromUp) : Vector3.up;
+            Vector3 targetDirection = base.inputBank ? Vector3.Lerp(Vector3.up, base.inputBank.moveVector * 3.5f, base.inputBank.moveVector.magnitude * AmyStaticValues.secondaryHammerAirJumpMaxLerpFromUp) : Vector3.up;
             base.characterMotor.Motor.ForceUnground();
             base.characterMotor.velocity = targetDirection * base.characterBody.jumpPower * AmyStaticValues.secondaryHammerAirJumpHeightMultiplier;
         }

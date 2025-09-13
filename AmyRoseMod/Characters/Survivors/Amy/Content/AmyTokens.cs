@@ -41,7 +41,10 @@ namespace Amy.Survivors.Amy
             Language.Add(prefix + "OUTRO_FAILURE", outroFailure);
 
             #region Skins
-            Language.Add(prefix + "MASTERY_SKIN_NAME", "Alternate");
+            Language.Add(prefix + "PALADIN_SKIN_NAME", "Paladin");
+            Language.Add(prefix + "RIDERS_SKIN_NAME", "Riders");
+            Language.Add(prefix + "FORTUNE_TELLER_SKIN_NAME", "Fortune Teller");
+            Language.Add(prefix + "MALWARE_SKIN_NAME", "Malware");
             #endregion
 
             #region Primary
@@ -51,15 +54,17 @@ namespace Amy.Survivors.Amy
 
             #region Secondary
             Language.Add(prefix + "SECONDARY_HAMMER_SMASH_NAME", $"Piko Piko Smash");
-            Language.Add(prefix + "SECONDARY_HAMMER_SMASH_DESCRIPTION", $"{Tokens.UtilityText("Launching")}. Charge a hammer swing dealing {Tokens.DamageValueText(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient,AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient)}. If airborne, quickly descend, {Tokens.DamageText("attack")} the ground where you land, and {Tokens.UtilityText("rebound upwards")}.");
+            Language.Add(prefix + "SECONDARY_HAMMER_SMASH_DESCRIPTION", $"{Tokens.UtilityText("Launching")}. Charge a hammer swing dealing {Tokens.DamageValueText(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient,AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient)}. If airborne, quickly descend, {Tokens.DamageText("attack")} where you land, and {Tokens.UtilityText("rebound upwards")}.");
             #endregion
 
             #region Utility
             LanguageAPI.Add(prefix + "UTILITY_BOOST_NAME", "Boost");
-            LanguageAPI.Add(prefix + "UTILITY_BOOST_DESCRIPTION", $"Spend boost meter to <style=cIsUtility>move {100f * AmyStaticValues.boostListedSpeedCoefficient}% faster</style> than normal. If airborne, do a short <style=cIsUtility>mid-air dash</style>.\nPress the primary skill to begin a {Tokens.UtilityText("hammer-spin")}, dealing {Tokens.DamageValueText(AmyStaticValues.boostHammerSpinDamageCoefficient)} repeatedly. Running out of boost meter while hammer-spinning will make you {Tokens.RedText("dizzy ") + Tokens.wipIcon}.");
+            LanguageAPI.Add(prefix + "UTILITY_BOOST_DESCRIPTION", $"Spend boost meter to <style=cIsUtility>move {100f * AmyStaticValues.boostListedSpeedCoefficient}% faster</style> than normal. If airborne, do a short <style=cIsUtility>mid-air dash</style>.\nPress the primary skill to begin a {Tokens.DamageText("hammer-spin")}. Running out of boost meter while hammer-spinning will make you {Tokens.RedText("dizzy ") + Tokens.wipIcon}.");
 
             LanguageAPI.Add(prefix + "UTILITY_HAMMER_SPIN_NAME", "Hammer-Spin");
             LanguageAPI.Add(prefix + "UTILITY_HAMMER_SPIN_DESCRIPTION", $"{Tokens.UtilityText("Launching")}. Spin dealing {Tokens.DamageValueText(AmyStaticValues.boostHammerSpinDamageCoefficient)} repeatedly. Running out of boost meter will make you {Tokens.RedText("dizzy")}.");
+
+            LanguageAPI.Add(prefix + "HAMMER_SPIN_KEYWORD", $"<style=CKeywordName>Hammer-Spin</style><style=cSub>Deal {Tokens.DamageValueText(AmyStaticValues.boostHammerSpinDamageCoefficient)} repeatedly to nearby enemies and {Tokens.UtilityText("launch")} them. {Tokens.UtilityText("Movement speed increases")} the longer the skill is used");
             #endregion
 
             #region Special
