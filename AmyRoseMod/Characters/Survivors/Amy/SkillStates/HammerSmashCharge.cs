@@ -30,12 +30,28 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected ICharacterFlightParameterProvider flight;
 
+        private CharacterCameraParamsData aimingCameraParams = new CharacterCameraParamsData
+        {
+            maxPitch = 80f,
+            minPitch = -80f,
+            pivotVerticalOffset = 0.8f,
+            idealLocalCameraPos = new Vector3(0f, 0f, -9f),
+            wallCushion = 0.1f
+        };
+        private CameraTargetParams.CameraParamsOverrideHandle camOverrideHandle;
+
         public override void OnEnter()
         {
             base.OnEnter();
             PrepareStats();
             chargeTime = baseChargeTime / characterBody.attackSpeed;
             flight = base.gameObject.GetComponent<ICharacterFlightParameterProvider>();
+
+            this.camOverrideHandle = base.cameraTargetParams.AddParamsOverride(new CameraTargetParams.CameraParamsOverrideRequest
+            {
+                cameraParamsData = aimingCameraParams,
+                priority = 1f
+            }, chargeTime * 0.5f);
         }
 
         protected virtual void PrepareStats()
@@ -67,6 +83,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 SetNextStateToSmash();
                 return;
             }
+        }
+
+        public override void OnExit()
+        {
+            base.cameraTargetParams.RemoveParamsOverride(this.camOverrideHandle, 0.5f);
+            base.OnExit();
         }
 
         protected virtual void ReachedMaxCharge()

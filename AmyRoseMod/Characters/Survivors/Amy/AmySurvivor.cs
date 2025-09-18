@@ -320,7 +320,7 @@ namespace Amy.Survivors.Amy
                 resetCooldownTimerOnUse = false,
                 fullRestockOnAssign = true,
                 dontAllowPastMaxStocks = false,
-                mustKeyPress = false,
+                mustKeyPress = true,
                 beginSkillCooldownOnSkillEnd = false,
 
                 isCombatSkill = false,
@@ -331,7 +331,6 @@ namespace Amy.Survivors.Amy
             utilityBoost.boostIdleState = new EntityStates.SerializableEntityStateType(typeof(BoostIdle));
             utilityBoost.brakeState = new EntityStates.SerializableEntityStateType(typeof(Brake));
             utilityBoost.boostHUDColor = amyColor;
-            //utilityBoost.hammerSwingState = new EntityStates.SerializableEntityStateType(typeof(BoostIdle));
 
             Skills.AddUtilitySkills(bodyPrefab, utilityBoost);
 

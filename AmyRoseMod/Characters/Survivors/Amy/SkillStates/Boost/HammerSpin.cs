@@ -61,6 +61,7 @@ namespace Amy.Survivors.Amy.SkillStates
             get { return 0.60f; }
         }
 
+        protected float buffStackNeededSpeedPercent;
         protected float buffStackTimer;
         protected float buffsPerSecond;
 
@@ -115,6 +116,7 @@ namespace Amy.Survivors.Amy.SkillStates
             hitStopDuration = 0.06f;
             hitHopVelocity = 4f;
             buffsPerSecond = AmyStaticValues.boostHammerSpinBuffPerSecond;
+            buffStackNeededSpeedPercent = 0.7f;
         }
 
         protected virtual void PrepareAttackStats()
@@ -153,13 +155,13 @@ namespace Amy.Survivors.Amy.SkillStates
                     }
                 }
 
-                if (NetworkServer.active && buffStackTimer > 0 && base.characterBody.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff) < AmyStaticValues.boostHammerSpinBuffMaxStacks)
+                if (NetworkServer.active && buffStackTimer > 0)
                 {
                     buffStackTimer -= Time.fixedDeltaTime;
                     if (buffStackTimer <= 0)
                     {
-                        base.characterBody.AddBuff(AmyBuffs.hammerSpinSpeedBuff);
                         buffStackTimer = buffsPerSecond;
+                        UpdateBuffs();
                     }
                 }
             }
@@ -169,7 +171,7 @@ namespace Amy.Survivors.Amy.SkillStates
                 if (animator) animator.SetFloat(playbackRateParam, 0f);
             }
 
-            if (base.characterMotor)
+            if (base.characterMotor && !base.characterMotor.isFlying)
             {
                 base.characterMotor.velocity.y = Mathf.Max(characterMotor.velocity.y, -3);
             }
@@ -185,12 +187,12 @@ namespace Amy.Survivors.Amy.SkillStates
 
             if (stopwatch >= minDuration && isAuthority && ((!inputBank || !boostLogic || !inputBank.skill1.down)))
             {
-                outer.SetNextStateToMain();
+                SetNextStateToEndLag();
                 return;
             }
-            if (boostLogic.boostMeter <= 0 || !boostLogic.boostAvailable)
+            if (boostLogic.boostMeter <= 0 || !boostLogic.boostAvailable && isAuthority)
             {
-                outer.SetNextStateToMain();
+                SetNextStateToDizzy();
                 return;
             }
         }
@@ -205,6 +207,26 @@ namespace Amy.Survivors.Amy.SkillStates
                 }
                 boostLogic.boostMeterDrain = boostMeterDrain;
                 boostLogic.boostDraining = true;
+            }
+        }
+
+        protected virtual void UpdateBuffs()
+        {
+            Vector3 vel = base.characterMotor.velocity;
+            if (!base.characterMotor.isFlying) { vel.y = 0; }
+            if (vel.magnitude >= base.characterBody.moveSpeed * buffStackNeededSpeedPercent)
+            {
+                if (base.characterBody.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff) < AmyStaticValues.boostHammerSpinBuffMaxStacks)
+                {
+                    base.characterBody.AddBuff(AmyBuffs.hammerSpinSpeedBuff);
+                }
+            }
+            else
+            {
+                if (base.characterBody.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff) > 1)
+                {
+                    base.characterBody.RemoveBuff(AmyBuffs.hammerSpinSpeedBuff);
+                }
             }
         }
         protected virtual void OnHitEnemyAuthority()
@@ -292,6 +314,21 @@ namespace Amy.Survivors.Amy.SkillStates
         public override InterruptPriority GetMinimumInterruptPriority()
         {
             return InterruptPriority.Pain;
+        }
+
+        protected virtual void SetNextStateToEndLag()
+        {
+            EntityStateMachine weapon = EntityStateMachine.FindByCustomName(base.gameObject, "Weapon");
+            if (weapon)
+            {
+                weapon.SetNextState(EntityStateCatalog.InstantiateState(typeof(HammerSpinEndLag)));
+            }
+            this.outer.SetNextStateToMain();
+        }
+
+        protected virtual void SetNextStateToDizzy()
+        {
+            this.outer.SetNextState(EntityStateCatalog.InstantiateState(typeof(Dizzy)));
         }
 
         public override void OnExit()

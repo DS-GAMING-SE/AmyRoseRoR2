@@ -1,0 +1,45 @@
+﻿using Amy.Survivors.Amy;
+using EntityStates;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
+{
+    public class HammerSpinEndLag : BaseState
+    {
+        protected float baseDuration;
+        protected float duration;
+        
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            PrepareStats();
+            duration = baseDuration / attackSpeedStat;
+            PlayAnimation();
+        }
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            if (fixedAge >= duration && base.isAuthority)
+            {
+                this.outer.SetNextStateToMain();
+            }
+        }
+
+        protected virtual void PrepareStats()
+        {
+            baseDuration = AmyStaticValues.boostHammerSpinEndLagBaseDuration;
+        }
+        protected virtual void PlayAnimation()
+        {
+            PlayCrossfade("Gesture, Override", "Slash1", "Slash.playbackRate", duration, 0.1f * duration);
+        }
+
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.Skill;
+        }
+    }
+}

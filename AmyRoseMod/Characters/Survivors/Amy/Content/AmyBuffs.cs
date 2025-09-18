@@ -36,14 +36,14 @@ namespace Amy.Survivors.Amy
                 false);
 
             hammerSpinSpeedBuff = Modules.Content.CreateAndAddBuff("bdAmyRoseHammerSpinSpeed",
-                LegacyResourcesAPI.Load<BuffDef>("BuffDefs/CloakSpeed").iconSprite,
-                AmySurvivor.amyColor,
+                assetBundle.LoadAsset<Sprite>("texHammerSpinBuffIcon"),
+                Color.white,
                 true,
                 false);
 
             dizzyDebuff = Modules.Content.CreateAndAddBuff("bdAmyRoseDizzy",
                 LegacyResourcesAPI.Load<BuffDef>("BuffDefs/Slow60").iconSprite,
-                Color.white,
+                AmySurvivor.amyColor,
                 false,
                 true);
 
@@ -57,7 +57,7 @@ namespace Amy.Survivors.Amy
         {
             if (Language.languagesByName.TryGetValue("en", out RoR2.Language en))
             {
-                RegisterLookingGlassBuff(en, boostBuff, "Amy Boost", $"Gain <style=cIsUtility>+{AmyStaticValues.boostArmor} armor</style>. Gain <style=cIsUtility>+{AmyStaticValues.boostListedSpeedCoefficient * 100}% movement speed</style>.");
+                RegisterLookingGlassBuff(en, boostBuff, "Amy Boost", $"Gain <style=cIsDamage>+{AmyStaticValues.boostArmor} armor</style>. Gain <style=cIsUtility>+{AmyStaticValues.boostListedSpeedCoefficient * 100}% movement speed</style>.");
                 RegisterLookingGlassBuff(en, hammerSmashSpeedBuff, "Amy Smash Speed", $"Gain <style=cIsUtility>+{AmyStaticValues.secondaryHammerAirJumpBuffSpeedCoefficient}% movement speed</style>.");
                 RegisterLookingGlassBuff(en, hammerSpinSpeedBuff, "Amy Spin Speed", $"Gain <style=cIsUtility>+{AmyStaticValues.boostHammerSpinBuffSpeedCoefficient}% movement speed</style>.");
                 RegisterLookingGlassBuff(en, dizzyDebuff, "Amy Dizzy", $"Reduce <style=cIsDamage>armor by{AmyStaticValues.dizzyDebuffArmorReduction}</style>.");

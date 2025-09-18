@@ -21,6 +21,8 @@ namespace Amy.Survivors.Amy
             Modules.Content.AddEntityState(typeof(Brake));
 
             Modules.Content.AddEntityState(typeof(HammerSpin));
+            Modules.Content.AddEntityState(typeof(Dizzy));
+            Modules.Content.AddEntityState(typeof(HammerSpinEndLag));
 
             Modules.Content.AddEntityState(typeof(ThrowBomb));
         }

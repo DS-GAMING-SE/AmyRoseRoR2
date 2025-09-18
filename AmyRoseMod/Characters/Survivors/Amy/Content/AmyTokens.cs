@@ -24,11 +24,11 @@ namespace Amy.Survivors.Amy
         {
             string prefix = AmySurvivor.AMY_PREFIX;
 
-            string desc = $"{Tokens.wipIcon} Amy is a skilled fighter who makes use of a wide arsenal of weaponry to take down his foes.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
-             + "< ! > Sword is a good all-rounder while Boxing Gloves are better for laying a beatdown on more powerful foes." + Environment.NewLine + Environment.NewLine
-             + "< ! > Pistol is a powerful anti air, with its low cooldown and high damage." + Environment.NewLine + Environment.NewLine
-             + "< ! > Roll has a lingering armor buff that helps to use it aggressively." + Environment.NewLine + Environment.NewLine
-             + "< ! > Bomb can be used to wipe crowds with ease." + Environment.NewLine + Environment.NewLine;
+            string desc = $"What Amy lacks in Sonic's speed, she makes up for with her powerful attacks and vertical mobility.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
+             + $"< ! > {Tokens.wipIcon}" + Environment.NewLine + Environment.NewLine
+             + "< ! > Piko Piko Smash used in the air is both a powerful attack and a tool for getting high in the air. Use it to approach aerial enemies and launch them down to your level." + Environment.NewLine + Environment.NewLine
+             + "< ! > Boost's Hammer-Spin can be used while stationary for a fast flurry of attacks, or while moving to reach speeds rivaling Sonic himself. Regardless of how you choose to use it, make sure to keep an eye on your remaining boost meter." + Environment.NewLine + Environment.NewLine
+             + $"< ! > {Tokens.wipIcon}" + Environment.NewLine + Environment.NewLine;
 
             string outro = $"..and so she left, {Tokens.wipIcon}.";
             string outroFailure = $"..and so she vanished, {Tokens.wipIcon}.";
@@ -59,12 +59,12 @@ namespace Amy.Survivors.Amy
 
             #region Utility
             LanguageAPI.Add(prefix + "UTILITY_BOOST_NAME", "Boost");
-            LanguageAPI.Add(prefix + "UTILITY_BOOST_DESCRIPTION", $"Spend boost meter to <style=cIsUtility>move {100f * AmyStaticValues.boostListedSpeedCoefficient}% faster</style> than normal. If airborne, do a short <style=cIsUtility>mid-air dash</style>.\nPress the primary skill to begin a {Tokens.DamageText("hammer-spin")}. Running out of boost meter while hammer-spinning will make you {Tokens.RedText("dizzy ") + Tokens.wipIcon}.");
+            LanguageAPI.Add(prefix + "UTILITY_BOOST_DESCRIPTION", $"Spend boost meter to <style=cIsUtility>move {100f * AmyStaticValues.boostListedSpeedCoefficient}% faster</style> than normal. If airborne, do a short <style=cIsUtility>mid-air dash</style>.\nPress the primary skill to begin a {Tokens.DamageText("hammer-spin")}. Running out of boost meter while hammer-spinning will make you {Tokens.RedText("dizzy")}.");
 
             LanguageAPI.Add(prefix + "UTILITY_HAMMER_SPIN_NAME", "Hammer-Spin");
             LanguageAPI.Add(prefix + "UTILITY_HAMMER_SPIN_DESCRIPTION", $"{Tokens.UtilityText("Launching")}. Spin dealing {Tokens.DamageValueText(AmyStaticValues.boostHammerSpinDamageCoefficient)} repeatedly. Running out of boost meter will make you {Tokens.RedText("dizzy")}.");
 
-            LanguageAPI.Add(prefix + "HAMMER_SPIN_KEYWORD", $"<style=CKeywordName>Hammer-Spin</style><style=cSub>Deal {Tokens.DamageValueText(AmyStaticValues.boostHammerSpinDamageCoefficient)} repeatedly to nearby enemies and {Tokens.UtilityText("launch")} them. {Tokens.UtilityText("Movement speed increases")} the longer the skill is used");
+            LanguageAPI.Add(prefix + "HAMMER_SPIN_KEYWORD", $"<style=CKeywordName>Hammer-Spin</style><style=cSub>Deal {Tokens.DamageValueText(AmyStaticValues.boostHammerSpinDamageCoefficient)} repeatedly to nearby enemies and {Tokens.UtilityText("launch")} them. {Tokens.UtilityText("Increases movement speed")} the longer the skill is used");
             #endregion
 
             #region Special
