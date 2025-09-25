@@ -57,13 +57,17 @@ namespace Amy.Survivors.Amy
 
         #region Hammer-Spin
 
-        public const float boostHammerSpinDamageCoefficient = 1.2f;
+        public const float boostHammerSpinDamageCoefficient = 1.6f;
+
+        public const float boostHammerSpinFastDamageCoefficient = 7f;
 
         public const float boostHammerSpinProcCoefficient = 0.6f;
 
         public const float boostHammerSpinLaunchForce = 250f;
 
-        public const float boostHammerSpinAttacksPerSecond = 4.5f;
+        public const float boostHammerSpinAttacksPerSecond = 4f;
+
+        public const float boostHammerSpinFastAttacksPerSecond = 0.6f;
 
         public const float boostHammerSpinAccelerationBaseDivide = 3.5f;
 
@@ -75,9 +79,7 @@ namespace Amy.Survivors.Amy
 
         public const int boostHammerSpinBuffMaxStacks = 6;
 
-        public const float dizzyDuration = 2.5f;
-
-        public const float dizzyDebuffArmorReduction = 20f;
+        public const float dizzyDuration = 3f;
 
         public const float boostHammerSpinEndLagBaseDuration = 0.7f;
 

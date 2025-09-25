@@ -11,6 +11,9 @@ using UnityEngine;
 using AmyRoseMod.Modules;
 using AmyRoseMod.Characters.Survivors.Amy.Content;
 using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
+using HedgehogUtils.Forms;
+using HedgehogUtils;
+using HedgehogUtils.Forms.SuperForm;
 
 namespace Amy.Survivors.Amy
 {
@@ -169,6 +172,8 @@ namespace Amy.Survivors.Amy
             AddSecondarySkills();
             AddUtilitySkills();
             AddSpecialSkills();
+
+            InitializeSuperSkills();
         }
 
         //skip if you don't have a passive
@@ -303,7 +308,7 @@ namespace Amy.Survivors.Amy
                 skillName = "AmyBoost",
                 skillNameToken = AMY_PREFIX + "UTILITY_BOOST_NAME",
                 skillDescriptionToken = AMY_PREFIX + "UTILITY_BOOST_DESCRIPTION",
-                keywordTokens = new string[] { AMY_PREFIX + "HAMMER_SPIN_KEYWORD", HedgehogUtils.Language.launchKeyword },
+                keywordTokens = new string[] { AMY_PREFIX + "HAMMER_SPIN_KEYWORD", HedgehogUtils.Language.launchKeyword, AMY_PREFIX + "DIZZY_KEYWORD" },
                 skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityBoostIcon"),
 
                 activationState = new EntityStates.SerializableEntityStateType(typeof(Boost)),
@@ -372,7 +377,7 @@ namespace Amy.Survivors.Amy
             Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, SkillSlot.Special);
 
             //a basic skill. some fields are omitted and will just have default values
-            SkillDef specialMultilock = Skills.CreateSkillDef(new SkillDefInfo
+            specialMultilock = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "AmySpecialMultiLock",
                 skillNameToken = AMY_PREFIX + "SPECIAL_MULTILOCK_NAME",
@@ -391,6 +396,35 @@ namespace Amy.Survivors.Amy
             });
 
             Skills.AddSpecialSkills(bodyPrefab, specialMultilock);
+        }
+
+        private void InitializeSuperSkills()
+        {
+            bodyPrefab.AddComponent<AmySuperFormComponent>();
+
+            AmySuperFormComponent.superPrimaryMelee = Helpers.CopySkillDef<AmySkillDefs.RequiresFormSteppedSkillDef>(primaryMelee);
+            AmySuperFormComponent.superPrimaryMelee.icon = assetBundle.LoadAsset<Sprite>("texSuperPrimaryHammerSwingIcon");
+            AmySuperFormComponent.superPrimaryMelee.stepCount = 4;
+            AmySuperFormComponent.superPrimaryMelee.stepGraceDuration = 0.5f;
+            AmySuperFormComponent.superPrimaryMelee.requiredForm = SuperFormDef.superFormDef;
+
+            AmySuperFormComponent.superSecondarySmash = Helpers.CopySkillDef<SkillDefs.RequiresFormSkillDef>(secondarySmash);
+            AmySuperFormComponent.superSecondarySmash.icon = assetBundle.LoadAsset<Sprite>("texSuperSecondaryHammerSmashIcon");
+            AmySuperFormComponent.superSecondarySmash.requiredForm = SuperFormDef.superFormDef;
+            AmySuperFormComponent.superSecondarySmash.canceledFromSprinting = false;
+            AmySuperFormComponent.superSecondarySmash.cancelSprintingOnActivation = false;
+
+            SkillDefs.RequiresFormSkillDef hammerSpin = Helpers.CopySkillDef<SkillDefs.RequiresFormSkillDef>(utilityBoostHammerSpin);
+            hammerSpin.icon = assetBundle.LoadAsset<Sprite>("texSuperUtilityHammerSpinIcon");
+            hammerSpin.requiredForm = SuperFormDef.superFormDef;
+            AmySuperFormComponent.superUtilityBoost = Helpers.CopyBoostSkillDef<AmySkillDefs.AmyRequiresFormBoostSkillDef>(utilityBoost);
+            AmySuperFormComponent.superUtilityBoost.icon = assetBundle.LoadAsset<Sprite>("texSuperUtilityBoostIcon");
+            AmySuperFormComponent.superUtilityBoost.requiredForm = SuperFormDef.superFormDef;
+            AmySuperFormComponent.superUtilityBoost.hammerSpinSkillDef = hammerSpin;
+
+            AmySuperFormComponent.superSpecialMultiLock = Helpers.CopySkillDef<SkillDefs.RequiresFormSkillDef>(specialMultilock);
+            AmySuperFormComponent.superSpecialMultiLock.icon = assetBundle.LoadAsset<Sprite>("texSuperSpecialMultiLockIcon");
+            AmySuperFormComponent.superSpecialMultiLock.requiredForm = SuperFormDef.superFormDef;
         }
         #endregion skills
         

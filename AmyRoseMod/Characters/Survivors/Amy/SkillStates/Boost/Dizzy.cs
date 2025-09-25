@@ -6,12 +6,16 @@ using UnityEngine;
 using RoR2;
 using Amy.Survivors.Amy;
 using UnityEngine.Networking;
+using HedgehogUtils;
+using HedgehogUtils.Boost;
 
 namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
     public class Dizzy : GenericCharacterMain
     {
         public float duration = AmyStaticValues.dizzyDuration;
+
+        protected BoostLogic boostLogic;
         
         protected GameObject stunVFXInstance;
         protected EffectManagerHelper _efhStunEffect;
@@ -20,30 +24,37 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         {
             base.OnEnter();
             base.modelLocator.normalizeToFloor = true;
+            boostLogic = base.GetComponent<BoostLogic>();
             CreateVFX();
-            if (NetworkServer.active)
-            {
-                base.characterBody.AddBuff(AmyBuffs.dizzyDebuff);
-            }
         }
 
         public override void FixedUpdate()
         {
             base.FixedUpdate();
             base.characterBody.isSprinting = false;
-            if (fixedAge >= duration && base.isAuthority)
+            AddBoost();
+            if ((!boostLogic || boostLogic.boostAvailable) && base.isAuthority)
             {
                 this.outer.SetNextStateToMain();
+            }
+        }
+
+        public virtual void AddBoost()
+        {
+            if (boostLogic && NetworkServer.active)
+            {
+                float boost = ((1 / AmyStaticValues.dizzyDuration) * 100) - boostLogic.baseBoostRegen;
+                boost *= Time.fixedDeltaTime;
+                if (boost > 0)
+                {
+                    boostLogic.AddBoost(boost);
+                }
             }
         }
 
         public override void OnExit()
         {
             base.modelLocator.normalizeToFloor = false;
-            if (NetworkServer.active)
-            {
-                base.characterBody.RemoveBuff(AmyBuffs.dizzyDebuff);
-            }
             ReleaseStunVFX();
             base.OnExit();
         }
@@ -55,21 +66,18 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         // Mostly copied from StunState
         protected virtual void CreateVFX()
         {
-            if (this.duration >= 0f)
+            if (!EffectManager.ShouldUsePooledEffect(StunState.stunVfxPrefab))
             {
-                if (!EffectManager.ShouldUsePooledEffect(StunState.stunVfxPrefab))
-                {
-                    this.stunVFXInstance = GameObject.Instantiate<GameObject>(StunState.stunVfxPrefab, base.transform);
-                }
-                else
-                {
-                    this._efhStunEffect = EffectManager.GetAndActivatePooledEffect(StunState.stunVfxPrefab, base.transform, false);
-                    this.stunVFXInstance = this._efhStunEffect.gameObject;
-                }
-                ScaleParticleSystemDuration component = this.stunVFXInstance.GetComponent<ScaleParticleSystemDuration>();
-                component.newDuration = this.duration;
-                component.UpdateDuration();
+                this.stunVFXInstance = GameObject.Instantiate<GameObject>(StunState.stunVfxPrefab, base.transform);
             }
+            else
+            {
+                this._efhStunEffect = EffectManager.GetAndActivatePooledEffect(StunState.stunVfxPrefab, base.transform, false);
+                this.stunVFXInstance = this._efhStunEffect.gameObject;
+            }
+            ScaleParticleSystemDuration component = this.stunVFXInstance.GetComponent<ScaleParticleSystemDuration>();
+            component.newDuration = this.duration;
+            component.UpdateDuration();
         }
         protected virtual void ReleaseStunVFX()
         {

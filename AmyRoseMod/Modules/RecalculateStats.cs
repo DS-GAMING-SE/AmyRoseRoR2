@@ -34,11 +34,6 @@ namespace AmyRoseMod.Modules
                 {
                     stats.moveSpeedMultAdd += self.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff) * AmyStaticValues.boostHammerSpinBuffSpeedCoefficient;
                 }
-
-                if (self.HasBuff(AmyBuffs.dizzyDebuff))
-                {
-                    stats.armorAdd -= AmyStaticValues.dizzyDebuffArmorReduction;
-                }
             }
         }
         private static void RecalcStatAPIDoesntHaveAcceleration(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)

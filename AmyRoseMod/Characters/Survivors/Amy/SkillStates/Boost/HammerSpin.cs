@@ -58,7 +58,7 @@ namespace Amy.Survivors.Amy.SkillStates
 
         protected virtual float boostMeterDrain
         {
-            get { return 0.60f; }
+            get { return 36f; }
         }
 
         protected float buffStackNeededSpeedPercent;
@@ -106,6 +106,11 @@ namespace Amy.Survivors.Amy.SkillStates
                     hammerSpinController.ApplySkillOverride(activatorSkillSlot, out SkillDef skillDef);
                     hammerSpinSkillDef = skillDef;
                 }
+
+                attack = new OverlapAttack();
+                attack.attacker = gameObject;
+                attack.inflictor = gameObject;
+                attack.teamIndex = GetTeam();
             }
         }
 
@@ -121,15 +126,16 @@ namespace Amy.Survivors.Amy.SkillStates
 
         protected virtual void PrepareAttackStats()
         {
+            float speedLerp = ((float)(base.characterBody.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff) - 1)) / ((float)AmyStaticValues.boostHammerSpinBuffMaxStacks);
             hitboxGroupName = "Spin";
 
             damageType = DamageTypeCombo.GenericUtility;
             damageType.AddModdedDamageType(HedgehogUtils.Launch.DamageTypes.launchOnKill);
             damageType.AddModdedDamageType(AmyDamageTypes.angleUpKnockbackIfGrounded);
-            damageCoefficient = AmyStaticValues.boostHammerSpinDamageCoefficient;
+            damageCoefficient = Mathf.Lerp(AmyStaticValues.boostHammerSpinDamageCoefficient, AmyStaticValues.boostHammerSpinFastDamageCoefficient, speedLerp);
             procCoefficient = AmyStaticValues.boostHammerSpinProcCoefficient;
             pushForce = AmyStaticValues.boostHammerSpinLaunchForce;
-            baseAttacksPerSecond = AmyStaticValues.boostHammerSpinAttacksPerSecond;
+            baseAttacksPerSecond = Mathf.Lerp(AmyStaticValues.boostHammerSpinAttacksPerSecond, AmyStaticValues.boostHammerSpinFastAttacksPerSecond, speedLerp);
         }
 
         public override void FixedUpdate()
@@ -182,8 +188,13 @@ namespace Amy.Survivors.Amy.SkillStates
             {
                 hasFired = true;
                 EnterAttack();
-                FireAttack();
             }
+            PrepareAttackStats();
+            if (base.isAuthority)
+            {
+                UpdateOverlapStats();
+            }
+            FireAttack();
 
             if (stopwatch >= minDuration && isAuthority && ((!inputBank || !boostLogic || !inputBank.skill1.down)))
             {
@@ -203,7 +214,7 @@ namespace Amy.Survivors.Amy.SkillStates
             {
                 if (NetworkServer.active)
                 {
-                    boostLogic.RemoveBoost(boostMeterDrain);
+                    boostLogic.RemoveBoost(boostMeterDrain * Time.fixedDeltaTime);
                 }
                 boostLogic.boostMeterDrain = boostMeterDrain;
                 boostLogic.boostDraining = true;
@@ -225,7 +236,7 @@ namespace Amy.Survivors.Amy.SkillStates
             {
                 if (base.characterBody.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff) > 1)
                 {
-                    base.characterBody.RemoveBuff(AmyBuffs.hammerSpinSpeedBuff);
+                    base.characterBody.SetBuffCount(AmyBuffs.hammerSpinSpeedBuff.buffIndex, Math.Max(1, base.characterBody.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff) - 2));
                 }
             }
         }
@@ -278,11 +289,11 @@ namespace Amy.Survivors.Amy.SkillStates
         {
             Util.PlayAttackSpeedSound(swingSoundString, gameObject, base.characterBody.attackSpeed);
 
+            PrepareAttackStats();
+            timeUntilNextAttack = 1 / (baseAttacksPerSecond * base.characterBody.attackSpeed);
             if (isAuthority)
             {
-                PrepareAttackStats();
-                CreateOverlap();
-                timeUntilNextAttack = 1 / (baseAttacksPerSecond * base.characterBody.attackSpeed);
+                attack.retriggerTimeout = timeUntilNextAttack;
             }
         }
 
@@ -294,13 +305,9 @@ namespace Amy.Survivors.Amy.SkillStates
             hammerSpinController.leanFrozen = false;
         }
 
-        protected void CreateOverlap()
+        protected void UpdateOverlapStats()
         {
-            attack = new OverlapAttack();
             attack.damageType = damageType;
-            attack.attacker = gameObject;
-            attack.inflictor = gameObject;
-            attack.teamIndex = GetTeam();
             attack.damage = damageCoefficient * base.characterBody.damage;
             attack.procCoefficient = procCoefficient;
             attack.hitEffectPrefab = hitEffectPrefab;
