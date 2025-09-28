@@ -1,10 +1,11 @@
 ﻿using RoR2;
 using UnityEngine;
-using Amy.Modules;
+using AmyRoseMod.Modules;
 using System;
 using RoR2.Projectile;
+using AmyRoseMod.Characters.Survivors.Amy.Components;
 
-namespace Amy.Survivors.Amy
+namespace AmyRoseMod.Characters.Survivors.Amy
 {
     public static class AmyAssets
     {
@@ -21,7 +22,7 @@ namespace Amy.Survivors.Amy
         public static NetworkSoundEventDef swordHitSoundEvent;
 
         //projectiles
-        public static GameObject bombProjectilePrefab;
+        public static GameObject multiLockProjectilePrefab;
 
         private static AssetBundle _assetBundle;
 
@@ -30,7 +31,7 @@ namespace Amy.Survivors.Amy
 
             _assetBundle = assetBundle;
 
-            swordHitSoundEvent = Content.CreateAndAddNetworkSoundEventDef("HenrySwordHit");
+            swordHitSoundEvent = Modules.Content.CreateAndAddNetworkSoundEventDef("HenrySwordHit");
 
             CreateEffects();
 
@@ -68,7 +69,7 @@ namespace Amy.Survivors.Amy
 
             shakeEmitter.wave = new Wave
             {
-                amplitude = 1f,
+                amplitude = 0.5f,
                 frequency = 40f,
                 cycleOffset = 0f
             };
@@ -79,35 +80,34 @@ namespace Amy.Survivors.Amy
         #region projectiles
         private static void CreateProjectiles()
         {
-            CreateBombProjectile();
-            Content.AddProjectilePrefab(bombProjectilePrefab);
+            CreateMultiLockProjectile();
+			Modules.Content.AddProjectilePrefab(multiLockProjectilePrefab);
         }
 
-        private static void CreateBombProjectile()
+        private static void CreateMultiLockProjectile()
         {
             //highly recommend setting up projectiles in editor, but this is a quick and dirty way to prototype if you want
-            bombProjectilePrefab = Asset.CloneProjectilePrefab("CommandoGrenadeProjectile", "HenryBombProjectile");
+            multiLockProjectilePrefab = Asset.CloneProjectilePrefab("CaptainAirstrikeProjectile1", "AmyRoseMultiLockProjectile");
 
-            //remove their ProjectileImpactExplosion component and start from default values
-            UnityEngine.Object.Destroy(bombProjectilePrefab.GetComponent<ProjectileImpactExplosion>());
-            ProjectileImpactExplosion bombImpactExplosion = bombProjectilePrefab.AddComponent<ProjectileImpactExplosion>();
-            
-            bombImpactExplosion.blastRadius = 16f;
-            bombImpactExplosion.blastDamageCoefficient = 1f;
-            bombImpactExplosion.falloffModel = BlastAttack.FalloffModel.None;
-            bombImpactExplosion.destroyOnEnemy = true;
-            bombImpactExplosion.lifetime = 12f;
-            bombImpactExplosion.impactEffect = bombExplosionEffect;
-            bombImpactExplosion.lifetimeExpiredSound = Content.CreateAndAddNetworkSoundEventDef("HenryBombExplosion");
-            bombImpactExplosion.timerAfterImpact = true;
-            bombImpactExplosion.lifetimeAfterImpact = 0.1f;
+            ProjectileImpactExplosion multiLockExplosion = multiLockProjectilePrefab.GetComponent<ProjectileImpactExplosion>();
+            multiLockProjectilePrefab.GetComponent<ProjectileDamage>().damageType = DamageTypeCombo.GenericSpecial;
+            multiLockProjectilePrefab.AddComponent<ProjectileTargetComponent>();
+            multiLockProjectilePrefab.AddComponent<ProjectileAttachToTargetComponent>();
 
-            ProjectileController bombController = bombProjectilePrefab.GetComponent<ProjectileController>();
+            multiLockExplosion.blastRadius = AmyStaticValues.specialMultiLockBlastRadius;
+            multiLockExplosion.blastDamageCoefficient = 1f;
+            multiLockExplosion.bonusBlastForce = Vector3.zero;
+            multiLockExplosion.falloffModel = BlastAttack.FalloffModel.None;
+            multiLockExplosion.lifetime = AmyStaticValues.specialMultiLockDetonationTime;
+            multiLockExplosion.impactEffect = bombExplosionEffect;
+            multiLockExplosion.lifetimeExpiredSound = Modules.Content.CreateAndAddNetworkSoundEventDef("HenryBombExplosion");
+
+            ProjectileController multiLockController = multiLockProjectilePrefab.GetComponent<ProjectileController>();
 
             if (_assetBundle.LoadAsset<GameObject>("HenryBombGhost") != null)
-                bombController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("HenryBombGhost");
+                multiLockController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("HenryBombGhost");
             
-            bombController.startSound = "";
+            multiLockController.startSound = "";
         }
         #endregion projectiles
     }

@@ -1,4 +1,4 @@
-﻿namespace Amy.Modules
+﻿namespace AmyRoseMod.Modules
 {
     internal static class Tokens
     {

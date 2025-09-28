@@ -2,7 +2,7 @@
 using System.Security;
 using System.Security.Permissions;
 
-namespace Amy
+namespace AmyRoseMod
 {
     internal static class Log
     {

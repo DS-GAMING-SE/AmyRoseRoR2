@@ -4,7 +4,7 @@ using HedgehogUtils.Forms.SuperForm;
 using RoR2.Skills;
 using RoR2;
 
-namespace Amy.Survivors.Amy.Components
+namespace AmyRoseMod.Characters.Survivors.Amy.Components
 {
     internal class AmySuperFormComponent : MonoBehaviour
     {

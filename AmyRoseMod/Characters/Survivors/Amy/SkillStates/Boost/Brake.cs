@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using HedgehogUtils.Boost;
 
-namespace Amy.Survivors.Amy.SkillStates
+namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
     public class Brake : HedgehogUtils.Boost.EntityStates.Brake
     {

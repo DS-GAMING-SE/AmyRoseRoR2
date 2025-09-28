@@ -1,7 +1,7 @@
-﻿using Amy.Survivors.Amy.SkillStates;
-using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
+﻿using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
+using AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades;
 
-namespace Amy.Survivors.Amy
+namespace AmyRoseMod.Characters.Survivors.Amy
 {
     public static class AmyStates
     {
@@ -24,7 +24,12 @@ namespace Amy.Survivors.Amy
             Modules.Content.AddEntityState(typeof(Dizzy));
             Modules.Content.AddEntityState(typeof(HammerSpinEndLag));
 
-            Modules.Content.AddEntityState(typeof(ThrowBomb));
+            Modules.Content.AddEntityState(typeof(SuperBoost));
+
+            Modules.Content.AddEntityState(typeof(SuperHammerSpin));
+
+            Modules.Content.AddEntityState(typeof(MultiLockTargeting));
+            Modules.Content.AddEntityState(typeof(MultiLockAttack));
         }
     }
 }

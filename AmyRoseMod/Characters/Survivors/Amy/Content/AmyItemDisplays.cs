@@ -1,5 +1,5 @@
-﻿using Amy.Modules;
-using Amy.Modules.Characters;
+﻿using AmyRoseMod.Modules;
+using AmyRoseMod.Modules.Characters;
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +11,7 @@ using UnityEngine;
                     {localScale})
 */
 
-namespace Amy.Survivors.Amy
+namespace AmyRoseMod.Characters.Survivors.Amy
 {
     public class AmyItemDisplays : ItemDisplaysBase
     {

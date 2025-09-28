@@ -1,6 +1,6 @@
-﻿using Amy.Modules.BaseStates;
-using Amy.Survivors.Amy;
-using Amy.Survivors.Amy.SkillStates;
+﻿using AmyRoseMod.Modules.BaseStates;
+using AmyRoseMod.Characters.Survivors.Amy;
+using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
 using AmyRoseMod.Characters.Survivors.Amy.Content;
 using EntityStates;
 using R2API;

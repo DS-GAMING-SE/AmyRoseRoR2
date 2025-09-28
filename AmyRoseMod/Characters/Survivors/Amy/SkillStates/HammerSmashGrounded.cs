@@ -1,4 +1,4 @@
-﻿using Amy.Modules.BaseStates;
+﻿using AmyRoseMod.Modules.BaseStates;
 using AmyRoseMod.Characters.Survivors.Amy.Content;
 using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
 using EntityStates;
@@ -8,7 +8,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Amy.Survivors.Amy.SkillStates
+namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
     public class HammerSmashGrounded : BaseMeleeAttack
     {

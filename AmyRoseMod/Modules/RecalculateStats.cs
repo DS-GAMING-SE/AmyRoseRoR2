@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using RoR2;
-using Amy;
-using Amy.Survivors.Amy;
+using AmyRoseMod;
+using  AmyRoseMod.Characters.Survivors.Amy;
 
 namespace AmyRoseMod.Modules
 {
@@ -22,6 +22,11 @@ namespace AmyRoseMod.Modules
                 if (self.HasBuff(AmyBuffs.boostBuff))
                 {
                     HedgehogUtils.Boost.BoostLogic.BoostStats(self, stats, AmyStaticValues.boostListedSpeedCoefficient);
+                    stats.armorAdd += AmyStaticValues.boostArmor;
+                }
+                if (self.HasBuff(AmyBuffs.superBoostBuff))
+                {
+                    HedgehogUtils.Boost.BoostLogic.BoostStats(self, stats, AmyStaticValues.superBoostListedSpeedCoefficient);
                     stats.armorAdd += AmyStaticValues.boostArmor;
                 }
 

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Amy.Modules
+namespace AmyRoseMod.Modules
 {
     internal static class Skins
     {

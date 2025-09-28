@@ -11,7 +11,7 @@ using System.Text;
 using UnityEngine;
 using static HedgehogUtils.Forms.SkillDefs;
 
-namespace Amy.Survivors.Amy
+namespace AmyRoseMod.Characters.Survivors.Amy
 {
     public static class AmySkillDefs
     {

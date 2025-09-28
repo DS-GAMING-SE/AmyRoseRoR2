@@ -3,7 +3,7 @@ using UnityEngine;
 using R2API;
 using RoR2.Skills;
 
-namespace Amy.Survivors.Amy.Components
+namespace AmyRoseMod.Characters.Survivors.Amy.Components
 {
     public class AmyHammerSpinController : MonoBehaviour
     {

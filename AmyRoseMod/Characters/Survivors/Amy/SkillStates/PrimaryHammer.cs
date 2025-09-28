@@ -1,11 +1,11 @@
-﻿using Amy.Modules.BaseStates;
+﻿using AmyRoseMod.Modules.BaseStates;
 using AmyRoseMod.Characters.Survivors.Amy.Content;
 using R2API;
 using RoR2;
 using System;
 using UnityEngine;
 
-namespace Amy.Survivors.Amy.SkillStates
+namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
     public class PrimaryHammer : BaseMeleeAttack
     {

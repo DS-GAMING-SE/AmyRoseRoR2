@@ -1,4 +1,4 @@
-﻿using Amy.Survivors.Amy;
+﻿using AmyRoseMod.Characters.Survivors.Amy;
 using EntityStates;
 using System;
 using System.Collections.Generic;

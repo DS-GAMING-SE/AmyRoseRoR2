@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using RoR2;
-using Amy.Survivors.Amy;
+using AmyRoseMod.Characters.Survivors.Amy;
 using UnityEngine.Networking;
 using HedgehogUtils;
 using HedgehogUtils.Boost;

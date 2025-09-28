@@ -2,7 +2,7 @@
 using RoR2.CharacterAI;
 using UnityEngine;
 
-namespace Amy.Survivors.Amy
+namespace AmyRoseMod.Characters.Survivors.Amy
 {
     public static class AmyAI
     {

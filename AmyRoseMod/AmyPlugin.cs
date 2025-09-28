@@ -1,5 +1,5 @@
 ﻿using BepInEx;
-using Amy.Survivors.Amy;
+using  AmyRoseMod.Characters.Survivors.Amy;
 using R2API.Utils;
 using RoR2;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Security.Permissions;
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 
 //rename this namespace
-namespace Amy
+namespace AmyRoseMod
 {
     [BepInDependency("com.bepis.r2api.content_management", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.bepis.r2api.prefab", BepInDependency.DependencyFlags.HardDependency)]

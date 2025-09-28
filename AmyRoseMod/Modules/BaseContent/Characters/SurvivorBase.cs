@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using RoR2.Skills;
 
-namespace Amy.Modules.Characters
+namespace AmyRoseMod.Modules.Characters
 {
     public abstract class SurvivorBase<T> : CharacterBase<T> where T : SurvivorBase<T>, new()
     {

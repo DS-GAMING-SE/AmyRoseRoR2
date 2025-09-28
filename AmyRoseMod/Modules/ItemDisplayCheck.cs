@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Amy.Modules
+namespace AmyRoseMod.Modules
 {
     internal static class ItemDisplayCheck
     {

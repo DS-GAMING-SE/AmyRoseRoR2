@@ -1,7 +1,7 @@
 ﻿using BepInEx.Configuration;
-using Amy.Modules;
+using AmyRoseMod.Modules;
 
-namespace Amy.Survivors.Amy
+namespace AmyRoseMod.Characters.Survivors.Amy
 {
     public static class AmyConfig
     {

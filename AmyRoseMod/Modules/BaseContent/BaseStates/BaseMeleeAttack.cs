@@ -1,4 +1,4 @@
-﻿using Amy.Survivors.Amy;
+﻿using AmyRoseMod.Characters.Survivors.Amy;
 using EntityStates;
 using R2API;
 using RoR2;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Amy.Modules.BaseStates
+namespace AmyRoseMod.Modules.BaseStates
 {
     public abstract class BaseMeleeAttack : BaseSkillState, SteppedSkillDef.IStepSetter
     {

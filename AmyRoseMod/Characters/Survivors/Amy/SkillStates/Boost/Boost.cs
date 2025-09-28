@@ -6,10 +6,10 @@ using System;
 using UnityEngine;
 using UnityEngine.Networking;
 using HedgehogUtils.Boost;
-using Amy.Survivors.Amy;
-using Amy.Survivors.Amy.Components;
+using AmyRoseMod.Characters.Survivors.Amy;
+using AmyRoseMod.Characters.Survivors.Amy.Components;
 
-namespace Amy.Survivors.Amy.SkillStates
+namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
     public class Boost : HedgehogUtils.Boost.EntityStates.Boost, ISkillState
     {

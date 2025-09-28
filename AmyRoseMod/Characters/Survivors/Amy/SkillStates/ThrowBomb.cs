@@ -1,10 +1,10 @@
 ﻿using EntityStates;
-using Amy.Survivors.Amy;
+using  AmyRoseMod.Characters.Survivors.Amy;
 using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
 
-namespace Amy.Survivors.Amy.SkillStates
+namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
     public class ThrowBomb : GenericProjectileBaseState
     {
@@ -16,7 +16,7 @@ namespace Amy.Survivors.Amy.SkillStates
 
         public override void OnEnter()
         {
-            projectilePrefab = AmyAssets.bombProjectilePrefab;
+            projectilePrefab = AmyAssets.multiLockProjectilePrefab;
             //base.effectPrefab = Modules.Assets.SomeMuzzleEffect;
             //targetmuzzle = "muzzleThrow"
 

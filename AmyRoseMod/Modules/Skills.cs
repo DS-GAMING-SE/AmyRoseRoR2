@@ -3,10 +3,10 @@ using RoR2;
 using RoR2.Skills;
 using System;
 using System.Collections.Generic;
-using Amy;
+using AmyRoseMod;
 using UnityEngine;
 
-namespace Amy.Modules
+namespace AmyRoseMod.Modules
 {
     internal static class Skills
     {
@@ -185,7 +185,7 @@ namespace Amy.Modules
 
             skillDef.keywordTokens = skillDefInfo.keywordTokens;
 
-            Amy.Modules.Content.AddSkillDef(skillDef);
+            AmyRoseMod.Modules.Content.AddSkillDef(skillDef);
 
 
             return skillDef;

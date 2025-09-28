@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Amy.Survivors.Amy
+namespace AmyRoseMod.Characters.Survivors.Amy
 {
     public static class AmyStaticValues
     {
@@ -55,6 +55,10 @@ namespace Amy.Survivors.Amy
 
         public const float boostArmor = 50;
 
+        #region Super Utility Boost
+        public const float superBoostListedSpeedCoefficient = 0.75f;
+        #endregion
+
         #region Hammer-Spin
 
         public const float boostHammerSpinDamageCoefficient = 1.6f;
@@ -89,6 +93,10 @@ namespace Amy.Survivors.Amy
         #region Special Multi-Lock
 
         public const float specialMultiLockDamageCoefficient = 8f;
+
+        public const float specialMultiLockBlastRadius = 4f;
+
+        public const float specialMultiLockDetonationTime = 1f;
 
         public const int specialMultiLockMaxTargets = 5;
 

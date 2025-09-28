@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Amy.Survivors.Amy.Components
+namespace AmyRoseMod.Characters.Survivors.Amy.Components
 {
     internal class AmyComponent : MonoBehaviour
     {

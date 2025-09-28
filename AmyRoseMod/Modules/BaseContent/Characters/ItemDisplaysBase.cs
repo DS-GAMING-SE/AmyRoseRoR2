@@ -1,7 +1,7 @@
 ﻿using RoR2;
 using System.Collections.Generic;
 
-namespace Amy.Modules.Characters
+namespace AmyRoseMod.Modules.Characters
 {
     public abstract class ItemDisplaysBase
     {

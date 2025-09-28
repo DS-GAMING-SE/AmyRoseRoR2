@@ -1,7 +1,7 @@
 ﻿using RoR2;
-using Amy.Modules.Achievements;
+using AmyRoseMod.Modules.Achievements;
 
-namespace Amy.Survivors.Amy.Achievements
+namespace AmyRoseMod.Characters.Survivors.Amy.Achievements
 {
     //automatically creates language tokens "ACHIEVMENT_{identifier.ToUpper()}_NAME" and "ACHIEVMENT_{identifier.ToUpper()}_DESCRIPTION" 
     [RegisterAchievement(identifier, unlockableIdentifier, null, 10, null)]

@@ -1,21 +1,20 @@
 ﻿using BepInEx.Configuration;
-using Amy.Modules;
-using Amy.Modules.Characters;
-using Amy.Survivors.Amy.Components;
-using Amy.Survivors.Amy.SkillStates;
+using AmyRoseMod.Modules;
+using AmyRoseMod.Modules.Characters;
+using AmyRoseMod.Characters.Survivors.Amy.Components;
+using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
 using RoR2;
 using RoR2.Skills;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using AmyRoseMod.Modules;
 using AmyRoseMod.Characters.Survivors.Amy.Content;
-using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
+using AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades;
 using HedgehogUtils.Forms;
 using HedgehogUtils;
 using HedgehogUtils.Forms.SuperForm;
 
-namespace Amy.Survivors.Amy
+namespace AmyRoseMod.Characters.Survivors.Amy
 {
     public class AmySurvivor : SurvivorBase<AmySurvivor>
     {
@@ -38,7 +37,9 @@ namespace Amy.Survivors.Amy
         public override string survivorTokenPrefix => AMY_PREFIX;
 
         public static Color amyColor = new Color(1f, 0.5f, 0.9f);
-        
+        public static Color superAmyColor = new Color(1f, 0.55f, 0.35f);
+
+
         public override BodyInfo bodyInfo => new BodyInfo
         {
             bodyName = bodyName,
@@ -384,15 +385,17 @@ namespace Amy.Survivors.Amy
                 skillDescriptionToken = AMY_PREFIX + "SPECIAL_MULTILOCK_DESCRIPTION",
                 skillIcon = assetBundle.LoadAsset<Sprite>("texSpecialMultiLockIcon"),
 
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ThrowBomb)),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(MultiLockTargeting)),
                 //setting this to the "weapon2" EntityStateMachine allows us to cast this skill at the same time primary, which is set to the "weapon" EntityStateMachine
                 activationStateMachineName = "Weapon2", interruptPriority = EntityStates.InterruptPriority.Skill,
 
                 baseMaxStock = 1,
+                stockToConsume = 0,
                 baseRechargeInterval = 8f,
 
                 isCombatSkill = true,
                 mustKeyPress = true,
+                cancelSprintingOnActivation = false
             });
 
             Skills.AddSpecialSkills(bodyPrefab, specialMultilock);
@@ -417,10 +420,13 @@ namespace Amy.Survivors.Amy
             SkillDefs.RequiresFormSkillDef hammerSpin = Helpers.CopySkillDef<SkillDefs.RequiresFormSkillDef>(utilityBoostHammerSpin);
             hammerSpin.icon = assetBundle.LoadAsset<Sprite>("texSuperUtilityHammerSpinIcon");
             hammerSpin.requiredForm = SuperFormDef.superFormDef;
+            hammerSpin.activationState = new EntityStates.SerializableEntityStateType(typeof(SuperHammerSpin));
             AmySuperFormComponent.superUtilityBoost = Helpers.CopyBoostSkillDef<AmySkillDefs.AmyRequiresFormBoostSkillDef>(utilityBoost);
             AmySuperFormComponent.superUtilityBoost.icon = assetBundle.LoadAsset<Sprite>("texSuperUtilityBoostIcon");
             AmySuperFormComponent.superUtilityBoost.requiredForm = SuperFormDef.superFormDef;
             AmySuperFormComponent.superUtilityBoost.hammerSpinSkillDef = hammerSpin;
+            AmySuperFormComponent.superUtilityBoost.activationState = new EntityStates.SerializableEntityStateType(typeof(SuperBoost));
+            AmySuperFormComponent.superUtilityBoost.boostHUDColor = superAmyColor;
 
             AmySuperFormComponent.superSpecialMultiLock = Helpers.CopySkillDef<SkillDefs.RequiresFormSkillDef>(specialMultilock);
             AmySuperFormComponent.superSpecialMultiLock.icon = assetBundle.LoadAsset<Sprite>("texSuperSpecialMultiLockIcon");

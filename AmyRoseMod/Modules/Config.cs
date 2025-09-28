@@ -5,7 +5,7 @@ using RiskOfOptions;
 using RiskOfOptions.Options;
 using RiskOfOptions.OptionConfigs;
 
-namespace Amy.Modules
+namespace AmyRoseMod.Modules
 {
     public static class Config
     {

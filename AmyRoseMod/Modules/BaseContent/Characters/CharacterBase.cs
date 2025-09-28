@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Amy.Modules.Characters
+namespace AmyRoseMod.Modules.Characters
 {
     public abstract class CharacterBase<T> where T : CharacterBase<T>, new()
     {

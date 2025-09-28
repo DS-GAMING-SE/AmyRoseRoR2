@@ -1,7 +1,7 @@
 ﻿using EntityStates;
 using System;
 
-namespace Amy.Modules.BaseStates
+namespace AmyRoseMod.Modules.BaseStates
 {
     //see example skills below
     public abstract class BaseTimedSkillState : BaseSkillState

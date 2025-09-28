@@ -1,4 +1,4 @@
-﻿using Amy.Modules;
+﻿using AmyRoseMod.Modules;
 using BepInEx.Configuration;
 using LookingGlass;
 using LookingGlass.LookingGlassLanguage;
@@ -10,11 +10,12 @@ using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using UnityEngine;
 
-namespace Amy.Survivors.Amy
+namespace AmyRoseMod.Characters.Survivors.Amy
 {
     public static class AmyBuffs
     {
         public static BuffDef boostBuff;
+        public static BuffDef superBoostBuff;
 
         public static BuffDef hammerSmashSpeedBuff;
 
@@ -25,6 +26,11 @@ namespace Amy.Survivors.Amy
             boostBuff = Modules.Content.CreateAndAddBuff("bdAmyRoseBoost",
                 LegacyResourcesAPI.Load<BuffDef>("BuffDefs/CloakSpeed").iconSprite,
                 AmySurvivor.amyColor,
+                false,
+                false);
+            superBoostBuff = Modules.Content.CreateAndAddBuff("bdAmyRoseSuperBoost",
+                LegacyResourcesAPI.Load<BuffDef>("BuffDefs/CloakSpeed").iconSprite,
+                AmySurvivor.superAmyColor,
                 false,
                 false);
 
@@ -51,6 +57,7 @@ namespace Amy.Survivors.Amy
             if (RoR2.Language.languagesByName.TryGetValue("en", out RoR2.Language en))
             {
                 RegisterLookingGlassBuff(en, boostBuff, "Amy Boost", $"Gain <style=cIsDamage>+{AmyStaticValues.boostArmor} armor</style>. Gain <style=cIsUtility>+{AmyStaticValues.boostListedSpeedCoefficient * 100}% movement speed</style>.");
+                RegisterLookingGlassBuff(en, superBoostBuff, "Amy Super Boost", $"Gain <style=cIsDamage>+{AmyStaticValues.boostArmor} armor</style>. Gain <style=cIsUtility>+{AmyStaticValues.superBoostListedSpeedCoefficient * 100}% movement speed</style>.");
                 RegisterLookingGlassBuff(en, hammerSmashSpeedBuff, "Amy Smash Speed", $"Gain <style=cIsUtility>+{AmyStaticValues.secondaryHammerAirJumpBuffSpeedCoefficient * 100f}% movement speed</style>.");
                 RegisterLookingGlassBuff(en, hammerSpinSpeedBuff, "Amy Spin Speed", $"Gain <style=cIsUtility>+{AmyStaticValues.boostHammerSpinBuffSpeedCoefficient * 100f}% movement speed</style>. Reduce {Tokens.RedText("acceleration")}. Increase hammer-spin {Tokens.DamageText("damage")}. Reduce hammer-spin {Tokens.RedText("attack speed")}.");
             }

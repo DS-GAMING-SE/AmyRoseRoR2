@@ -1,10 +1,10 @@
 ﻿using EntityStates;
-using Amy.Survivors.Amy;
+using AmyRoseMod.Characters.Survivors.Amy;
 using RoR2;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Amy.Survivors.Amy.SkillStates
+namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
     public class Roll : BaseSkillState
     {

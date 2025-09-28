@@ -1,5 +1,5 @@
-﻿using Amy.Survivors.Amy;
-using Amy.Survivors.Amy.SkillStates;
+﻿using  AmyRoseMod.Characters.Survivors.Amy;
+using  AmyRoseMod.Characters.Survivors.Amy.SkillStates;
 using EntityStates;
 using R2API;
 using RoR2;

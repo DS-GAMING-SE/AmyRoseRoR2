@@ -1,7 +1,7 @@
 ﻿using RoR2;
 using RoR2.Achievements;
 
-namespace Amy.Modules.Achievements
+namespace AmyRoseMod.Modules.Achievements
 {
     public abstract class BaseMasteryAchievement : BaseAchievement
     {

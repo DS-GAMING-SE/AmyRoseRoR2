@@ -1,8 +1,8 @@
-﻿using Amy.Survivors.Amy.Achievements;
+﻿using  AmyRoseMod.Characters.Survivors.Amy.Achievements;
 using RoR2;
 using UnityEngine;
 
-namespace Amy.Survivors.Amy
+namespace AmyRoseMod.Characters.Survivors.Amy
 {
     public static class AmyUnlockables
     {

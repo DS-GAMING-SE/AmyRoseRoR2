@@ -1,5 +1,5 @@
-﻿using Amy.Modules.BaseStates;
-using Amy.Survivors.Amy.Components;
+﻿using AmyRoseMod.Modules.BaseStates;
+using AmyRoseMod.Characters.Survivors.Amy.Components;
 using AmyRoseMod.Characters.Survivors.Amy.Content;
 using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
 using EntityStates;
@@ -13,7 +13,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using static EntityStates.BaseState;
 
-namespace Amy.Survivors.Amy.SkillStates
+namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
     public class HammerSpin : GenericCharacterMain, ISkillState
     {
@@ -56,6 +56,9 @@ namespace Amy.Survivors.Amy.SkillStates
         public GenericSkill activatorSkillSlot { get; set; }
         public SkillDef hammerSpinSkillDef;
 
+        protected virtual BuffDef boostBuff { get { return AmyBuffs.boostBuff; } }
+        protected virtual BuffDef hammerSpinBuff { get { return AmyBuffs.hammerSpinSpeedBuff; } }
+
         protected virtual float boostMeterDrain
         {
             get { return 36f; }
@@ -96,8 +99,8 @@ namespace Amy.Survivors.Amy.SkillStates
 
             if (NetworkServer.active)
             {
-                base.characterBody.AddBuff(AmyBuffs.boostBuff);
-                base.characterBody.AddBuff(AmyBuffs.hammerSpinSpeedBuff);
+                base.characterBody.AddBuff(boostBuff);
+                base.characterBody.AddBuff(hammerSpinBuff);
             }
             if (base.isAuthority)
             {
@@ -126,7 +129,7 @@ namespace Amy.Survivors.Amy.SkillStates
 
         protected virtual void PrepareAttackStats()
         {
-            float speedLerp = ((float)(base.characterBody.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff) - 1)) / ((float)AmyStaticValues.boostHammerSpinBuffMaxStacks);
+            float speedLerp = ((float)(base.characterBody.GetBuffCount(hammerSpinBuff) - 1)) / ((float)AmyStaticValues.boostHammerSpinBuffMaxStacks);
             hitboxGroupName = "Spin";
 
             damageType = DamageTypeCombo.GenericUtility;
@@ -227,16 +230,16 @@ namespace Amy.Survivors.Amy.SkillStates
             if (!base.characterMotor.isFlying) { vel.y = 0; }
             if (vel.magnitude >= base.characterBody.moveSpeed * buffStackNeededSpeedPercent)
             {
-                if (base.characterBody.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff) < AmyStaticValues.boostHammerSpinBuffMaxStacks)
+                if (base.characterBody.GetBuffCount(hammerSpinBuff) < AmyStaticValues.boostHammerSpinBuffMaxStacks)
                 {
-                    base.characterBody.AddBuff(AmyBuffs.hammerSpinSpeedBuff);
+                    base.characterBody.AddBuff(hammerSpinBuff);
                 }
             }
             else
             {
-                if (base.characterBody.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff) > 1)
+                if (base.characterBody.GetBuffCount(hammerSpinBuff) > 1)
                 {
-                    base.characterBody.SetBuffCount(AmyBuffs.hammerSpinSpeedBuff.buffIndex, Math.Max(1, base.characterBody.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff) - 2));
+                    base.characterBody.SetBuffCount(hammerSpinBuff.buffIndex, Math.Max(1, base.characterBody.GetBuffCount(hammerSpinBuff) - 2));
                 }
             }
         }
@@ -348,8 +351,8 @@ namespace Amy.Survivors.Amy.SkillStates
             }
             if (NetworkServer.active)
             {
-                base.characterBody.RemoveBuff(AmyBuffs.boostBuff);
-                base.characterBody.SetBuffCount(AmyBuffs.hammerSpinSpeedBuff.buffIndex, 0);
+                base.characterBody.RemoveBuff(boostBuff);
+                base.characterBody.SetBuffCount(hammerSpinBuff.buffIndex, 0);
             }
             base.characterMotor.airControl = previousAirControl;
             base.OnExit();

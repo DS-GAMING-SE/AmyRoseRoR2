@@ -6,9 +6,9 @@ using System;
 using UnityEngine;
 using UnityEngine.Networking;
 using HedgehogUtils.Boost;
-using Amy.Survivors.Amy.Components;
+using AmyRoseMod.Characters.Survivors.Amy.Components;
 
-namespace Amy.Survivors.Amy.SkillStates
+namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
     public class BoostIdle : HedgehogUtils.Boost.EntityStates.BoostIdle
     {

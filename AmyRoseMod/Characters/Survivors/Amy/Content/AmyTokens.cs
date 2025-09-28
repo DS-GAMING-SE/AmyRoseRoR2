@@ -1,12 +1,12 @@
-﻿using Amy.Modules;
-using Amy.Survivors.Amy.Achievements;
+﻿using AmyRoseMod.Modules;
+using AmyRoseMod.Characters.Survivors.Amy.Achievements;
 using LookingGlass.LookingGlassLanguage;
 using R2API;
 using System;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
-namespace Amy.Survivors.Amy
+namespace AmyRoseMod.Characters.Survivors.Amy
 {
     public static class AmyTokens
     {

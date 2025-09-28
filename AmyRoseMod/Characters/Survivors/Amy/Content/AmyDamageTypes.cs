@@ -1,4 +1,4 @@
-﻿using Amy;
+﻿using AmyRoseMod;
 using HedgehogUtils.Launch;
 using R2API;
 using RoR2;

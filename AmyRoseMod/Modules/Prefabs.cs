@@ -2,15 +2,15 @@
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
-using Amy.Modules.Characters;
+using AmyRoseMod.Modules.Characters;
 using RoR2.CharacterAI;
 using static RoR2.CharacterAI.AISkillDriver;
 using RoR2.Skills;
 using System;
 using System.Linq;
-using Amy.Survivors.Amy.Components;
+using  AmyRoseMod.Characters.Survivors.Amy.Components;
 
-namespace Amy.Modules
+namespace AmyRoseMod.Modules
 {
     // module for creating body prefabs and whatnot
     // recommended to simply avoid touching this unless you REALLY need to
