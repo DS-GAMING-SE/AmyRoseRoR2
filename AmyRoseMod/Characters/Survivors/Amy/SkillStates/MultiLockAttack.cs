@@ -19,7 +19,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
     {
         public List<HurtBox> targets;
 
-        public float noTargetMinDuration = 1f;
+        public float maxDurationFailsafe = 5f;
+
+        public float orbBounceRange;
 
         protected CharacterModel characterModel;
         
@@ -57,7 +59,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             {
                 base.characterMotor.velocity = Vector3.zero;
             }
-            if (base.isAuthority && fixedAge >= noTargetMinDuration)
+            if (base.isAuthority && fixedAge >= maxDurationFailsafe)
             {
                 this.outer.SetNextStateToMain();
                 return;
@@ -66,8 +68,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public virtual void FireOrb()
         {
-            AmyOrbs.MultiLockOrb orb = AmyOrbs.CreateMultiLockOrb<AmyOrbs.MultiLockOrb>(AmyStaticValues.specialMultiLockDamageCoefficient * damageStat, base.gameObject, Util.CheckRoll(this.critStat, base.characterBody.master), AmyAssets.multiLockProjectilePrefab,
-                90f, base.gameObject.transform.position, targets, OrbStorageUtility.Get("Prefabs/Effects/OrbEffects/HuntressGlaiveOrbEffect"));
+            AmyOrbs.MultiLockOrb orb = AmyOrbs.CreateMultiLockOrb<AmyOrbs.MultiLockOrb>(AmyStaticValues.specialMultiLockDamageCoefficient * damageStat, base.gameObject, this.outer, Util.CheckRoll(this.critStat, base.characterBody.master), AmyAssets.multiLockProjectilePrefab,
+                90f, orbBounceRange, base.gameObject.transform.position, targets, OrbStorageUtility.Get("Prefabs/Effects/OrbEffects/HuntressGlaiveOrbEffect"));
             OrbManager.instance.AddOrb(orb);
         }
 

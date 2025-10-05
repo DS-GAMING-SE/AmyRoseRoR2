@@ -69,7 +69,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             #endregion
 
             #region Special
-            Language.Add(prefix + "SPECIAL_MULTILOCK_NAME", $"Multi-Lock {Tokens.wipIcon}");
+            Language.Add(prefix + "SPECIAL_MULTILOCK_NAME", "Multi-Lock");
             Language.Add(prefix + "SPECIAL_MULTILOCK_DESCRIPTION", $"Enter {Tokens.UtilityText("target painting mode")}, then bounce between targets dealing {Tokens.DamageValueText(AmyStaticValues.specialMultiLockDamageCoefficient)}. Can target up to {AmyStaticValues.specialMultiLockMaxTargets}.");
             #endregion
 

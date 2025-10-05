@@ -13,11 +13,14 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
     public class MultiLockTargeting : BaseState
     {
-        public List<HurtBox> targets;
+        public List<Target> targets;
+        public List<HurtBox> targetHurtBoxes;
 
         public BullseyeSearch search;
 
         public float noTargetMinDuration = 0.4f;
+
+        public float orbBounceRange;
 
         public int maxTargets = AmyStaticValues.specialMultiLockMaxTargets;
 
@@ -25,10 +28,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
-            PrepareStats();
+            PrepareStatsStart();
             if (base.isAuthority)
             {
-                targets = new List<HurtBox>();
+                targets = new List<Target>();
+                targetHurtBoxes = new List<HurtBox>();
                 PrepareSearch();
             }
         }
@@ -61,10 +65,14 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public override void OnExit()
         {
+            foreach (var target in targets)
+            {
+                target.indicator.active = false;
+            }
             base.OnExit();
         }
 
-        public virtual void PrepareStats()
+        public virtual void PrepareStatsStart()
         {
 
         }
@@ -82,35 +90,65 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             this.search.viewer = base.characterBody;
         }
 
-        protected virtual void UpdateSearch()
+        protected virtual void UpdateStats()
         {
             this.search.maxDistanceFilter = 40;
-            this.search.searchOrigin = inputBank.GetAimRay().origin;
-            this.search.searchDirection = inputBank.GetAimRay().direction;
+            this.orbBounceRange = 60f;
         }
 
         protected virtual void Search()
         {
-            UpdateSearch();
+            this.search.searchOrigin = inputBank.GetAimRay().origin;
+            this.search.searchDirection = inputBank.GetAimRay().direction;
+            UpdateStats();
+
             this.search.RefreshCandidates();
-            this.search.FilterOutGameObject(base.gameObject);
-            for (int i = 0; i < this.targets.Count; i++)
-            {
-                if (targets[i] && targets[i].healthComponent && targets[i].healthComponent.alive)
-                {
-                    this.search.FilterOutGameObject(targets[i].healthComponent.gameObject);
-                }
-                else
-                {
-                    targets.RemoveAt(i);
-                    i--;
-                }
-            }
+
+            SanitizeAndFilterTargets();
+
             HurtBox hit = this.search.GetResults().FirstOrDefault(target => target.healthComponent && target.healthComponent.alive);
             if (hit)
             {
-                this.targets.Add(hit);
+                AddTarget(hit);
             }
+        }
+
+        public void SanitizeAndFilterTargets()
+        {
+            this.search.FilterOutGameObject(base.gameObject);
+            for (int i = 0; i < this.targets.Count; i++)
+            {
+                if (targetHurtBoxes[i] && targetHurtBoxes[i].healthComponent && targetHurtBoxes[i].healthComponent.alive &&
+                    Vector3.Distance(targetHurtBoxes[i].transform.position, base.transform.position) < this.search.maxDistanceFilter &&
+                    (i == 0 || Vector3.Distance(targetHurtBoxes[i].transform.position, targetHurtBoxes[i - 1].transform.position) < orbBounceRange))
+                {
+                    this.search.FilterOutGameObject(targetHurtBoxes[i].healthComponent.gameObject);
+                }
+                else
+                {
+                    RemoveTarget(i);
+                    i--;
+                }
+            }
+        }
+
+        public virtual void AddTarget(HurtBox target)
+        {
+            Target targetIndicator = new Target();
+            targetIndicator.number = this.targets.Count;
+            targetIndicator.indicator = new Indicator(base.gameObject, LegacyResourcesAPI.Load<GameObject>("Prefabs/EngiMissileTrackingIndicator"));
+            targetIndicator.indicator.targetTransform = target.transform;
+            targetIndicator.indicator.active = true;
+            this.targets.Add(targetIndicator);
+            this.targetHurtBoxes.Add(target);
+        }
+
+        public virtual void RemoveTarget(int index)
+        {
+            targets[index].indicator.active = false;
+            targets.RemoveAt(index);
+            targetHurtBoxes.RemoveAt(index);
+            // update target.number
         }
 
         public virtual void SetNextStateToAttack()
@@ -120,13 +158,22 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             if (body)
             {
                 MultiLockAttack state = (MultiLockAttack)EntityStateCatalog.InstantiateState(typeof(MultiLockAttack));
-                state.targets = this.targets;
+                state.targets = targetHurtBoxes;
+                state.orbBounceRange = this.orbBounceRange;
                 body.SetNextState(state);
             }
         }
+
         public override InterruptPriority GetMinimumInterruptPriority()
         {
             return InterruptPriority.Skill;
         }
+    }
+
+    public struct Target
+    {
+        public Indicator indicator;
+
+        public int number;
     }
 }

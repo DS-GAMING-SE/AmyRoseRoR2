@@ -18,7 +18,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Content
 {
     public static class AmyOrbs
     {
-        public static T CreateMultiLockOrb<T>(float damage, GameObject attacker, bool crit, GameObject projectilePrefab, float speed, Vector3 origin, List<HurtBox> targets, GameObject orbEffectPrefab) where T : MultiLockOrb
+        public static T CreateMultiLockOrb<T>(float damage, GameObject attacker, EntityStateMachine bodyState, bool crit, GameObject projectilePrefab, float speed, float range, Vector3 origin, List<HurtBox> targets, GameObject orbEffectPrefab) where T : MultiLockOrb
         {
             if (targets.Count == 0) { return null; }
             MultiLockOrb orb = new MultiLockOrb
@@ -26,6 +26,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Content
                 target = targets.FirstOrDefault(),
                 remainingTargets = targets,
                 attacker = attacker,
+                bodyState = bodyState,
                 damage = damage,
                 isCrit = crit,
                 speed = speed,
@@ -50,6 +51,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Content
 
             public GameObject attacker;
 
+            public EntityStateMachine bodyState;
+
             public float damage;
 
             public bool isCrit;
@@ -60,10 +63,24 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Content
                 remainingTargets.RemoveAt(0);
                 FireProjectile();
                 StunTarget();
-                if (remainingTargets.Count > 0 && Mathf.Abs((remainingTargets[0].transform.position - target.transform.position).magnitude) <= range)
+                for (int i = 0; i < remainingTargets.Count; i++)
                 {
-                    FireNextOrb();
+                    if (remainingTargets.Count <= 0)
+                    {
+                        break;
+                    }
+                    if (remainingTargets[0] && Mathf.Abs((remainingTargets[0].transform.position - target.transform.position).magnitude) <= range)
+                    {
+                        FireNextOrb();
+                        return;
+                    }
+                    else
+                    {
+                        remainingTargets.RemoveAt(0);
+                        i--;
+                    }
                 }
+                SetNextStateToEnd();
             }
 
             public override void Begin()
@@ -86,19 +103,21 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Content
             {
                 if (projectilePrefab)
                 {
-                    Vector3 position = target.transform.position;
-                    if (target.healthComponent && target.healthComponent.body)
-                    {
-                        position += Vector3.up * Mathf.Min(target.healthComponent.body.bestFitRadius * 0.5f, AmyStaticValues.specialMultiLockBlastRadius);
-                    }
-                    ProjectileManager.instance.FireProjectile(projectilePrefab, position, 
+                    ProjectileManager.instance.FireProjectile(projectilePrefab, PositionAboveTarget(), 
                         Quaternion.LookRotation((target.transform.position - origin).normalized, Vector3.up), attacker, damage, 0, isCrit, DamageColorIndex.Default, target.gameObject);
                 }
             }
 
             protected virtual void FireNextOrb()
             {
-                OrbManager.instance.AddOrb(CreateMultiLockOrb<MultiLockOrb>(damage, attacker, isCrit, projectilePrefab, speed, target.transform.position, remainingTargets, orbEffectPrefab));
+                OrbManager.instance.AddOrb(CreateMultiLockOrb<MultiLockOrb>(damage, attacker, bodyState, isCrit, projectilePrefab, speed, range, target.transform.position, remainingTargets, orbEffectPrefab));
+            }
+
+            protected virtual void SetNextStateToEnd()
+            {
+                SkillStates.MultiLockEnd state = new SkillStates.MultiLockEnd();
+                state.teleportPosition = PositionAboveTarget();
+                bodyState.SetNextState(state);
             }
 
             protected void StunTarget()
@@ -110,6 +129,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Content
                         stun.SetStun(AmyStaticValues.specialMultiLockDetonationTime);
                     }
                 }
+            }
+
+            private Vector3 PositionAboveTarget()
+            {
+                return target.transform.position + (Vector3.up * target.collider.bounds.extents.y * 1.2f);
             }
         }
     }

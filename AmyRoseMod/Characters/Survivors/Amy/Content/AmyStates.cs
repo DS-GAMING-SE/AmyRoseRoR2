@@ -30,6 +30,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             Modules.Content.AddEntityState(typeof(MultiLockTargeting));
             Modules.Content.AddEntityState(typeof(MultiLockAttack));
+            Modules.Content.AddEntityState(typeof(MultiLockEnd));
         }
     }
 }

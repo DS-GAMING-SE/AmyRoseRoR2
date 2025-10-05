@@ -100,6 +100,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public const int specialMultiLockMaxTargets = 5;
 
+        public const float specialMultiLockEndDuration = 0.9f;
+
+        public const float specialMultiLockEndLingeringInvincibilityDuration = 0.4f;
+
         #endregion
     }
 }
