@@ -11,6 +11,14 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public const float primaryHammerLaunchForce = 250f;
 
+        #region Super Primary Hammer
+
+        public const float superPrimaryHammerAfterimageDamageCoefficient = primaryHammerDamageCoefficient / 2f;
+
+        public const float superPrimaryHammerAfterimageProcCoefficient = 0;
+
+        #endregion
+
         #endregion
 
         #region Secondary Hammer Smash
@@ -63,7 +71,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public const float boostHammerSpinDamageCoefficient = 1.6f;
 
-        public const float boostHammerSpinFastDamageCoefficient = 7f;
+        public const float boostHammerSpinFastDamageCoefficient = 10f;
 
         public const float boostHammerSpinProcCoefficient = 0.6f;
 
@@ -103,6 +111,14 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         public const float specialMultiLockEndDuration = 0.9f;
 
         public const float specialMultiLockEndLingeringInvincibilityDuration = 0.4f;
+
+        #region Super Special Multi-Lock
+
+        public const float superSpecialMultiLockBlastRadius = 8f;
+
+        public const int superSpecialMultiLockMaxTargets = 10;
+
+        #endregion
 
         #endregion
     }

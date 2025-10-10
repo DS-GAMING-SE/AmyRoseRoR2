@@ -24,6 +24,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public int maxTargets = AmyStaticValues.specialMultiLockMaxTargets;
 
+        protected static string[] targetBodyBlacklist = { "GravekeeperTrackingFireball" };
+
         
         public override void OnEnter()
         {
@@ -74,7 +76,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public virtual void PrepareStatsStart()
         {
-
+            this.orbBounceRange = 60f;
         }
 
         protected virtual void PrepareSearch()
@@ -90,23 +92,23 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             this.search.viewer = base.characterBody;
         }
 
-        protected virtual void UpdateStats()
+        protected virtual void UpdateSearchStats()
         {
             this.search.maxDistanceFilter = 40;
-            this.orbBounceRange = 60f;
         }
 
         protected virtual void Search()
         {
             this.search.searchOrigin = inputBank.GetAimRay().origin;
             this.search.searchDirection = inputBank.GetAimRay().direction;
-            UpdateStats();
+            UpdateSearchStats();
 
             this.search.RefreshCandidates();
 
             SanitizeAndFilterTargets();
 
-            HurtBox hit = this.search.GetResults().FirstOrDefault(target => target.healthComponent && target.healthComponent.alive);
+            HurtBox hit = this.search.GetResults().FirstOrDefault(target => target.healthComponent && target.healthComponent.alive && target.healthComponent.body && 
+                !targetBodyBlacklist.Contains(BodyCatalog.GetBodyName(target.healthComponent.body.bodyIndex)));
             if (hit)
             {
                 AddTarget(hit);
@@ -158,7 +160,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             if (body)
             {
                 MultiLockAttack state = (MultiLockAttack)EntityStateCatalog.InstantiateState(typeof(MultiLockAttack));
+                state.target = targetHurtBoxes[0];
                 state.targets = targetHurtBoxes;
+                state.orbStartPosition = base.transform.position;
+                state.firstAttack = true;
                 state.orbBounceRange = this.orbBounceRange;
                 body.SetNextState(state);
             }

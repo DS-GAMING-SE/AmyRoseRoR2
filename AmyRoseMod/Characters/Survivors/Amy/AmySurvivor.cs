@@ -406,23 +406,31 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             bodyPrefab.AddComponent<AmySuperFormComponent>();
 
             AmySuperFormComponent.superPrimaryMelee = Helpers.CopySkillDef<AmySkillDefs.RequiresFormSteppedSkillDef>(primaryMelee);
+            AmySuperFormComponent.superPrimaryMelee.skillNameToken = AMY_PREFIX + "SUPER_PRIMARY_HAMMER_NAME";
+            AmySuperFormComponent.superPrimaryMelee.skillDescriptionToken = AMY_PREFIX + "SUPER_PRIMARY_HAMMER_DESCRIPTION";
             AmySuperFormComponent.superPrimaryMelee.icon = assetBundle.LoadAsset<Sprite>("texSuperPrimaryHammerSwingIcon");
             AmySuperFormComponent.superPrimaryMelee.stepCount = 4;
             AmySuperFormComponent.superPrimaryMelee.stepGraceDuration = 0.5f;
             AmySuperFormComponent.superPrimaryMelee.requiredForm = SuperFormDef.superFormDef;
 
             AmySuperFormComponent.superSecondarySmash = Helpers.CopySkillDef<SkillDefs.RequiresFormSkillDef>(secondarySmash);
+            AmySuperFormComponent.superSecondarySmash.skillNameToken = AMY_PREFIX + "SUPER_SECONDARY_HAMMER_SMASH_NAME";
+            AmySuperFormComponent.superSecondarySmash.skillDescriptionToken = AMY_PREFIX + "SUPER_SECONDARY_HAMMER_SMASH_DESCRIPTION";
             AmySuperFormComponent.superSecondarySmash.icon = assetBundle.LoadAsset<Sprite>("texSuperSecondaryHammerSmashIcon");
             AmySuperFormComponent.superSecondarySmash.requiredForm = SuperFormDef.superFormDef;
             AmySuperFormComponent.superSecondarySmash.canceledFromSprinting = false;
             AmySuperFormComponent.superSecondarySmash.cancelSprintingOnActivation = false;
 
             SkillDefs.RequiresFormSkillDef hammerSpin = Helpers.CopySkillDef<SkillDefs.RequiresFormSkillDef>(utilityBoostHammerSpin);
+            hammerSpin.skillNameToken = AMY_PREFIX + "SUPER_UTILITY_HAMMER_SPIN_NAME";
+            hammerSpin.skillDescriptionToken = AMY_PREFIX + "SUPER_UTILITY_HAMMER_SPIN_DESCRIPTION";
             hammerSpin.icon = assetBundle.LoadAsset<Sprite>("texSuperUtilityHammerSpinIcon");
             hammerSpin.requiredForm = SuperFormDef.superFormDef;
             hammerSpin.activationState = new EntityStates.SerializableEntityStateType(typeof(SuperHammerSpin));
             AmySuperFormComponent.superUtilityBoost = Helpers.CopyBoostSkillDef<AmySkillDefs.AmyRequiresFormBoostSkillDef>(utilityBoost);
             AmySuperFormComponent.superUtilityBoost.icon = assetBundle.LoadAsset<Sprite>("texSuperUtilityBoostIcon");
+            AmySuperFormComponent.superUtilityBoost.skillNameToken = AMY_PREFIX + "SUPER_UTILITY_BOOST_NAME";
+            AmySuperFormComponent.superUtilityBoost.skillDescriptionToken = AMY_PREFIX + "SUPER_UTILITY_BOOST_DESCRIPTION";
             AmySuperFormComponent.superUtilityBoost.requiredForm = SuperFormDef.superFormDef;
             AmySuperFormComponent.superUtilityBoost.hammerSpinSkillDef = hammerSpin;
             AmySuperFormComponent.superUtilityBoost.activationState = new EntityStates.SerializableEntityStateType(typeof(SuperBoost));
@@ -430,6 +438,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             AmySuperFormComponent.superSpecialMultiLock = Helpers.CopySkillDef<SkillDefs.RequiresFormSkillDef>(specialMultilock);
             AmySuperFormComponent.superSpecialMultiLock.icon = assetBundle.LoadAsset<Sprite>("texSuperSpecialMultiLockIcon");
+            AmySuperFormComponent.superSpecialMultiLock.skillNameToken = AMY_PREFIX + "SUPER_SPECIAL_MULTILOCK_NAME";
+            AmySuperFormComponent.superSpecialMultiLock.skillDescriptionToken = AMY_PREFIX + "SUPER_SPECIAL_MULTILOCK_DESCRIPTION";
             AmySuperFormComponent.superSpecialMultiLock.requiredForm = SuperFormDef.superFormDef;
         }
         #endregion skills
