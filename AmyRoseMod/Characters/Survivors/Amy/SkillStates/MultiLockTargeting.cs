@@ -76,7 +76,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public virtual void PrepareStatsStart()
         {
-            this.orbBounceRange = 60f;
+            this.orbBounceRange = AmyStaticValues.specialMultiLockBounceRange;
         }
 
         protected virtual void PrepareSearch()
@@ -94,7 +94,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected virtual void UpdateSearchStats()
         {
-            this.search.maxDistanceFilter = 40;
+            this.search.maxDistanceFilter = AmyStaticValues.specialMultiLockSearchRange;
         }
 
         protected virtual void Search()

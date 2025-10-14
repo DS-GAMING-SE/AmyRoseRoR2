@@ -58,10 +58,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             #region Secondary
             Language.Add(prefix + "SECONDARY_HAMMER_SMASH_NAME", $"Piko Piko Smash");
-            Language.Add(prefix + "SECONDARY_HAMMER_SMASH_DESCRIPTION", $"{Tokens.UtilityText("Launching")}. Charge a hammer swing dealing {Tokens.DamageValueText(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient,AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient)}. If airborne, quickly descend, {Tokens.DamageText("attack")} where you land, and {Tokens.UtilityText("rebound upwards")}.");
+            Language.Add(prefix + "SECONDARY_HAMMER_SMASH_DESCRIPTION", $"{Tokens.UtilityText("Launching")}. Charge a hammer swing dealing {Tokens.DamageValueText(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient,AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient)}. If airborne, quickly descend and {Tokens.DamageText("attack")} where you land. Hold the attack when landing to {Tokens.UtilityText("rebound upwards")}.");
 
             Language.Add(prefix + "SUPER_SECONDARY_HAMMER_SMASH_NAME", HedgehogUtils.Helpers.SuperFormText("Super Piko Piko Smash"));
-            Language.Add(prefix + "SUPER_SECONDARY_HAMMER_SMASH_DESCRIPTION", $"{HedgehogUtils.Helpers.SuperFormText("Launching")}. Charge a hammer swing dealing {Tokens.DamageValueText(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient, AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient)}. {HedgehogUtils.Helpers.SuperFormText("Can be charged while sprinting.")}");
+            Language.Add(prefix + "SUPER_SECONDARY_HAMMER_SMASH_DESCRIPTION", $"{HedgehogUtils.Helpers.SuperFormText("Launching")}. {HedgehogUtils.Helpers.SuperFormText("Agile")}. Charge a hammer swing dealing {Tokens.DamageValueText(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient, AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient)}.");
             #endregion
 
             #region Utility

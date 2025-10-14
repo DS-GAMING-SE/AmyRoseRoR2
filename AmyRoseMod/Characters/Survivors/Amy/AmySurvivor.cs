@@ -77,7 +77,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 }
         };
 
-        public override UnlockableDef characterUnlockableDef => AmyUnlockables.characterUnlockableDef;
+        public override UnlockableDef characterUnlockableDef => null;
         
         public override ItemDisplaysBase itemDisplays => null;
 
@@ -479,11 +479,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             #region MasterySkin
             
             ////creating a new skindef as we did before
-            //SkinDef masterySkin = Modules.Skins.CreateSkinDef(AMY_PREFIX + "MASTERY_SKIN_NAME",
-            //    assetBundle.LoadAsset<Sprite>("texMasteryAchievement"),
-            //    defaultRendererinfos,
-            //    prefabCharacterModel.gameObject,
-            //    HenryUnlockables.masterySkinUnlockableDef);
+            SkinDef masterySkin = Modules.Skins.CreateSkinDef(AMY_PREFIX + "PALADIN_SKIN_NAME",
+                assetBundle.LoadAsset<Sprite>("texPaladinSkinIcon"),
+                defaultRendererinfos,
+                prefabCharacterModel.gameObject,
+                AmyUnlockables.masterySkinUnlockableDef);
 
             ////adding the mesh replacements as above. 
             ////if you don't want to replace the mesh (for example, you only want to replace the material), pass in null so the order is preserved
@@ -509,7 +509,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             //};
             ////simply find an object on your child locator you want to activate/deactivate and set if you want to activate/deacitvate it with this skin
 
-            //skins.Add(masterySkin);
+            skins.Add(masterySkin);
             
             #endregion
 

@@ -33,7 +33,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             baseHitStopDuration = Mathf.Lerp(0.3f, 0.4f, charge);
             baseDuration = 0.7f;
             PrepareStats();
-            hitStopDuration = baseHitStopDuration / attackSpeedStat;
+            hitStopDuration = (baseHitStopDuration / 2) + ((baseHitStopDuration / 2) / attackSpeedStat);
             duration = baseDuration / attackSpeedStat;
             if (NetworkServer.active)
             {
@@ -90,7 +90,14 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             else if (!hasJumped)
             {
                 hasJumped = true;
-                Jump();
+                if (base.inputBank.skill2.down)
+                {
+                    Jump();
+                }
+                else
+                {
+                    SmallHop(base.characterMotor, 12f);
+                }
             }
             if (hasJumped && fixedAge > duration)
             {
@@ -113,9 +120,14 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         protected virtual void Jump()
         {
             PlayJumpAnimation();
-            Vector3 targetDirection = base.inputBank ? Vector3.Lerp(Vector3.up, base.inputBank.moveVector * 3.5f, base.inputBank.moveVector.magnitude * AmyStaticValues.secondaryHammerAirJumpMaxLerpFromUp) : Vector3.up;
+            Vector3 velocity = Vector3.up * (base.inputBank ? 1 - (base.inputBank.moveVector.magnitude * AmyStaticValues.secondaryHammerAirJumpHeightReductionWhenAngled): 1f);
+            velocity *= base.characterBody.jumpPower * AmyStaticValues.secondaryHammerAirJumpHeightMultiplier;
+            if (base.inputBank)
+            {
+                velocity += base.characterBody.moveSpeed * AmyStaticValues.secondaryHammerAirJumpHorizontalSpeedMult * base.inputBank.moveVector;
+            }
             base.characterMotor.Motor.ForceUnground();
-            base.characterMotor.velocity = targetDirection * base.characterBody.jumpPower * AmyStaticValues.secondaryHammerAirJumpHeightMultiplier;
+            base.characterMotor.velocity = velocity;
         }
 
         public override void OnExit()

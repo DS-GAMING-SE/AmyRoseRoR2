@@ -42,7 +42,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
             hitStopDuration = 0.08f;
             attackRecoil = 0.5f;
-            hitHopVelocity = 8.5f;
+            hitHopVelocity = 6f;
         }
 
         protected override void PrepareAttackStats()

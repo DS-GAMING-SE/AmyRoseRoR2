@@ -23,21 +23,21 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         #region Secondary Hammer Smash
 
-        public const float secondaryHammerChargeMinimumDamageCoefficient = 7f;
+        public const float secondaryHammerChargeMinimumDamageCoefficient = 8f;
 
-        public const float secondaryHammerChargeMaximumDamageCoefficient = 14f;
+        public const float secondaryHammerChargeMaximumDamageCoefficient = 24f;
 
         public const float secondaryHammerChargeMinimumProcCoefficient = 1f;
 
         public const float secondaryHammerChargeMaximumProcCoefficient = 1.5f;
 
-        public const float secondaryHammerBaseChargeTime = 2.5f;
+        public const float secondaryHammerBaseChargeTime = 3f;
 
         public const float secondaryHammerLaunchForce = 400f;
 
         #region Air Version
 
-        public const float secondaryHammerAirFallDistanceForMaxCharge = 33f;
+        public const float secondaryHammerAirFallDistanceForMaxCharge = 45f;
 
         public const float secondaryHammerAirFallAcceleration = 60f;
 
@@ -47,7 +47,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public const float secondaryHammerAirJumpHeightMultiplier = 2.5f;
 
-        public const float secondaryHammerAirJumpMaxLerpFromUp = 0.18f;
+        public const float secondaryHammerAirJumpHeightReductionWhenAngled = 0.18f;
+
+        public const float secondaryHammerAirJumpHorizontalSpeedMult = 2.3f;
 
         public const float secondaryHammerAirJumpBuffSpeedCoefficient = 0.2f;
 
@@ -106,6 +108,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public const float specialMultiLockDetonationTime = 1f;
 
+        public const float specialMultiLockSearchRange = 55f;
+
+        public const float specialMultiLockBounceRange = 70f;
+
         public const int specialMultiLockMaxTargets = 5;
 
         public const float specialMultiLockEndDuration = 0.9f;
@@ -116,7 +122,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public const float superSpecialMultiLockBlastRadius = 8f;
 
+        public const float superSpecialMultiLockSearchRange = 80f;
+
+        public const float superSpecialMultiLockBounceRange = 100f;
+
         public const int superSpecialMultiLockMaxTargets = 10;
+
 
         #endregion
 
