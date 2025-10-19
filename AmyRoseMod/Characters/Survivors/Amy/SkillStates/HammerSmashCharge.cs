@@ -120,7 +120,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.PrioritySkill;
+            return InterruptPriority.Pain;
         }
     }
 }

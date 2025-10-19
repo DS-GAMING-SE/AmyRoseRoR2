@@ -4,6 +4,7 @@ using UnityEngine;
 using RiskOfOptions;
 using RiskOfOptions.Options;
 using RiskOfOptions.OptionConfigs;
+using System;
 
 namespace AmyRoseMod.Modules
 {
@@ -67,17 +68,21 @@ namespace AmyRoseMod.Modules
             {
                 ModSettingsManager.AddOption(new SliderOption(entry as ConfigEntry<float>, new SliderConfig() { min = min, max = max, formatString = "{0:0.00}", restartRequired = restartRequired }));
             }
-            if (entry is ConfigEntry<int>)
+            else if (entry is ConfigEntry<int>)
             {
                 ModSettingsManager.AddOption(new IntSliderOption(entry as ConfigEntry<int>, new IntSliderConfig() { min = (int)min, max = (int)max, restartRequired = restartRequired }));
             }
-            if (entry is ConfigEntry<bool>)
+            else if (entry is ConfigEntry<bool>)
             {
                 ModSettingsManager.AddOption(new CheckBoxOption(entry as ConfigEntry<bool>, restartRequired));
             }
-            if (entry is BepInEx.Configuration.ConfigEntry<KeyboardShortcut>)
+            else if (entry is BepInEx.Configuration.ConfigEntry<KeyboardShortcut>)
             {
                 ModSettingsManager.AddOption(new KeyBindOption(entry as ConfigEntry<KeyboardShortcut>, restartRequired));
+            }
+            else
+            {
+                ModSettingsManager.AddOption(new ChoiceOption(entry, restartRequired));
             }
         }
 

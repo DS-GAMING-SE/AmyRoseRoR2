@@ -77,10 +77,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Content
 
             protected virtual void FireProjectile()
             {
-                if (projectilePrefab)
+                if (projectilePrefab && target)
                 {
+                    Vector3 forward = target.transform.position - origin;
+                    forward.y = 0;
                     ProjectileManager.instance.FireProjectile(projectilePrefab, PositionAboveTarget(), 
-                        Quaternion.LookRotation((target.transform.position - origin).normalized, Vector3.up), attacker, damage, 0, isCrit, DamageColorIndex.Default, target.gameObject);
+                        Quaternion.LookRotation(forward.normalized, Vector3.up), attacker, damage, 0, isCrit, DamageColorIndex.Default, target.gameObject);
                 }
             }
 

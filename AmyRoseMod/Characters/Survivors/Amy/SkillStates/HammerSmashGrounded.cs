@@ -105,7 +105,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             {
                 return InterruptPriority.Any;
             }
-            return InterruptPriority.PrioritySkill;
+            return InterruptPriority.Pain;
         }
 
         public override void OnExit()

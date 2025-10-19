@@ -9,6 +9,9 @@ using RoR2.Orbs;
 using RoR2.Skills;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Net;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
@@ -36,6 +39,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         protected AmyOrbs.MultiLockOrb orb;
 
         protected CharacterModel characterModel;
+
+        public MultiLockCameraProvider camera;
         
         public override void OnEnter()
         {
@@ -56,7 +61,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             }
             if (target)
             {
-                predictedTimeUntilArrival = Vector3.Distance(orbStartPosition, target.transform.position) / orbSpeed;
+                targetLastPosition = target.transform.position;
+                predictedTimeUntilArrival = Vector3.Distance(orbStartPosition, targetLastPosition) / orbSpeed;
                 predictedTimeUntilArrival += 0.1f;
             }
             else
@@ -80,6 +86,17 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             if (target)
             {
                 targetLastPosition = target.transform.position;
+                if (camera)
+                {
+                    camera.targetPosition = targetLastPosition;
+                }
+            }
+
+            if (predictedTimeUntilArrival - fixedAge <= MultiLockCameraProvider.maxLerpTime &&
+                AmyConfig.multiLockSmoothCamera.Value != MultiLockCameraProvider.CameraMovementModes.Instant && targets.Count == 1 && predictedTimeUntilArrival > 0
+                && !camera)
+            {
+                camera = MultiLockCameraProvider.StartCameraMove(base.gameObject, orbStartPosition, targetLastPosition, predictedTimeUntilArrival - fixedAge);
             }
 
             if (base.isAuthority)
@@ -158,6 +175,16 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             {
                 base.characterBody.RemoveBuff(RoR2Content.Buffs.Intangible);
             }
+            if (characterDirection)
+            {
+                base.characterDirection.forward = (targetLastPosition - orbStartPosition).normalized;
+                base.characterDirection.moveVector = (targetLastPosition - orbStartPosition).normalized;
+            }
+            if (camera)
+            {
+                camera.EndCameraMove();
+                Destroy(camera);
+            }
             base.OnExit();
         }
 
@@ -178,6 +205,124 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             base.OnDeserialize(reader);
             target = reader.ReadHurtBoxReference().ResolveHurtBox();
             orbStartPosition = reader.ReadVector3();
+        }
+    }
+    // Nemmerc code looks very sane and normal
+    //
+    // I could've just made this a class and not a monobehaviour but nooooooo. CameraModePlayerBasic has to be annoying and throw errors every frame if I'm not using
+    // UnityEngine.Object as the base class. The error doesn't even do anything, it's just annoying to look at
+    public class MultiLockCameraProvider : MonoBehaviour, ICameraStateProvider
+    {
+        public const float maxLerpTime = 0.35f;
+        
+        public GameObject user;
+        public Vector3 userPosition;
+
+        public Vector3 orbStartPosition;
+        
+        public Vector3 targetPosition;
+
+        public Vector3 backwardMovementVector;
+        
+        public static MultiLockCameraProvider StartCameraMove(GameObject user, Vector3 orbStartPosition, Vector3 targetPosition, float lerpTime)
+        {
+            MultiLockCameraProvider provider = user.AddComponent<MultiLockCameraProvider>();
+            provider.orbStartPosition = orbStartPosition;
+            provider.targetPosition = targetPosition;
+            provider.user = user;
+            provider.userPosition = user.transform.position;
+            foreach (CameraRigController cameraRigController in CameraRigController.readOnlyInstancesList)
+            {
+                if (cameraRigController.target == user)
+                {
+                    cameraRigController.SetOverrideCam(provider, Mathf.Min(lerpTime, maxLerpTime));
+                }
+                else if (cameraRigController.IsOverrideCam(provider))
+                {
+                    cameraRigController.SetOverrideCam(null, 0.05f);
+                }
+            }
+            return provider;
+        }
+
+        public void EndCameraMove()
+        {
+            ReadOnlyCollection<CameraRigController> readOnlyInstancesList = CameraRigController.readOnlyInstancesList;
+            for (int i = 0; i < readOnlyInstancesList.Count; i++)
+            {
+                CameraRigController cameraRigController = readOnlyInstancesList[i];
+                if (cameraRigController.IsOverrideCam(this))
+                {
+                    cameraRigController.SetOverrideCam(null, 0.2f);
+                }
+            }
+        }
+
+        public void GetCameraState(CameraRigController cameraRigController, ref CameraState cameraState)
+        {
+            userPosition = user ? user.transform.position : userPosition;
+
+            backwardMovementVector = (orbStartPosition - targetPosition).normalized;
+            backwardMovementVector.y = Mathf.Clamp(backwardMovementVector.y, -0.1f, -0.3f);
+
+            Vector3 cameraLocalPos = cameraRigController.targetParams.currentCameraParamsData.idealLocalCameraPos.value;
+            cameraLocalPos.y += cameraRigController.targetParams.currentCameraParamsData.pivotVerticalOffset.value + 0.9f;
+            cameraLocalPos += (cameraRigController.targetParams.cameraPivotTransform ? cameraRigController.targetParams.cameraPivotTransform.localPosition : Vector3.zero);
+            Vector3 cameraPosition = targetPosition;
+            cameraPosition += (AmyConfig.multiLockSmoothCamera.Value == CameraMovementModes.MoveAndRotate ? 
+                Util.QuaternionSafeLookRotation(backwardMovementVector.normalized) : cameraState.rotation) * cameraLocalPos;
+
+            Vector3 between = cameraPosition - user.transform.position;
+            float distanceFromPivot = Raycast(new Ray(userPosition, between.normalized), between.magnitude, 0.09f);
+            Vector3 finalPosition = (between.normalized * distanceFromPivot) + userPosition;
+
+            cameraState.position = finalPosition;
+
+            if (AmyConfig.multiLockSmoothCamera.Value == CameraMovementModes.MoveAndRotate)
+            {
+                cameraState.rotation = Util.QuaternionSafeLookRotation(backwardMovementVector).normalized;
+            }
+        }
+        public float Raycast(Ray ray, float maxDistance, float wallCushion)
+        {
+            LayerIndex world = LayerIndex.world;
+            RaycastHit[] array = Physics.SphereCastAll(ray, wallCushion, maxDistance, world.mask, QueryTriggerInteraction.Ignore);
+            float num = maxDistance;
+            for (int i = 0; i < array.Length; i++)
+            {
+                float distance = array[i].distance;
+                if (distance < num)
+                {
+                    Collider collider = array[i].collider;
+                    if (collider && !collider.GetComponent<NonSolidToCamera>())
+                    {
+                        num = distance;
+                    }
+                }
+            }
+            return num;
+        }
+
+        public bool IsHudAllowed(CameraRigController cameraRigController)
+        {
+            return true;
+        }
+
+        public bool IsUserControlAllowed(CameraRigController cameraRigController)
+        {
+            return true;
+        }
+
+        public bool IsUserLookAllowed(CameraRigController cameraRigController)
+        {
+            return true;
+        }
+
+        public enum CameraMovementModes
+        {
+            MoveAndRotate,
+            Move,
+            Instant
         }
     }
 }

@@ -4,7 +4,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 {
     public static class AmyStaticValues
     {
-        public const float bombDamageCoefficient = 16f;
         #region Primary Hammer
 
         public const float primaryHammerDamageCoefficient = 3f;
@@ -108,9 +107,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public const float specialMultiLockDetonationTime = 1f;
 
-        public const float specialMultiLockSearchRange = 55f;
+        public const float specialMultiLockSearchRange = 47f;
 
-        public const float specialMultiLockBounceRange = 70f;
+        public const float specialMultiLockBounceRange = 60f;
 
         public const int specialMultiLockMaxTargets = 5;
 

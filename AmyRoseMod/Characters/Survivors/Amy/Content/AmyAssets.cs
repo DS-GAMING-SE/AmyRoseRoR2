@@ -63,13 +63,13 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             ShakeEmitter shakeEmitter = bombExplosionEffect.AddComponent<ShakeEmitter>();
             shakeEmitter.amplitudeTimeDecay = true;
-            shakeEmitter.duration = 0.5f;
-            shakeEmitter.radius = 200f;
+            shakeEmitter.duration = 0.2f;
+            shakeEmitter.radius = 100f;
             shakeEmitter.scaleShakeRadiusWithLocalScale = false;
 
             shakeEmitter.wave = new Wave
             {
-                amplitude = 0.5f,
+                amplitude = 0.3f,
                 frequency = 40f,
                 cycleOffset = 0f
             };
@@ -104,8 +104,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             ProjectileController multiLockController = multiLockProjectilePrefab.GetComponent<ProjectileController>();
 
-            if (_assetBundle.LoadAsset<GameObject>("HenryBombGhost") != null)
-                multiLockController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("HenryBombGhost");
+            if (_assetBundle.LoadAsset<GameObject>("AmyRoseMultiLockHeartGhost") != null)
+                multiLockController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("AmyRoseMultiLockHeartGhost");
             
             multiLockController.startSound = "";
         }

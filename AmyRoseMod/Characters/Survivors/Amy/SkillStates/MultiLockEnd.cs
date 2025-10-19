@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine.Networking;
 using UnityEngine;
+using Unity.Collections;
 
 namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
@@ -13,6 +14,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
     {
         protected float baseDuration;
         protected float duration;
+
+        protected float startSpeed;
 
         public Vector3 teleportPosition;
         
@@ -35,10 +38,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (base.isAuthority && base.characterMotor)
+            if (base.isAuthority && base.characterMotor && base.characterDirection)
             {
-                Vector3 vel = Vector3.zero;
-                vel.y = Mathf.Max(-1f, base.characterMotor.velocity.y);
+                Vector3 vel = characterDirection.forward;
+                vel *= 0.7f;
+                vel.y = 1f;
+                vel *= startSpeed * (1f - (fixedAge / duration));
                 base.characterMotor.velocity = vel;
             }
             if (fixedAge >= duration && base.isAuthority)
@@ -59,6 +64,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         protected virtual void PrepareStats()
         {
             baseDuration = AmyStaticValues.specialMultiLockEndDuration;
+            startSpeed = 17f;
         }
         protected virtual void PlayAnimation()
         {

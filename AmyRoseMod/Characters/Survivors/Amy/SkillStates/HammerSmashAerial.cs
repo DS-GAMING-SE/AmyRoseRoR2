@@ -22,6 +22,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         public float baseDuration;
         protected float duration;
 
+        protected bool bufferedJump;
         protected bool hasJumped;
 
         public OverlapAttack overlapAttack;
@@ -84,13 +85,17 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             }
             if (fixedAge <= hitStopDuration)
             {
+                if (base.inputBank.skill2.down)
+                {
+                    bufferedJump = true;
+                }
                 base.characterMotor.velocity = Vector3.zero;
                 overlapAttack.Fire();
             }
             else if (!hasJumped)
             {
                 hasJumped = true;
-                if (base.inputBank.skill2.down)
+                if (base.inputBank.skill2.down || bufferedJump)
                 {
                     Jump();
                 }
@@ -137,7 +142,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.PrioritySkill;
+            return InterruptPriority.Pain;
         }
     }
 }

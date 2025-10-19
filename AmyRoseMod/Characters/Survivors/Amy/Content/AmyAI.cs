@@ -73,7 +73,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             shootDriver.movementType = AISkillDriver.MovementType.ChaseMoveTarget;
             shootDriver.moveInputScale = 1;
             shootDriver.aimType = AISkillDriver.AimType.AtMoveTarget;
-            shootDriver.buttonPressType = AISkillDriver.ButtonPressType.Hold; 
+            shootDriver.buttonPressType = AISkillDriver.ButtonPressType.TapContinuous; 
             
             AISkillDriver rollDriver = master.AddComponent<AISkillDriver>();
             //Selection Conditions
