@@ -37,7 +37,7 @@ namespace AmyRoseMod.Modules
 
                 if (self.HasBuff(AmyBuffs.hammerSpinSpeedBuff))
                 {
-                    stats.moveSpeedMultAdd += self.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff) * AmyStaticValues.boostHammerSpinBuffSpeedCoefficient;
+                    stats.moveSpeedMultAdd += (((float)self.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff)) / ((float)AmyStaticValues.boostHammerSpinBuffMaxStacks)) * AmyStaticValues.boostHammerSpinBuffMaxSpeedCoefficient;
                 }
             }
         }

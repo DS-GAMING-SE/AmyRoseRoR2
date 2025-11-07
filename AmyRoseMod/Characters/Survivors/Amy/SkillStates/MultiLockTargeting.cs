@@ -20,7 +20,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public float noTargetMinDuration = 0.4f;
 
-        public float orbBounceRange;
+        public float orbBounceRange = AmyStaticValues.specialMultiLockBounceRange;
 
         public int maxTargets = AmyStaticValues.specialMultiLockMaxTargets;
 
@@ -76,7 +76,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public virtual void PrepareStatsStart()
         {
-            this.orbBounceRange = AmyStaticValues.specialMultiLockBounceRange;
         }
 
         protected virtual void PrepareSearch()

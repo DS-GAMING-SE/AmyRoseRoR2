@@ -59,7 +59,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 RegisterLookingGlassBuff(en, boostBuff, "Amy Boost", $"Gain <style=cIsDamage>+{AmyStaticValues.boostArmor} armor</style>. Gain <style=cIsUtility>+{AmyStaticValues.boostListedSpeedCoefficient * 100}% movement speed</style>.");
                 RegisterLookingGlassBuff(en, superBoostBuff, "Amy Super Boost", $"Gain <style=cIsDamage>+{AmyStaticValues.boostArmor} armor</style>. Gain <style=cIsUtility>+{AmyStaticValues.superBoostListedSpeedCoefficient * 100}% movement speed</style>.");
                 RegisterLookingGlassBuff(en, hammerSmashSpeedBuff, "Amy Smash Speed", $"Gain <style=cIsUtility>+{AmyStaticValues.secondaryHammerAirJumpBuffSpeedCoefficient * 100f}% movement speed</style>.");
-                RegisterLookingGlassBuff(en, hammerSpinSpeedBuff, "Amy Spin Speed", $"Gain <style=cIsUtility>+{AmyStaticValues.boostHammerSpinBuffSpeedCoefficient * 100f}% movement speed</style>. Reduce {Tokens.RedText("acceleration")}. Increase hammer-spin {Tokens.DamageText("damage")}. Reduce hammer-spin {Tokens.RedText("attack speed")}.");
+                RegisterLookingGlassBuff(en, hammerSpinSpeedBuff, "Amy Spin Speed", $"Gain <style=cIsUtility>+{AmyStaticValues.boostHammerSpinBuffMaxSpeedCoefficient * 100f}% movement speed</style>. Reduce {Tokens.RedText("acceleration")}. Increase hammer-spin {Tokens.DamageText("damage")}. Reduce hammer-spin {Tokens.RedText("attack speed")}.");
             }
         }
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]

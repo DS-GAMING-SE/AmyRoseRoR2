@@ -92,7 +92,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 }
             }
 
-            if (predictedTimeUntilArrival - fixedAge <= MultiLockCameraProvider.maxLerpTime &&
+            if (predictedTimeUntilArrival > 0 && predictedTimeUntilArrival - fixedAge <= MultiLockCameraProvider.maxLerpTime &&
                 AmyConfig.multiLockSmoothCamera.Value != MultiLockCameraProvider.CameraMovementModes.Instant && targets.Count == 1 && predictedTimeUntilArrival > 0
                 && !camera)
             {
@@ -141,6 +141,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public virtual void FireOrb()
         {
+            if (!target) { return; }
             orb = AmyOrbs.CreateMultiLockOrb<AmyOrbs.MultiLockOrb>(AmyStaticValues.specialMultiLockDamageCoefficient * damageStat, base.gameObject, this.outer, Util.CheckRoll(this.critStat, base.characterBody.master), 
                 AmyAssets.multiLockProjectilePrefab, orbSpeed, orbStartPosition, target, OrbStorageUtility.Get("Prefabs/Effects/OrbEffects/HuntressGlaiveOrbEffect"));
             OrbManager.instance.AddOrb(orb);

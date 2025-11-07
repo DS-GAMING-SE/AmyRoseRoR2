@@ -23,14 +23,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 304081778}
-  m_LocalRotation: {x: -0.4335639, y: 0.09065111, z: -0.8775748, w: -0.1834863}
-  m_LocalPosition: {x: 0.116, y: 1.178, z: 1.01}
+  m_LocalRotation: {x: 0.20671636, y: -0.0016794043, z: 0.97815067, w: 0.022063034}
+  m_LocalPosition: {x: 0, y: 1.1, z: 1.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8315140139193319990}
   m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 18.555, y: 50.139004, z: -194.87999}
+  m_LocalEulerAnglesHint: {x: 0.711, y: 23.851, z: 177.566}
 --- !u!1 &1588917075
 GameObject:
   m_ObjectHideFlags: 0
@@ -54,14 +54,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1588917075}
-  m_LocalRotation: {x: 0.042331364, y: -0.23975171, z: 0.16864218, w: 0.95513713}
-  m_LocalPosition: {x: 0.029, y: 1.281, z: 1.0949999}
+  m_LocalRotation: {x: 0.018413162, y: -0.24114826, z: 0.10382263, w: 0.96474314}
+  m_LocalPosition: {x: 0, y: 1.281, z: 1.0949999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8315140139193319990}
   m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 9.307, y: -26.720001, z: 17.811}
+  m_LocalEulerAnglesHint: {x: 4.911, y: -27.592, z: 11.078}
 --- !u!1 &1767225301492422643
 GameObject:
   m_ObjectHideFlags: 0
@@ -273,6 +273,37 @@ Transform:
   m_Father: {fileID: 8315140139193319944}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4207987881799336820
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 682684662111504493}
+  m_Layer: 0
+  m_Name: SwingDown
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &682684662111504493
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4207987881799336820}
+  m_LocalRotation: {x: 0.23524502, y: -0.10369442, z: 0.83325624, w: 0.48948064}
+  m_LocalPosition: {x: 0, y: 1.1, z: 1.01}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8315140139193319990}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 23.772, y: 18.509, z: 123.066}
 --- !u!1 &4249275661335445994
 GameObject:
   m_ObjectHideFlags: 0
@@ -350,6 +381,37 @@ Transform:
   m_Father: {fileID: 8315140139193319944}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4964926134768267251
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2900166405965760846}
+  m_Layer: 0
+  m_Name: SwingUp
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2900166405965760846
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4964926134768267251}
+  m_LocalRotation: {x: -0.050092265, y: -0.12982708, z: -0.38918167, w: 0.9105896}
+  m_LocalPosition: {x: 0, y: 1.22, z: 1.01}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8315140139193319990}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: -11.086, y: -11.607, z: -45.153}
 --- !u!1 &5759912551305007785
 GameObject:
   m_ObjectHideFlags: 0
@@ -2256,6 +2318,8 @@ Transform:
   - {fileID: 1239346192492864591}
   - {fileID: 4771091606830605582}
   - {fileID: 7112536428064320074}
+  - {fileID: 2900166405965760846}
+  - {fileID: 682684662111504493}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2363,6 +2427,10 @@ MonoBehaviour:
     transform: {fileID: 4771091606830605582}
   - name: SpinHitbox
     transform: {fileID: 7112536428064320074}
+  - name: SwingUp
+    transform: {fileID: 2900166405965760846}
+  - name: SwingDown
+    transform: {fileID: 682684662111504493}
 --- !u!114 &7238953315125949139
 MonoBehaviour:
   m_ObjectHideFlags: 0

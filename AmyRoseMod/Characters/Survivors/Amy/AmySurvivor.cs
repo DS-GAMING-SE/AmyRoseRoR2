@@ -420,6 +420,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             AmySuperFormComponent.superSecondarySmash.requiredForm = SuperFormDef.superFormDef;
             AmySuperFormComponent.superSecondarySmash.canceledFromSprinting = false;
             AmySuperFormComponent.superSecondarySmash.cancelSprintingOnActivation = false;
+            AmySuperFormComponent.superSecondarySmash.activationState = new EntityStates.SerializableEntityStateType(typeof(SuperHammerSmashCharge));
 
             SkillDefs.RequiresFormSkillDef hammerSpin = Helpers.CopySkillDef<SkillDefs.RequiresFormSkillDef>(utilityBoostHammerSpin);
             hammerSpin.skillNameToken = AMY_PREFIX + "SUPER_UTILITY_HAMMER_SPIN_NAME";

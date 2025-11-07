@@ -86,10 +86,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
             base.OnEnter();
             hammerSpinController = base.GetComponent<AmyHammerSpinController>();
-            if (hammerSpinController)
-            {
-                hammerSpinController.ActivateLean();
-            }
+            if (!hammerSpinController) { this.outer.SetNextStateToMain(); return; }
+            hammerSpinController.ActivateSpin();
 
             boostLogic = base.GetComponent<BoostLogic>();
             boostLogic.boostBeingUsed = true;
@@ -104,11 +102,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             }
             if (base.isAuthority)
             {
-                if (hammerSpinController)
-                {
-                    hammerSpinController.ApplySkillOverride(activatorSkillSlot, out SkillDef skillDef);
-                    hammerSpinSkillDef = skillDef;
-                }
+                base.characterBody.skillLocator.primary.onSkillChanged += OnSkillChanged;
+
+                hammerSpinController.ApplySkillOverride(activatorSkillSlot, out SkillDef skillDef);
+                hammerSpinSkillDef = skillDef;
 
                 attack = new OverlapAttack();
                 attack.attacker = gameObject;
@@ -129,7 +126,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected virtual void PrepareAttackStats()
         {
-            float speedLerp = ((float)(base.characterBody.GetBuffCount(hammerSpinBuff) - 1)) / ((float)AmyStaticValues.boostHammerSpinBuffMaxStacks);
+            float speedLerp = ((float)(base.characterBody.GetBuffCount(hammerSpinBuff)) - 1f) / (((float)AmyStaticValues.boostHammerSpinBuffMaxStacks - 1));
             hitboxGroupName = "Spin";
 
             damageType = DamageTypeCombo.GenericUtility;
@@ -138,7 +135,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             damageCoefficient = Mathf.Lerp(AmyStaticValues.boostHammerSpinDamageCoefficient, AmyStaticValues.boostHammerSpinFastDamageCoefficient, speedLerp);
             procCoefficient = AmyStaticValues.boostHammerSpinProcCoefficient;
             pushForce = AmyStaticValues.boostHammerSpinLaunchForce;
-            baseAttacksPerSecond = Mathf.Lerp(AmyStaticValues.boostHammerSpinAttacksPerSecond, AmyStaticValues.boostHammerSpinFastAttacksPerSecond, speedLerp);
+            baseAttacksPerSecond = Mathf.Lerp(AmyStaticValues.boostHammerSpinAttacksPerSecond, AmyStaticValues.boostHammerSpinBuffMaxAttacksPerSecond, speedLerp);
         }
 
         public override void FixedUpdate()
@@ -166,6 +163,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
                 if (NetworkServer.active && buffStackTimer > 0)
                 {
+                    UpdateIsHighSpeed();
+
                     buffStackTimer -= Time.fixedDeltaTime;
                     if (buffStackTimer <= 0)
                     {
@@ -224,11 +223,16 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             }
         }
 
+        protected virtual void UpdateIsHighSpeed()
+        {
+            Vector3 vel = hammerSpinController.estimatedVelocity;
+            if (!base.characterMotor.isFlying) { vel.y = 0; }
+            hammerSpinController.highSpeed = vel.magnitude >= base.characterBody.moveSpeed * buffStackNeededSpeedPercent;
+        }
+
         protected virtual void UpdateBuffs()
         {
-            Vector3 vel = base.characterMotor.velocity;
-            if (!base.characterMotor.isFlying) { vel.y = 0; }
-            if (vel.magnitude >= base.characterBody.moveSpeed * buffStackNeededSpeedPercent)
+            if (hammerSpinController.highSpeed)
             {
                 if (base.characterBody.GetBuffCount(hammerSpinBuff) < AmyStaticValues.boostHammerSpinBuffMaxStacks)
                 {
@@ -343,11 +347,15 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public override void OnExit()
         {
+            if (base.isAuthority)
+            {
+                base.characterBody.skillLocator.primary.onSkillChanged -= OnSkillChanged;
+            }
             boostLogic.boostDraining = false;
             boostLogic.boostBeingUsed = false;
             if (hammerSpinController) 
             { 
-                hammerSpinController.DeactivateLean();
+                hammerSpinController.DeactivateSpin();
             }
             if (NetworkServer.active)
             {
@@ -356,6 +364,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             }
             base.characterMotor.airControl = previousAirControl;
             base.OnExit();
+        }
+
+        public virtual void OnSkillChanged(GenericSkill skill)
+        {
+            SetNextStateToEndLag();
         }
     }
 }

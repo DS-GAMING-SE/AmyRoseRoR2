@@ -11,15 +11,32 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
     {
         // 0 makes launches perfectly straight where you aim, 1 makes them go in the direction of the attack's swing animation (based on what Amy's animations will be)
         public float launchDirectionLerp;
+
+        private GameObject swingEffectInstance;
+        private EffectManagerHelper _emh_swingEffectInstance;
         public override void OnEnter()
         {
             PrepareAnimationStats();
 
             swingSoundString = "HenrySwordSwing";
             hitSoundString = "";
-            muzzleString = swingIndex % 2 == 0 ? "SwingLeft" : "SwingRight";
+            switch(swingIndex)
+            {
+                case 0:
+                    muzzleString = "SwingLeft";
+                    break;
+                case 1:
+                    muzzleString = "SwingRight";
+                    break;
+                case 2:
+                    muzzleString = "SwingUp";
+                    break;
+                case 3:
+                    muzzleString = "SwingDown";
+                    break;
+            }
             playbackRateParam = "Slash.playbackRate";
-            swingEffectPrefab = AmyAssets.swordSwingEffect;
+            swingEffectPrefab = AmyAssets.hammerSwingEffect;
             hitEffectPrefab = AmyAssets.swordHitImpactEffect;
 
             impactSound = AmyAssets.swordHitSoundEvent.index;
@@ -72,7 +89,23 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected virtual void DecideLaunchDirection(Vector3 aim)
         {
-            if (swingIndex == 0) // left
+            switch(swingIndex)
+            {
+                case 0:
+                    bonusForce = Vector3.Lerp(aim, Vector3.Cross(aim, Vector3.up), launchDirectionLerp).normalized * pushForce;
+                    break;
+                case 1:
+                    bonusForce = Vector3.Lerp(aim, Vector3.Cross(aim, Vector3.down), launchDirectionLerp).normalized * pushForce;
+                    break;
+                case 2:
+                    bonusForce = Vector3.Lerp(aim, Vector3.up, launchDirectionLerp).normalized * pushForce;
+                    break;
+                case 3:
+                    bonusForce = Vector3.Lerp(aim, Vector3.down, launchDirectionLerp).normalized * pushForce;
+                    damageType.AddModdedDamageType(AmyDamageTypes.angleUpKnockbackIfGrounded);
+                    break;
+            }
+            /*if (swingIndex == 0) // left
             {
                 bonusForce = Vector3.Lerp(aim, Vector3.Cross(aim, Vector3.up), launchDirectionLerp).normalized * pushForce;
             }
@@ -88,7 +121,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             {
                 bonusForce = Vector3.Lerp(aim, Vector3.down, launchDirectionLerp).normalized * pushForce;
                 damageType.AddModdedDamageType(AmyDamageTypes.angleUpKnockbackIfGrounded);
-            }
+            }*/
         }
 
         protected override void PlayAttackAnimation()
@@ -98,7 +131,28 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected override void PlaySwingEffect()
         {
-            base.PlaySwingEffect();
+            if (this.swingEffectPrefab)
+            {
+                Transform transform = base.FindModelChild(this.muzzleString);
+                if (transform)
+                {
+                    if (!EffectManager.ShouldUsePooledEffect(this.swingEffectPrefab))
+                    {
+                        this.swingEffectInstance = GameObject.Instantiate(this.swingEffectPrefab, transform);
+                    }
+                    else
+                    {
+                        this._emh_swingEffectInstance = EffectManager.GetAndActivatePooledEffect(this.swingEffectPrefab, transform, true);
+                        this.swingEffectInstance = this._emh_swingEffectInstance.gameObject;
+                    }
+                    ScaleParticleSystemDuration component = this.swingEffectInstance.GetComponent<ScaleParticleSystemDuration>();
+                    if (component)
+                    {
+                        component.newDuration = duration * (1 - attackStartPercentTime - attackEndPercentTime);
+                    }
+                    swingEffectInstance.transform.localRotation = Quaternion.Euler(90, 0, 0);
+                }
+            }
         }
 
         protected override void OnHitEnemyAuthority()
@@ -108,6 +162,16 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public override void OnExit()
         {
+            if (this._emh_swingEffectInstance != null && this._emh_swingEffectInstance.OwningPool != null)
+            {
+                this._emh_swingEffectInstance.OwningPool.ReturnObject(this._emh_swingEffectInstance);
+            }
+            else if (this.swingEffectInstance)
+            {
+                GameObject.Destroy(this.swingEffectInstance);
+            }
+            this.swingEffectInstance = null;
+            this._emh_swingEffectInstance = null;
             base.OnExit();
         }
     }

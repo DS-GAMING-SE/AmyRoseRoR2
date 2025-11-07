@@ -2,22 +2,29 @@
 using UnityEngine;
 using R2API;
 using RoR2.Skills;
+using System.Runtime.InteropServices;
+using UnityEngine.Networking;
 
 namespace AmyRoseMod.Characters.Survivors.Amy.Components
 {
-    public class AmyHammerSpinController : MonoBehaviour
+    public class AmyHammerSpinController : NetworkBehaviour
     {
         public Transform modelTransform;
         public Transform modelParentTransform;
 
         public ModelLocator modelLocator;
 
-        public bool leanActive = false;
+        public bool spinActive = false;
         public bool leanFrozen;
 
         public Vector3 currentNormal;
         public Vector3 targetNormal;
         private Vector3 normalSmoothDampVelocity;
+
+        private Vector3 lastPosition;
+        public Vector3 estimatedVelocity;
+
+        public bool highSpeed;
 
         private CharacterBody characterBody;
         private EntityStateMachine bodyState;
@@ -36,24 +43,25 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
             bodyState = EntityStateMachine.FindByCustomName(base.gameObject, "Body");
         }
 
-        public void ActivateLean()
+        public void ActivateSpin()
         {
+            lastPosition = this.modelParentTransform.position;
             if (modelLocator)
             {
                 modelLocator.autoUpdateModelTransform = false;
             }
             currentNormal = modelLocator.currentNormal;
-            leanActive = true;
+            spinActive = true;
         }
 
-        public void DeactivateLean()
+        public void DeactivateSpin()
         {
             if (modelLocator)
             {
                 modelLocator.autoUpdateModelTransform = true;
             }
             modelLocator.currentNormal = currentNormal;
-            leanActive = false;
+            spinActive = false;
         }
 
         public void FixedUpdate()
@@ -66,10 +74,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
 
         public void LateUpdate()
         {
-            if (leanActive)
+            estimatedVelocity = 50 * (this.modelParentTransform.position - lastPosition);
+            if (spinActive)
             {
                 UpdateModelTransform();
             }
+            lastPosition = modelParentTransform.position;
         }
 
         private void UpdateModelTransform()
@@ -81,8 +91,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
             {
                 if (characterBody && characterBody.characterMotor)
                 {
-                    float velocityReachedMovementSpeed = Mathf.Clamp01(characterBody.characterMotor.velocity.magnitude / (characterBody.moveSpeed * 0.7f));
-                    targetNormal = Vector3.RotateTowards(Vector3.up, characterBody.characterMotor.velocity.normalized, Mathf.Lerp(0, maxAngleLean * 0.017453292f, velocityReachedMovementSpeed), float.PositiveInfinity);
+                    float velocityReachedMovementSpeed = Mathf.Clamp01(estimatedVelocity.magnitude / (characterBody.moveSpeed * 0.7f));
+                    targetNormal = Vector3.RotateTowards(Vector3.up, estimatedVelocity.normalized, Mathf.Lerp(0, maxAngleLean * 0.017453292f, velocityReachedMovementSpeed), float.PositiveInfinity);
                 }
                 else
                 {
@@ -101,6 +111,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
             this.currentNormal = Vector3.SmoothDamp(this.currentNormal, this.targetNormal, ref this.normalSmoothDampVelocity, 0.2f, float.PositiveInfinity, deltaTime);
         }
 
+        #region Skill Override
         public bool ApplySkillOverride(GenericSkill activatorSkillSlot, out SkillDef hammerSwingSkillDef)
         {
             hammerSwingSkillDef = null;
@@ -152,5 +163,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
             }
             return false;
         }
+        #endregion
+
     }
 }

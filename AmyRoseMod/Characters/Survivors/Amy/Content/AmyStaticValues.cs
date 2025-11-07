@@ -54,8 +54,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public const float secondaryHammerAirJumpBuffDuration = 3f;
 
-
         #endregion
+
+        #region Super Secondary Hammer Smash
+        public const float superSecondaryHammerLaunchForce = 10000f;
+        #endregion
+
         #endregion
 
         #region Utility Boost
@@ -80,17 +84,17 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public const float boostHammerSpinAttacksPerSecond = 4f;
 
-        public const float boostHammerSpinFastAttacksPerSecond = 0.6f;
+        public const float boostHammerSpinBuffMaxAttacksPerSecond = 0.6f;
 
         public const float boostHammerSpinAccelerationBaseDivide = 3.5f;
 
         public const float boostHammerSpinAccelerationStackDivide = 0.75f;
 
-        public const float boostHammerSpinBuffSpeedCoefficient = 0.1f;
+        public const float boostHammerSpinBuffMaxSpeedCoefficient = 0.5f;
 
-        public const float boostHammerSpinBuffPerSecond = 0.7f;
+        public const float boostHammerSpinBuffPerSecond = 0.85f;
 
-        public const int boostHammerSpinBuffMaxStacks = 6;
+        public const int boostHammerSpinBuffMaxStacks = 4;
 
         public const float dizzyDuration = 3f;
 
@@ -101,7 +105,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         #region Special Multi-Lock
 
-        public const float specialMultiLockDamageCoefficient = 8f;
+        public const float specialMultiLockDamageCoefficient = 11f;
 
         public const float specialMultiLockBlastRadius = 4f;
 

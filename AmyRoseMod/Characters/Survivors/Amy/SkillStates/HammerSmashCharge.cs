@@ -28,8 +28,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             get { return (1 / Mathf.Max(chargeTime - minDuration, 0.1f)) * Time.fixedDeltaTime; }
         }
 
-        protected ICharacterFlightParameterProvider flight;
-
         private CharacterCameraParamsData aimingCameraParams = new CharacterCameraParamsData
         {
             maxPitch = 80f,
@@ -45,7 +43,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             base.OnEnter();
             PrepareStats();
             chargeTime = baseChargeTime / characterBody.attackSpeed;
-            flight = base.gameObject.GetComponent<ICharacterFlightParameterProvider>();
 
             this.camOverrideHandle = base.cameraTargetParams.AddParamsOverride(new CameraTargetParams.CameraParamsOverrideRequest
             {
@@ -78,7 +75,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                     return;
                 }
             }
-            else if (fixedAge >= minAirDuration && base.isAuthority && inputBank && !inputBank.skill2.down && !base.characterMotor.isGrounded && !HedgehogUtils.Helpers.Flying(flight))
+            else if (fixedAge >= minAirDuration && base.isAuthority && inputBank && !inputBank.skill2.down && !base.characterMotor.isGrounded && !characterMotor.isFlying)
             {
                 SetNextStateToSmash();
                 return;
@@ -98,7 +95,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected virtual void SetNextStateToSmash()
         {
-            if (base.characterMotor.isGrounded || HedgehogUtils.Helpers.Flying(flight))
+            if (base.characterMotor.isGrounded || characterMotor.isFlying)
             {
                 HammerSmashGrounded state = (HammerSmashGrounded)EntityStateCatalog.InstantiateState(typeof(HammerSmashGrounded));
                 if (state != null)
