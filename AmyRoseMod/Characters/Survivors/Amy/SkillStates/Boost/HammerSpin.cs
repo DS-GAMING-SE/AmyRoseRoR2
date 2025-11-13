@@ -294,7 +294,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected virtual void EnterAttack()
         {
-            Util.PlayAttackSpeedSound(swingSoundString, gameObject, base.characterBody.attackSpeed);
+            //Util.PlayAttackSpeedSound(swingSoundString, gameObject, base.characterBody.attackSpeed);
 
             PrepareAttackStats();
             timeUntilNextAttack = 1 / (baseAttacksPerSecond * base.characterBody.attackSpeed);

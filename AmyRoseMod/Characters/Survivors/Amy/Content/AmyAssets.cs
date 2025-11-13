@@ -15,6 +15,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
     {
         // particle effects
         public static GameObject hammerSwingEffect;
+        public static GameObject hammerSwingLargeEffect;
         public static GameObject swordSwingEffect;
         public static GameObject swordHitImpactEffect;
 
@@ -22,6 +23,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public static GameObject amyBoostFlashEffect;
         public static GameObject amyBoostAuraEffect;
+
+        // materials
+        public static Material hammerSwingMaterial;
 
         // networked hit sounds
         public static NetworkSoundEventDef swordHitSoundEvent;
@@ -39,20 +43,44 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             swordHitSoundEvent = Modules.Content.CreateAndAddNetworkSoundEventDef("HenrySwordHit");
 
-            CreateEffects();
+            CreateEffects(assetBundle);
 
             CreateProjectiles();
         }
 
         #region effects
-        private static void CreateEffects()
+        private static void CreateEffects(AssetBundle assetBundle)
         {
             CreateBombExplosionEffect();
 
-            AsyncOperationHandle<GameObject> asyncHammerSwing = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Loader/LoaderSwingBasic.prefab");
-            asyncHammerSwing.Completed += delegate (AsyncOperationHandle<GameObject> x)
+            AsyncOperationHandle<Material> asyncHammerSwingMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Loader/matLoaderSwingThick.mat");
+            asyncHammerSwingMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
+            {
+                hammerSwingMaterial = new Material(x.Result);
+                hammerSwingMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmyHammer"));
+                hammerSwingMaterial.SetVector("_TintColor", new Vector4(0.3f, 0.3f, 0.3f, 1f));
+            };
+
+            AsyncOperationHandle<GameObject> asyncHammerSwingParticle = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Loader/LoaderSwingBasic.prefab");
+            asyncHammerSwingParticle.Completed += delegate (AsyncOperationHandle<GameObject> x)
             {
                 hammerSwingEffect = PrefabAPI.InstantiateClone(x.Result, "AmyRoseHammerSwingEffect", false);
+                Transform swingTrailObject = hammerSwingEffect.transform.Find("SwingTrail");
+                ParticleSystem.MainModule hammerSwingMain = swingTrailObject.GetComponent<ParticleSystem>().main;
+                // original size is (1.2, 1.2, 2.25)
+                hammerSwingMain.startSizeXMultiplier = 1.4f;
+                hammerSwingMain.startSizeYMultiplier = 1.4f;
+                hammerSwingMain.startSizeZMultiplier = 3f;
+
+                ParticleSystemRenderer hammerSwingRender = swingTrailObject.GetComponent<ParticleSystemRenderer>();
+                hammerSwingRender.sharedMaterial = hammerSwingMaterial;
+
+                hammerSwingLargeEffect = PrefabAPI.InstantiateClone(hammerSwingEffect, "AmyRoseHammerSwingLargeEffect", false);
+                ParticleSystem.MainModule hammerSwingLargeMain = hammerSwingLargeEffect.transform.Find("SwingTrail").GetComponent<ParticleSystem>().main;
+                // original size is (1.2, 1.2, 2.25)
+                hammerSwingLargeMain.startSizeXMultiplier = 1.8f;
+                hammerSwingLargeMain.startSizeYMultiplier = 1.8f;
+                hammerSwingLargeMain.startSizeZMultiplier = 4.5f;
             };
 
             swordSwingEffect = _assetBundle.LoadEffect("HenrySwordSwingEffect", true);

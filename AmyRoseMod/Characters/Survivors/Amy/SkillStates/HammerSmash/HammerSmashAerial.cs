@@ -8,7 +8,9 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
+using static EntityStates.BaseState;
 
 namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
@@ -28,6 +30,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         public OverlapAttack overlapAttack;
         public HealthComponent targetToIgnore;
 
+        private Animator animator;
+        private float cachedAnimationDuration;
+
         public override void OnEnter()
         {
             base.OnEnter();
@@ -38,8 +43,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             duration = baseDuration / attackSpeedStat;
             if (NetworkServer.active)
             {
-                base.characterBody.AddTimedBuff(AmyBuffs.hammerSmashSpeedBuff, AmyStaticValues.secondaryHammerAirJumpBuffDuration);
-                base.characterBody.AddTimedBuff(JunkContent.Buffs.IgnoreFallDamage, 1);
+                base.characterBody.AddTimedBuff(JunkContent.Buffs.IgnoreFallDamage, 0.3f);
             }
             if (base.isAuthority)
             {
@@ -61,8 +65,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 }
                 PrepareAttack();
             }
+            animator = GetModelAnimator();
 
-            PlayAttackAnimation();
+            PlayJumpAnimation();
+            cachedAnimationDuration = animator.GetFloat("Roll.playbackRate");
         }
 
         public virtual void PrepareStats()
@@ -89,6 +95,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 {
                     bufferedJump = true;
                 }
+                if (animator) animator.SetFloat("Roll.playbackRate", 0.1f);
                 base.characterMotor.velocity = Vector3.zero;
                 overlapAttack.Fire();
             }
@@ -98,10 +105,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 if (base.inputBank.skill2.down || bufferedJump)
                 {
                     Jump();
+                    return;
                 }
                 else
                 {
                     SmallHop(base.characterMotor, 12f);
+                    if (animator) animator.SetFloat("Roll.playbackRate", cachedAnimationDuration);
                 }
             }
             if (hasJumped && fixedAge > duration)
@@ -112,11 +121,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         }
 
-        protected virtual void PlayAttackAnimation()
-        {
-            PlayAnimation("Gesture, Override", "Slash1", "Slash.playbackRate", hitStopDuration);
-        }
-
         protected virtual void PlayJumpAnimation()
         {
             PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", duration);
@@ -124,15 +128,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected virtual void Jump()
         {
-            PlayJumpAnimation();
-            Vector3 velocity = Vector3.up * (base.inputBank ? 1 - (base.inputBank.moveVector.magnitude * AmyStaticValues.secondaryHammerAirJumpHeightReductionWhenAngled): 1f);
-            velocity *= base.characterBody.jumpPower * AmyStaticValues.secondaryHammerAirJumpHeightMultiplier;
-            if (base.inputBank)
-            {
-                velocity += base.characterBody.moveSpeed * AmyStaticValues.secondaryHammerAirJumpHorizontalSpeedMult * base.inputBank.moveVector;
-            }
-            base.characterMotor.Motor.ForceUnground();
-            base.characterMotor.velocity = velocity;
+            this.outer.SetNextState(new HammerSmashAerialJump());
         }
 
         public override void OnExit()

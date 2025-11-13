@@ -39,6 +39,11 @@ namespace AmyRoseMod.Modules.BaseStates
         protected string muzzleString = "SwingCenter";
         protected string playbackRateParam = "Slash.playbackRate";
         protected GameObject swingEffectPrefab;
+
+        protected bool poolSwingEffect = true;
+        private GameObject swingEffectInstance;
+        private EffectManagerHelper _emh_swingEffectInstance;
+
         protected GameObject hitEffectPrefab;
         protected NetworkSoundEventIndex impactSound = NetworkSoundEventIndex.Invalid;
         protected OverlapAttack attack;
@@ -79,12 +84,55 @@ namespace AmyRoseMod.Modules.BaseStates
             {
                 RemoveHitstop();
             }
+            if (poolSwingEffect)
+            {
+                ReturnSwingEffect();
+            }
             base.OnExit();
         }
 
         protected virtual void PlaySwingEffect()
         {
             EffectManager.SimpleMuzzleFlash(swingEffectPrefab, gameObject, muzzleString, false);
+        }
+        protected virtual void PlayPooledSwingEffect()
+        {
+            if (this.swingEffectPrefab)
+            {
+                Transform transform = base.FindModelChild(this.muzzleString);
+                if (transform)
+                {
+                    if (!EffectManager.ShouldUsePooledEffect(this.swingEffectPrefab))
+                    {
+                        this.swingEffectInstance = GameObject.Instantiate(this.swingEffectPrefab, transform);
+                    }
+                    else
+                    {
+                        this._emh_swingEffectInstance = EffectManager.GetAndActivatePooledEffect(this.swingEffectPrefab, transform, true);
+                        this.swingEffectInstance = this._emh_swingEffectInstance.gameObject;
+                    }
+                    ScaleParticleSystemDuration component = this.swingEffectInstance.GetComponent<ScaleParticleSystemDuration>();
+                    if (component)
+                    {
+                        component.newDuration = duration * (1 - attackStartPercentTime - (1 - attackEndPercentTime));
+                    }
+                    swingEffectInstance.transform.localRotation = Quaternion.Euler(90, 0, 0);
+                }
+            }
+        }
+
+        protected virtual void ReturnSwingEffect()
+        {
+            if (this._emh_swingEffectInstance != null && this._emh_swingEffectInstance.OwningPool != null)
+            {
+                this._emh_swingEffectInstance.OwningPool.ReturnObject(this._emh_swingEffectInstance);
+            }
+            else if (this.swingEffectInstance)
+            {
+                GameObject.Destroy(this.swingEffectInstance);
+            }
+            this.swingEffectInstance = null;
+            this._emh_swingEffectInstance = null;
         }
 
         protected virtual void OnHitEnemyAuthority()
@@ -130,8 +178,14 @@ namespace AmyRoseMod.Modules.BaseStates
         {
             hasFired = true;
             Util.PlayAttackSpeedSound(swingSoundString, gameObject, attackSpeedStat);
-
-            PlaySwingEffect();
+            if (poolSwingEffect)
+            {
+                PlayPooledSwingEffect();
+            }
+            else
+            {
+                PlaySwingEffect();
+            }
 
             if (isAuthority)
             {

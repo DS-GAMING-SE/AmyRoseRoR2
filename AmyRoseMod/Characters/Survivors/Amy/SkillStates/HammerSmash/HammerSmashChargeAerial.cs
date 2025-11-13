@@ -42,7 +42,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 overlapAttack.inflictor = base.gameObject;
                 overlapAttack.hitBoxGroup = FindHitBoxGroup("Stomp");
                 overlapAttack.teamIndex = base.teamComponent.teamIndex;
-                PrepareAttackStats();
+                PrepareAttackStats(overlapAttack);
                 if (base.characterMotor)
                 {
                     SmallHop(characterMotor, characterBody.jumpPower);
@@ -104,7 +104,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             }
         }
 
-        public virtual void PrepareAttackStats()
+        public virtual void PrepareStats()
+        {
+
+        }
+
+        public virtual void PrepareAttackStats(OverlapAttack overlap)
         {
 
         }
