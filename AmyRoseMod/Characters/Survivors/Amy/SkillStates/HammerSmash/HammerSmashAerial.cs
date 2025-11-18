@@ -104,6 +104,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 hasJumped = true;
                 if (base.inputBank.skill2.down || bufferedJump)
                 {
+                    base.inputBank.skill2.hasPressBeenClaimed = true;
                     Jump();
                     return;
                 }

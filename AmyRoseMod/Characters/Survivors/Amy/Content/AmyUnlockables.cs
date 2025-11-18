@@ -12,18 +12,28 @@ namespace AmyRoseMod.Characters.Survivors.Amy
     {
         public static UnlockableDef masterySkinUnlockableDef = null;
         public static ConfigEntry<bool> masterySkinUnlockableConfig;
+
+        public static UnlockableDef grandMasterySkinUnlockableDef = null;
+        public static ConfigEntry<bool> grandMasterySkinUnlockableConfig;
         public static void Init()
         {
             // Mastery
             masterySkinUnlockableDef = Modules.Content.CreateAndAddUnlockbleDef(
                 AmyMasteryAchievement.unlockableIdentifier,
                 Modules.Tokens.GetAchievementNameToken(AmyMasteryAchievement.unlockableIdentifier),
-                AmySurvivor.instance.assetBundle.LoadAsset<Sprite>("texPaladinSkinIcon"));
+                AmySurvivor.instance.assetBundle.LoadAsset<Sprite>("texMainSkinIcon"));
             masterySkinUnlockableConfig = CreateUnlockableConfig("Mastery");
             masterySkinUnlockableConfig.SettingChanged += new EventHandler(delegate (object o, EventArgs a)
             { UnlockableConfigChanged(masterySkinUnlockableConfig.Value, masterySkinUnlockableDef, AmyMasteryAchievement.unlockableIdentifier); });
 
-
+            // Grand Mastery
+            grandMasterySkinUnlockableDef = Modules.Content.CreateAndAddUnlockbleDef(
+                AmyGrandMasteryAchievement.unlockableIdentifier,
+                Modules.Tokens.GetAchievementNameToken(AmyGrandMasteryAchievement.unlockableIdentifier),
+                AmySurvivor.instance.assetBundle.LoadAsset<Sprite>("texPaladinSkinIcon"));
+            grandMasterySkinUnlockableConfig = CreateUnlockableConfig("Grand Mastery");
+            grandMasterySkinUnlockableConfig.SettingChanged += new EventHandler(delegate (object o, EventArgs a)
+            { UnlockableConfigChanged(grandMasterySkinUnlockableConfig.Value, grandMasterySkinUnlockableDef, AmyGrandMasteryAchievement.unlockableIdentifier); });
 
             On.RoR2.UserProfile.OnLogin += ConfigUnlocks;
         }
@@ -33,6 +43,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             if (!self.HasAchievement(AmyMasteryAchievement.unlockableIdentifier) && masterySkinUnlockableConfig.Value)
             {
                 self.AddAchievement(AmyMasteryAchievement.unlockableIdentifier, true);
+            }
+            if (!self.HasAchievement(AmyGrandMasteryAchievement.unlockableIdentifier) && grandMasterySkinUnlockableConfig.Value)
+            {
+                self.AddAchievement(AmyGrandMasteryAchievement.unlockableIdentifier, true);
             }
         }
 

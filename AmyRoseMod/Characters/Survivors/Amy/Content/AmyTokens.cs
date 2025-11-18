@@ -92,6 +92,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             #region Achievements
             Language.Add(Tokens.GetAchievementNameToken(AmyMasteryAchievement.identifier), "Amy: Mastery");
             Language.Add(Tokens.GetAchievementDescriptionToken(AmyMasteryAchievement.identifier), "As Amy, beat the game or obliterate on Monsoon.");
+
+            Language.Add(Tokens.GetAchievementNameToken(AmyGrandMasteryAchievement.identifier), "Amy: Grand Mastery");
+            Language.Add(Tokens.GetAchievementDescriptionToken(AmyGrandMasteryAchievement.identifier), "As Amy, beat the game or obliterate on Typhoon or Eclipse.");
             #endregion
         }
     }

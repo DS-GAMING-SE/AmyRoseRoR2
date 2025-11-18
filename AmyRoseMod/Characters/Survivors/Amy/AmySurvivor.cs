@@ -478,29 +478,44 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             //uncomment this when you have a mastery skin
             #region MasterySkin
-            
+
             ////creating a new skindef as we did before
-            SkinDef masterySkin = Modules.Skins.CreateSkinDef(AMY_PREFIX + "PALADIN_SKIN_NAME",
+            SkinDef ridersSkin = Modules.Skins.CreateSkinDef(AMY_PREFIX + "RIDERS_SKIN_NAME",
+                assetBundle.LoadAsset<Sprite>("texRidersSkinIcon"),
+                defaultRendererinfos,
+                prefabCharacterModel.gameObject,
+                AmyUnlockables.masterySkinUnlockableDef);
+            SkinDef paladinSkin = Modules.Skins.CreateSkinDef(AMY_PREFIX + "PALADIN_SKIN_NAME",
                 assetBundle.LoadAsset<Sprite>("texPaladinSkinIcon"),
+                defaultRendererinfos,
+                prefabCharacterModel.gameObject,
+                AmyUnlockables.grandMasterySkinUnlockableDef);
+            SkinDef fortuneTellerSkin = Modules.Skins.CreateSkinDef(AMY_PREFIX + "FORTUNE_TELLER_SKIN_NAME",
+                assetBundle.LoadAsset<Sprite>("texFortuneTellerSkinIcon"),
+                defaultRendererinfos,
+                prefabCharacterModel.gameObject,
+                AmyUnlockables.masterySkinUnlockableDef);
+            SkinDef malwareSkin = Modules.Skins.CreateSkinDef(AMY_PREFIX + "MALWARE_SKIN_NAME",
+                assetBundle.LoadAsset<Sprite>("texMalwareSkinIcon"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject,
                 AmyUnlockables.masterySkinUnlockableDef);
 
             ////adding the mesh replacements as above. 
             ////if you don't want to replace the mesh (for example, you only want to replace the material), pass in null so the order is preserved
-            //masterySkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
+            //paladinSkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
             //    "meshHenrySwordAlt",
             //    null,//no gun mesh replacement. use same gun mesh
             //    "meshHenryAlt");
 
-            ////masterySkin has a new set of RendererInfos (based on default rendererinfos)
+            ////paladinSkin has a new set of RendererInfos (based on default rendererinfos)
             ////you can simply access the RendererInfos' materials and set them to the new materials for your skin.
-            //masterySkin.rendererInfos[0].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
-            //masterySkin.rendererInfos[1].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
-            //masterySkin.rendererInfos[2].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
+            //paladinSkin.rendererInfos[0].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
+            //paladinSkin.rendererInfos[1].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
+            //paladinSkin.rendererInfos[2].defaultMaterial = assetBundle.LoadMaterial("matHenryAlt");
 
             ////here's a barebones example of using gameobjectactivations that could probably be streamlined or rewritten entirely, truthfully, but it works
-            //masterySkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
+            //paladinSkin.gameObjectActivations = new SkinDef.GameObjectActivation[]
             //{
             //    new SkinDef.GameObjectActivation
             //    {
@@ -510,8 +525,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             //};
             ////simply find an object on your child locator you want to activate/deactivate and set if you want to activate/deacitvate it with this skin
 
-            skins.Add(masterySkin);
-            
+            skins.Add(ridersSkin);
+            skins.Add(paladinSkin);
+            skins.Add(fortuneTellerSkin);
+            skins.Add(malwareSkin);
+
             #endregion
 
             skinController.skins = skins.ToArray();

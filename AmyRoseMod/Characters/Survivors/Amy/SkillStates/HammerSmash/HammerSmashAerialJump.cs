@@ -13,6 +13,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
     {
         protected float baseDuration;
         protected float duration;
+        protected static float earlyExitPercent = 0.7f;
         
         public override void OnEnter()
         {
@@ -61,7 +62,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public override InterruptPriority GetMinimumInterruptPriority()
         {
-            return InterruptPriority.Skill;
+            return baseDuration / duration >= earlyExitPercent ? InterruptPriority.Skill : InterruptPriority.Pain;
         }
     }
 }
