@@ -211,6 +211,8 @@ namespace AmyRoseMod.Modules
             bodyComponent.hullClassification = HullClassification.Human;
 
             bodyComponent.isChampion = false;
+
+            bodyComponent.vehicleIdleStateMachine = Array.Empty<EntityStateMachine>();
         }
 
         private static Transform AddCharacterModelToSurvivorBody(GameObject bodyPrefab, Transform modelTransform, BodyInfo bodyInfo)

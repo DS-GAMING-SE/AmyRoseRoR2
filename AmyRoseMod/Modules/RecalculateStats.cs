@@ -37,7 +37,7 @@ namespace AmyRoseMod.Modules
 
                 if (self.HasBuff(AmyBuffs.hammerSpinSpeedBuff))
                 {
-                    stats.moveSpeedMultAdd += (((float)self.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff)) / ((float)AmyStaticValues.boostHammerSpinBuffMaxStacks)) * AmyStaticValues.boostHammerSpinBuffMaxSpeedCoefficient;
+                    stats.moveSpeedMultAdd += ((((float)self.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff)) - AmyStaticValues.boostHammerSpinBuffPercentPerEffectiveStack) / 80f) * AmyStaticValues.boostHammerSpinBuffMaxSpeedCoefficient;
                 }
             }
         }
@@ -47,7 +47,7 @@ namespace AmyRoseMod.Modules
 
             if (self.HasBuff(AmyBuffs.hammerSpinSpeedBuff))
             {
-                self.acceleration /= (AmyStaticValues.boostHammerSpinAccelerationBaseDivide + (self.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff) * AmyStaticValues.boostHammerSpinAccelerationStackDivide));
+                self.acceleration /= UnityEngine.Mathf.Lerp(AmyStaticValues.boostHammerSpinAccelerationBaseDivide, AmyStaticValues.boostHammerSpinAccelerationMaxDivide, (((float)self.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff)) - AmyStaticValues.boostHammerSpinBuffPercentPerEffectiveStack) / 80f);
             }
         }
     }

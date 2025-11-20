@@ -85,16 +85,19 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         public const float boostHammerSpinAttacksPerSecond = 4f;
 
         public const float boostHammerSpinBuffMaxAttacksPerSecond = 0.6f;
+        #region Buff
+        public const float boostHammerSpinAccelerationBaseDivide = 4f;
 
-        public const float boostHammerSpinAccelerationBaseDivide = 3.5f;
-
-        public const float boostHammerSpinAccelerationStackDivide = 0.75f;
+        public const float boostHammerSpinAccelerationMaxDivide = 6f;
 
         public const float boostHammerSpinBuffMaxSpeedCoefficient = 0.5f;
 
-        public const float boostHammerSpinBuffPerSecond = 0.85f;
+        public const float boostHammerSpinBuffPerSecond = 0.7f;
 
-        public const int boostHammerSpinBuffMaxStacks = 4;
+        public const int boostHammerSpinBuffMaxEffectiveStacks = 5;
+
+        public const int boostHammerSpinBuffPercentPerEffectiveStack = 100 / boostHammerSpinBuffMaxEffectiveStacks;
+        #endregion
 
         public const float dizzyDuration = 3f;
 

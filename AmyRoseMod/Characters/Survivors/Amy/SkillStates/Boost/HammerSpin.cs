@@ -98,7 +98,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             if (NetworkServer.active)
             {
                 base.characterBody.AddBuff(boostBuff);
-                base.characterBody.AddBuff(hammerSpinBuff);
+                AddSpinBuff(hammerSpinBuff.buffIndex, 1);
             }
             if (base.isAuthority)
             {
@@ -126,7 +126,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected virtual void PrepareAttackStats()
         {
-            float speedLerp = ((float)(base.characterBody.GetBuffCount(hammerSpinBuff)) - 1f) / (((float)AmyStaticValues.boostHammerSpinBuffMaxStacks - 1));
+            float speedLerp = ((float)(GetSpinBuffCount(hammerSpinBuff.buffIndex)) - 1f) / (((float)AmyStaticValues.boostHammerSpinBuffMaxEffectiveStacks - 1));
             hitboxGroupName = "Spin";
 
             damageType = DamageTypeCombo.GenericUtility;
@@ -234,18 +234,30 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         {
             if (hammerSpinController.highSpeed)
             {
-                if (base.characterBody.GetBuffCount(hammerSpinBuff) < AmyStaticValues.boostHammerSpinBuffMaxStacks)
+                if (base.characterBody.GetBuffCount(hammerSpinBuff) < 100)
                 {
-                    base.characterBody.AddBuff(hammerSpinBuff);
+                    AddSpinBuff(hammerSpinBuff.buffIndex, 1);
                 }
             }
             else
             {
-                if (base.characterBody.GetBuffCount(hammerSpinBuff) > 1)
+                if (GetSpinBuffCount(hammerSpinBuff.buffIndex) > 1)
                 {
-                    base.characterBody.SetBuffCount(hammerSpinBuff.buffIndex, Math.Max(1, base.characterBody.GetBuffCount(hammerSpinBuff) - 2));
+                    RemoveSpinBuff(hammerSpinBuff.buffIndex, 2);
                 }
             }
+        }
+        protected void AddSpinBuff(BuffIndex buffIndex, int effectiveStack)
+        {
+            base.characterBody.SetBuffCount(buffIndex, Mathf.Min(base.characterBody.GetBuffCount(hammerSpinBuff) + effectiveStack * AmyStaticValues.boostHammerSpinBuffPercentPerEffectiveStack, 100));
+        }
+        protected void RemoveSpinBuff(BuffIndex buffIndex, int effectiveStack)
+        {
+            base.characterBody.SetBuffCount(buffIndex, Mathf.Max(AmyStaticValues.boostHammerSpinBuffPercentPerEffectiveStack, base.characterBody.GetBuffCount(hammerSpinBuff) - effectiveStack * AmyStaticValues.boostHammerSpinBuffPercentPerEffectiveStack));
+        }
+        protected int GetSpinBuffCount(BuffIndex buffIndex)
+        {
+            return base.characterBody.GetBuffCount(buffIndex) / AmyStaticValues.boostHammerSpinBuffPercentPerEffectiveStack;
         }
         protected virtual void OnHitEnemyAuthority()
         {

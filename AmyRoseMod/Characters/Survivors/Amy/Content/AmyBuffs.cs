@@ -44,7 +44,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 assetBundle.LoadAsset<Sprite>("texHammerSpinBuffIcon"),
                 Color.white,
                 true,
-                false);
+                false, false, BuffDef.StackingDisplayMethod.Percentage);
 
             if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(LookingGlass.PluginInfo.PLUGIN_GUID))
             {

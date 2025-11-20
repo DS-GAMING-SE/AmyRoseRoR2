@@ -87,9 +87,13 @@ namespace AmyRoseMod.Modules
         }
         internal static BuffDef CreateAndAddBuff(string buffName, Sprite buffIcon, Color buffColor, bool canStack, bool isDebuff)
         {
-            return CreateAndAddBuff(buffName, buffIcon, buffColor, canStack, isDebuff, false);
+            return CreateAndAddBuff(buffName, buffIcon, buffColor, canStack, isDebuff, false, BuffDef.StackingDisplayMethod.Default);
         }
         internal static BuffDef CreateAndAddBuff(string buffName, Sprite buffIcon, Color buffColor, bool canStack, bool isDebuff, bool isHidden)
+        {
+            return CreateAndAddBuff(buffName, buffIcon, buffColor, canStack, isDebuff, isHidden, BuffDef.StackingDisplayMethod.Default);
+        }
+        internal static BuffDef CreateAndAddBuff(string buffName, Sprite buffIcon, Color buffColor, bool canStack, bool isDebuff, bool isHidden, BuffDef.StackingDisplayMethod stackDisplayMethod)
         {
             BuffDef buffDef = ScriptableObject.CreateInstance<BuffDef>();
             buffDef.name = buffName;
@@ -99,6 +103,7 @@ namespace AmyRoseMod.Modules
             buffDef.eliteDef = null;
             buffDef.iconSprite = buffIcon;
             buffDef.isHidden = isHidden;
+            buffDef.stackingDisplayMethod = stackDisplayMethod;
 
             AddBuffDef(buffDef);
 
