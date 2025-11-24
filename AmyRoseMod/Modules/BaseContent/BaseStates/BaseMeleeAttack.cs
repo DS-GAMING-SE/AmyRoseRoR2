@@ -95,9 +95,10 @@ namespace AmyRoseMod.Modules.BaseStates
         {
             EffectManager.SimpleMuzzleFlash(swingEffectPrefab, gameObject, muzzleString, false);
         }
-        protected virtual void PlayPooledSwingEffect()
+        protected void PlayPooledSwingEffect()
         {
-            if (this.swingEffectPrefab)
+            PlayPooledSwingEffect(swingEffectPrefab, swingEffectInstance, _emh_swingEffectInstance, duration * (1 - attackStartPercentTime - (1 - attackEndPercentTime)));
+            /*if (this.swingEffectPrefab)
             {
                 Transform transform = base.FindModelChild(this.muzzleString);
                 if (transform)
@@ -118,12 +119,38 @@ namespace AmyRoseMod.Modules.BaseStates
                     }
                     swingEffectInstance.transform.localRotation = Quaternion.Euler(90, 0, 0);
                 }
-            }
+            }*/
         }
 
-        protected virtual void ReturnSwingEffect()
+        protected virtual void PlayPooledSwingEffect(GameObject prefab, GameObject instance, EffectManagerHelper emh, float duration)
         {
-            if (this._emh_swingEffectInstance != null && this._emh_swingEffectInstance.OwningPool != null)
+            if (prefab)
+            {
+                Transform transform = base.FindModelChild(this.muzzleString);
+                if (transform)
+                {
+                    if (!EffectManager.ShouldUsePooledEffect(prefab))
+                    {
+                        instance = GameObject.Instantiate(prefab, transform);
+                    }
+                    else
+                    {
+                        emh = EffectManager.GetAndActivatePooledEffect(prefab, transform, true);
+                        instance = emh.gameObject;
+                    }
+                    ScaleParticleSystemDuration component = instance.GetComponent<ScaleParticleSystemDuration>();
+                    if (component)
+                    {
+                        component.newDuration = duration;
+                    }
+                    instance.transform.localRotation = Quaternion.Euler(90, 0, 0);
+                }
+            }
+        }
+        protected void ReturnSwingEffect()
+        {
+            ReturnSwingEffect(swingEffectInstance, _emh_swingEffectInstance);
+            /*if (this._emh_swingEffectInstance != null && this._emh_swingEffectInstance.OwningPool != null)
             {
                 this._emh_swingEffectInstance.OwningPool.ReturnObject(this._emh_swingEffectInstance);
             }
@@ -132,7 +159,21 @@ namespace AmyRoseMod.Modules.BaseStates
                 GameObject.Destroy(this.swingEffectInstance);
             }
             this.swingEffectInstance = null;
-            this._emh_swingEffectInstance = null;
+            this._emh_swingEffectInstance = null;*/
+        }
+
+        protected virtual void ReturnSwingEffect(GameObject instance, EffectManagerHelper emh)
+        {
+            if (emh != null && emh.OwningPool != null)
+            {
+                emh.OwningPool.ReturnObject(emh);
+            }
+            else if (instance)
+            {
+                GameObject.Destroy(instance);
+            }
+            instance = null;
+            emh = null;
         }
 
         protected virtual void OnHitEnemyAuthority()

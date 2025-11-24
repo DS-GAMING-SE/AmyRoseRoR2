@@ -14,6 +14,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
     {
         protected float baseDuration;
         protected float duration;
+        protected const float vfxDurationPercent = 0.6f;
 
         protected float startSpeed;
 
@@ -46,6 +47,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 vel *= startSpeed * (1f - (fixedAge / duration));
                 base.characterMotor.velocity = vel;
             }
+            if (fixedAge >= duration * vfxDurationPercent)
+            {
+                PlayVFX();
+            }
             if (fixedAge >= duration && base.isAuthority)
             {
                 this.outer.SetNextStateToMain();
@@ -69,6 +74,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         protected virtual void PlayAnimation()
         {
             PlayCrossfade("Gesture, Override", "Slash1", "Slash.playbackRate", duration, 0.1f * duration);
+        }
+
+        protected virtual void PlayVFX()
+        {
+
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()

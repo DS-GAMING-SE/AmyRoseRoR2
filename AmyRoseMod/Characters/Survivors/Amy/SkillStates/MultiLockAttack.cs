@@ -28,6 +28,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public bool firstAttack;
 
+        public bool finalAttack;
+
         public Vector3 orbStartPosition;
 
         public float orbSpeed = 90f;
@@ -45,14 +47,18 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
-            if (base.isAuthority && firstAttack)
+            if (base.isAuthority)
             {
-                EntityStateMachine weaponState = EntityStateMachine.FindByCustomName(base.gameObject, "Weapon");
-                if (weaponState) { weaponState.SetNextStateToMain(); }
-                if (base.skillLocator)
+                if (firstAttack)
                 {
-                    skillLocator.special.DeductStock(1);
+                    EntityStateMachine weaponState = EntityStateMachine.FindByCustomName(base.gameObject, "Weapon");
+                    if (weaponState) { weaponState.SetNextStateToMain(); }
+                    if (base.skillLocator)
+                    {
+                        skillLocator.special.DeductStock(1);
+                    }
                 }
+                finalAttack = targets.Count == 1;
             }
             if (NetworkServer.active)
             {
@@ -93,7 +99,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             }
 
             if (predictedTimeUntilArrival > 0 && predictedTimeUntilArrival - fixedAge <= MultiLockCameraProvider.maxLerpTime &&
-                AmyConfig.multiLockSmoothCamera.Value != MultiLockCameraProvider.CameraMovementModes.Instant && targets.Count == 1 && predictedTimeUntilArrival > 0
+                AmyConfig.multiLockSmoothCamera.Value != MultiLockCameraProvider.CameraMovementModes.Instant && finalAttack && predictedTimeUntilArrival > 0
                 && !camera)
             {
                 camera = MultiLockCameraProvider.StartCameraMove(base.gameObject, orbStartPosition, targetLastPosition, predictedTimeUntilArrival - fixedAge);
@@ -199,6 +205,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             base.OnSerialize(writer);
             writer.Write(HurtBoxReference.FromHurtBox(target));
             writer.Write(orbStartPosition);
+            writer.Write(finalAttack);
         }
 
         public override void OnDeserialize(NetworkReader reader)
@@ -206,6 +213,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             base.OnDeserialize(reader);
             target = reader.ReadHurtBoxReference().ResolveHurtBox();
             orbStartPosition = reader.ReadVector3();
+            finalAttack = reader.ReadBoolean();
         }
     }
     // Nemmerc code looks very sane and normal

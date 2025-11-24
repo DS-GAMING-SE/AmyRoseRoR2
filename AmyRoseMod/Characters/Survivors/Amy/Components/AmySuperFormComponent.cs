@@ -11,7 +11,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
         public CharacterBody characterBody;
         public FormComponent formComponent;
 
-        public static AmySkillDefs.RequiresFormSteppedSkillDef superPrimaryMelee;
+        public static AmySkillDefs.RequiresFormSteppedSkillDef superPrimaryHammer;
         public static SkillDefs.RequiresFormSkillDef superSecondarySmash;
         public static AmySkillDefs.AmyRequiresFormBoostSkillDef superUtilityBoost;
         public static SkillDefs.RequiresFormSkillDef superSpecialMultiLock;
@@ -34,7 +34,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
         {
             if (characterBody && characterBody.hasAuthority && characterBody.skillLocator && current == SuperFormDef.superFormDef)
             {
-                SetSkillOverride(characterBody.skillLocator.primary, AmySurvivor.primaryMelee, superPrimaryMelee);
+                SetSkillOverride(characterBody.skillLocator.primary, AmySurvivor.primaryMelee, superPrimaryHammer);
                 SetSkillOverride(characterBody.skillLocator.secondary, AmySurvivor.secondarySmash, superSecondarySmash);
                 SetSkillOverride(characterBody.skillLocator.utility, AmySurvivor.utilityBoost, superUtilityBoost);
                 SetSkillOverride(characterBody.skillLocator.special, AmySurvivor.specialMultilock, superSpecialMultiLock);

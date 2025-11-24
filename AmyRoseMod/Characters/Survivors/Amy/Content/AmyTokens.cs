@@ -24,11 +24,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         {
             string prefix = AmySurvivor.AMY_PREFIX;
 
-            string desc = $"Amy is a fast and floaty melee survivor. Her boundless energy gives her great vertical mobility and unwieldly speed, closing the distance before smashing enemies with her Piko Piko Hammer.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
-             + $"< ! > All of Amy's attacks that use her Piko-Piko Hammer can launch lightweight enemies. Even if you're fighting a powerful enemy, don't forget about the smaller enemies. They can be used to your advantage for extra damage." + Environment.NewLine + Environment.NewLine
+            string desc = "Amy is a fast and floaty melee survivor. Her boundless energy gives her great vertical mobility and unwieldly speed, closing the distance before smashing enemies with her Piko Piko Hammer.<color=#CCD3E0>" + Environment.NewLine + Environment.NewLine
+             + "< ! > All of Amy's attacks that use her Piko-Piko Hammer can launch lightweight enemies. Even if you're fighting a powerful enemy, don't forget about the smaller enemies. They can be used to your advantage for extra damage." + Environment.NewLine + Environment.NewLine
              + "< ! > Piko Piko Smash used in the air is both a powerful attack and a tool for getting high in the air. Use it to approach aerial enemies and launch them down to ground level." + Environment.NewLine + Environment.NewLine
-             + "< ! > Boost's Hammer-Spin used while stationary delivers a fast flurry of attacks. While maintaining high speeds, it does high single-hit damage and gives speed rivaling Sonic himself. Even getting dizzy can be beneficial, just make sure you're careful about when you let that happen." + Environment.NewLine + Environment.NewLine
-             + $"< ! > {Tokens.wipIcon}" + Environment.NewLine + Environment.NewLine;
+             + "< ! > Boost's Hammer-Spin, when used while stationary, delivers a fast flurry of attacks. While maintaining high speeds, it does high single-hit damage and gives speed rivaling Sonic himself. Just make sure you're careful about not letting your boost meter get too low." + Environment.NewLine + Environment.NewLine
+             + "< ! > Multi-Lock is a fast and easy way of dealing with a number of enemies at once. It's also useful for getting above enemies before you send them straight down with a Piko Piko Smash." + Environment.NewLine + Environment.NewLine;
 
             string outro = $"..and so she left, {Tokens.wipIcon}.";
             string outroFailure = $"..and so she vanished, {Tokens.wipIcon}.";

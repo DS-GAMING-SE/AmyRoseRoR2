@@ -11,6 +11,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             Modules.Content.AddEntityState(typeof(PrimaryHammer));
 
+            Modules.Content.AddEntityState(typeof(SuperPrimaryHammer));
+
             Modules.Content.AddEntityState(typeof(HammerSmashCharge));
             Modules.Content.AddEntityState(typeof(HammerSmashGrounded));
             Modules.Content.AddEntityState(typeof(HammerSmashChargeAerial));
@@ -35,6 +37,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             Modules.Content.AddEntityState(typeof(MultiLockTargeting));
             Modules.Content.AddEntityState(typeof(MultiLockAttack));
             Modules.Content.AddEntityState(typeof(MultiLockEnd));
+
+            Modules.Content.AddEntityState(typeof(SuperMultiLockTargeting));
+            Modules.Content.AddEntityState(typeof(SuperMultiLockAttack));
+            Modules.Content.AddEntityState(typeof(SuperMultiLockEnd));
         }
     }
 }

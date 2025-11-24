@@ -16,6 +16,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         // particle effects
         public static GameObject hammerSwingEffect;
         public static GameObject hammerSwingLargeEffect;
+        public static GameObject hammerSwingSuperEffect;
         public static GameObject swordSwingEffect;
         public static GameObject swordHitImpactEffect;
 
@@ -81,6 +82,20 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 hammerSwingLargeMain.startSizeXMultiplier = 1.8f;
                 hammerSwingLargeMain.startSizeYMultiplier = 1.8f;
                 hammerSwingLargeMain.startSizeZMultiplier = 4.5f;
+
+                hammerSwingSuperEffect = PrefabAPI.InstantiateClone(hammerSwingEffect, "AmyRoseHammerSwingSuperEffect", false);
+                ParticleSystem.MainModule hammerSwingSuperMain = hammerSwingSuperEffect.transform.Find("SwingTrail").GetComponent<ParticleSystem>().main;
+                // original size is (1.2, 1.2, 2.25)
+                hammerSwingSuperMain.startSizeXMultiplier = 5f;
+                hammerSwingSuperMain.startSizeYMultiplier = 5f;
+                hammerSwingSuperMain.startSizeZMultiplier = 12f;
+                GameObject hammerSwingSuperBlur = GameObject.Instantiate(hammerSwingSuperEffect.transform.Find("SwingTrail").gameObject, hammerSwingSuperEffect.transform);
+                hammerSwingSuperBlur.GetComponent<ParticleSystemRenderer>().sharedMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Croco/matCrocoSlashDistortion.mat").WaitForCompletion();
+                ParticleSystem.MainModule hammerSwingSuperBlurMain = hammerSwingSuperBlur.GetComponent<ParticleSystem>().main;
+                hammerSwingSuperBlurMain.startSizeXMultiplier = 4f;
+                hammerSwingSuperBlurMain.startSizeYMultiplier = 4f;
+                hammerSwingSuperBlurMain.startSizeZMultiplier = 2f;
+                hammerSwingSuperBlurMain.startDelay = 0.2f;
             };
 
             swordSwingEffect = _assetBundle.LoadEffect("HenrySwordSwingEffect", true);
