@@ -51,6 +51,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 }
             }
 
+            PlayAnimation("FullBody, Override", "SecondaryAir");
+
             previousAirControl = characterMotor.airControl;
             characterMotor.airControl = 0.5f;
 
@@ -87,13 +89,14 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public override void OnExit()
         {
-            base.OnExit();
             characterMotor.airControl = previousAirControl;
             base.characterMotor.onHitGroundAuthority -= OnGroundHit;
+            PlayAnimation("FullBody, Override", "BufferEmpty");
             if (NetworkServer.active)
             {
                 base.characterBody.RemoveBuff(JunkContent.Buffs.IgnoreFallDamage);
             }
+            base.OnExit();
         }
 
         public void OnGroundHit(ref CharacterMotor.HitGroundInfo hitGroundInfo)

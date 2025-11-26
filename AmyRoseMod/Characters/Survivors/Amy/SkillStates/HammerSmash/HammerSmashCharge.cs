@@ -44,6 +44,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             PrepareStats();
             chargeTime = baseChargeTime / characterBody.attackSpeed;
 
+            PlayAnimation("UpperBody, Override", "SecondaryCharge");
+
             this.camOverrideHandle = base.cameraTargetParams.AddParamsOverride(new CameraTargetParams.CameraParamsOverrideRequest
             {
                 cameraParamsData = aimingCameraParams,
@@ -84,6 +86,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public override void OnExit()
         {
+            PlayAnimation("UpperBody, Override", "BufferEmpty");
             base.cameraTargetParams.RemoveParamsOverride(this.camOverrideHandle, 0.5f);
             base.OnExit();
         }

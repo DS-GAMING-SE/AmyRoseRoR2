@@ -87,7 +87,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected override void PlayAttackAnimation()
         {
-            PlayCrossfade("Gesture, Override", "Slash1", playbackRateParam, duration, 0.1f * duration);
+            PlayAnimation("FullBody, Override", "SecondaryAttack", "Slash.playbackRate", duration);
         }
 
         protected override void PlaySwingEffect()

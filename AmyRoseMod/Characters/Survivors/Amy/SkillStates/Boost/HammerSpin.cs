@@ -81,6 +81,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             playbackRateParam = "Slash.playbackRate";
             swingEffectPrefab = AmyAssets.swordSwingEffect;
             hitEffectPrefab = AmyAssets.swordHitImpactEffect;
+            PlayAnimation("FullBody, Override", "HammerSpin");
 
             impactSound = AmyAssets.swordHitSoundEvent.index;
 
@@ -363,6 +364,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             {
                 base.characterBody.skillLocator.primary.onSkillChanged -= OnSkillChanged;
             }
+            PlayAnimation("FullBody, Override", "BufferEmpty");
             boostLogic.boostDraining = false;
             boostLogic.boostBeingUsed = false;
             if (hammerSpinController) 

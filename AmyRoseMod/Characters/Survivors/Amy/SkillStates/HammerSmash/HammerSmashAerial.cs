@@ -68,7 +68,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             animator = GetModelAnimator();
 
             PlayJumpAnimation();
-            cachedAnimationDuration = animator.GetFloat("Roll.playbackRate");
+            cachedAnimationDuration = animator.GetFloat("Slash.playbackRate");
         }
 
         public virtual void PrepareStats()
@@ -95,7 +95,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 {
                     bufferedJump = true;
                 }
-                if (animator) animator.SetFloat("Roll.playbackRate", 0.1f);
+                if (animator) animator.SetFloat("Slash.playbackRate", 0.1f);
                 base.characterMotor.velocity = Vector3.zero;
                 overlapAttack.Fire();
             }
@@ -111,7 +111,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 else
                 {
                     SmallHop(base.characterMotor, 12f);
-                    if (animator) animator.SetFloat("Roll.playbackRate", cachedAnimationDuration);
+                    if (animator) animator.SetFloat("Slash.playbackRate", cachedAnimationDuration);
                 }
             }
             if (hasJumped && fixedAge > duration)
@@ -124,7 +124,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected virtual void PlayJumpAnimation()
         {
-            PlayAnimation("FullBody, Override", "Roll", "Roll.playbackRate", duration);
+            PlayAnimation("FullBody, Override", "SecondaryAirLand", "Slash.playbackRate", duration);
         }
 
         protected virtual void Jump()

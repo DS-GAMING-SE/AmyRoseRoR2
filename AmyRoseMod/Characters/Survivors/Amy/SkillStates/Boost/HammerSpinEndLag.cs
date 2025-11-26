@@ -34,7 +34,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         }
         protected virtual void PlayAnimation()
         {
-            PlayCrossfade("Gesture, Override", "Slash1", "Slash.playbackRate", duration, 0.1f * duration);
+            PlayAnimation("FullBody, Override", "HammerSpinEnd", "Slash.playbackRate", duration);
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()

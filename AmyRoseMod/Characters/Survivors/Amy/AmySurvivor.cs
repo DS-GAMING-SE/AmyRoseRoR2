@@ -28,7 +28,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         public override string masterName => "AmyRoseMonsterMaster"; //if you do not
 
         //the names of the prefabs you set up in unity that we will use to build your character
-        public override string modelPrefabName => "mdlHenry";
+        public override string modelPrefabName => "mdlAmy";
         public override string displayPrefabName => "HenryDisplay";
 
         public const string AMY_PREFIX = AmyPlugin.DEVELOPER_PREFIX + "_AMY_ROSE_";
@@ -64,16 +64,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         {
                 new CustomRendererInfo
                 {
-                    childName = "SwordModel",
-                    material = assetBundle.LoadMaterial("matHenry"),
-                },
-                new CustomRendererInfo
-                {
-                    childName = "GunModel",
-                },
-                new CustomRendererInfo
-                {
-                    childName = "Model",
+                    childName = "Model"
                 }
         };
 
@@ -451,6 +442,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         #region skins
         public override void InitializeSkins()
         {
+            assetBundle.LoadMaterial("matAmyBase");
+            assetBundle.LoadMaterial("matAmyEyes");
+
             ModelSkinController skinController = prefabCharacterModel.gameObject.AddComponent<ModelSkinController>();
             ModelSkinController displaySkinController = displayPrefab.gameObject.AddComponent<ModelSkinController>();
             ChildLocator childLocator = prefabCharacterModel.GetComponent<ChildLocator>();

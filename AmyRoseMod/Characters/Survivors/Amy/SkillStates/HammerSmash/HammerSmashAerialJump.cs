@@ -53,11 +53,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected virtual void PrepareStats()
         {
-            baseDuration = 1.2f;
+            baseDuration = 1f;
         }
         protected virtual void PlayAnimation()
         {
-            PlayCrossfade("FullBody, Override", "Roll", "Roll.playbackRate", duration, 0.1f * duration);
+            PlayCrossfade("FullBody, Override", "SecondaryAirRebound", "Slash.playbackRate", duration * 1.3f, 0.1f * duration);
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()
