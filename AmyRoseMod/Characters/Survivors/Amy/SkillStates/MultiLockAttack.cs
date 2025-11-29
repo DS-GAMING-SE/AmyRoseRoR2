@@ -83,6 +83,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                     characterModel.invisibilityCount++;
                 }
             }
+
+            if (firstAttack)
+            {
+                Util.PlaySound("Play_amyrose_multilock_start", base.gameObject);
+            }
         }
 
         public override void FixedUpdate()

@@ -15,10 +15,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
 
         protected OverlapAttack superAttack;
 
+        protected float superSwingSoundStartPercentTime = 0.1f;
         protected float superAttackStartPercentTime = 0.25f;
         protected float superAttackEndPercentTime = 0.5f;
 
         private bool hasFired;
+        private bool soundFired;
 
         public override void OnEnter()
         {
@@ -30,6 +32,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
         public override void FixedUpdate()
         {
             base.FixedUpdate();
+            if (stopwatch >= superSwingSoundStartPercentTime && !soundFired)
+            {
+                soundFired = true;
+                Util.PlaySound("Play_amyrose_swing_super", gameObject);
+            }
             if (stopwatch >= superAttackStartPercentTime && (stopwatch <= superAttackEndPercentTime || !hasFired))
             {
                 if (!hasFired)

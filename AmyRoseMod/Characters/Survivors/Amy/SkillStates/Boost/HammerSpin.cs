@@ -30,13 +30,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         protected float hitStopDuration;
         protected float hitHopVelocity;
 
-        protected string swingSoundString = "";
-        protected string hitSoundString = "";
-        protected string muzzleString = "SwingCenter";
         protected string playbackRateParam = "Slash.playbackRate";
         protected GameObject swingEffectPrefab;
         protected GameObject hitEffectPrefab;
-        protected NetworkSoundEventIndex impactSound = NetworkSoundEventIndex.Invalid;
+        protected NetworkSoundEventIndex impactSound = AmyAssets.hammerHitSoundEvent.index;
         protected OverlapAttack attack;
 
         protected bool hasFired;
@@ -70,22 +67,24 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         private float previousAirControl;
 
+        protected LoopSoundManager.SoundLoopPtr hammerSpinLoopSound;
+
         public override void OnEnter()
         {
             PrepareBaseStats();
             buffStackTimer = buffsPerSecond;
             animator = GetModelAnimator();
-            swingSoundString = "HenrySwordSwing";
-            hitSoundString = "";
-            muzzleString = "SwingLeft";
             playbackRateParam = "Slash.playbackRate";
             swingEffectPrefab = AmyAssets.swordSwingEffect;
             hitEffectPrefab = AmyAssets.swordHitImpactEffect;
             PlayAnimation("FullBody, Override", "HammerSpin");
 
-            impactSound = AmyAssets.swordHitSoundEvent.index;
+            impactSound = AmyAssets.hammerHitSoundEvent.index;
 
             base.OnEnter();
+
+            hammerSpinLoopSound = LoopSoundManager.PlaySoundLoopLocal(base.gameObject, AmyAssets.hammerSpinLoopSoundDef);
+
             hammerSpinController = base.GetComponent<AmyHammerSpinController>();
             if (!hammerSpinController) { this.outer.SetNextStateToMain(); return; }
             hammerSpinController.ActivateSpin();
@@ -134,7 +133,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             damageType.AddModdedDamageType(HedgehogUtils.Launch.DamageTypes.launchOnKill);
             damageType.AddModdedDamageType(AmyDamageTypes.angleUpKnockbackIfGrounded);
             damageCoefficient = Mathf.Lerp(AmyStaticValues.boostHammerSpinDamageCoefficient, AmyStaticValues.boostHammerSpinFastDamageCoefficient, speedLerp);
-            procCoefficient = AmyStaticValues.boostHammerSpinProcCoefficient;
+            procCoefficient = Mathf.Lerp(AmyStaticValues.boostHammerSpinMinProcCoefficient, AmyStaticValues.boostHammerSpinMaxProcCoefficient, speedLerp);
             pushForce = AmyStaticValues.boostHammerSpinLaunchForce;
             baseAttacksPerSecond = Mathf.Lerp(AmyStaticValues.boostHammerSpinAttacksPerSecond, AmyStaticValues.boostHammerSpinBuffMaxAttacksPerSecond, speedLerp);
         }
@@ -262,8 +261,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         }
         protected virtual void OnHitEnemyAuthority()
         {
-            Util.PlaySound(hitSoundString, gameObject);
-
             if (!hasHopped)
             {
                 if (characterMotor && !characterMotor.isGrounded && hitHopVelocity > 0f)
@@ -376,6 +373,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 base.characterBody.RemoveBuff(boostBuff);
                 base.characterBody.SetBuffCount(hammerSpinBuff.buffIndex, 0);
             }
+            LoopSoundManager.StopSoundLoopLocal(hammerSpinLoopSound);
             base.characterMotor.airControl = previousAirControl;
             base.OnExit();
         }

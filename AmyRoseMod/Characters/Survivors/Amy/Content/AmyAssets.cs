@@ -2,6 +2,7 @@
 using AmyRoseMod.Modules;
 using R2API;
 using RoR2;
+using RoR2.Audio;
 using RoR2.Projectile;
 using System;
 using UnityEngine;
@@ -29,7 +30,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         public static Material hammerSwingMaterial;
 
         // networked hit sounds
-        public static NetworkSoundEventDef swordHitSoundEvent;
+        public static NetworkSoundEventDef hammerHitSoundEvent;
+        public static NetworkSoundEventDef hammerHitHeavySoundEvent;
+        public static LoopSoundDef hammerSpinLoopSoundDef;
 
         //projectiles
         public static GameObject multiLockProjectilePrefab;
@@ -42,7 +45,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             _assetBundle = assetBundle;
 
-            swordHitSoundEvent = Modules.Content.CreateAndAddNetworkSoundEventDef("HenrySwordHit");
+            hammerHitSoundEvent = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_hit");
+            hammerHitHeavySoundEvent = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_hit_heavy");
+            hammerSpinLoopSoundDef = ScriptableObject.CreateInstance<LoopSoundDef>();
+            hammerSpinLoopSoundDef.startSoundName = "Play_amyrose_hammer_spin_loop";
+            hammerSpinLoopSoundDef.stopSoundName = "Stop_amyrose_hammer_spin_loop";
 
             CreateEffects(assetBundle);
 
@@ -111,7 +118,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         private static void CreateBombExplosionEffect()
         {
-            bombExplosionEffect = _assetBundle.LoadEffect("BombExplosionEffect", "HenryBombExplosion");
+            bombExplosionEffect = _assetBundle.LoadEffect("BombExplosionEffect", "Play_amyrose_multilock_projectile_hit");
 
             if (!bombExplosionEffect)
                 return;
@@ -157,14 +164,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             multiLockExplosion.falloffModel = BlastAttack.FalloffModel.None;
             multiLockExplosion.lifetime = AmyStaticValues.specialMultiLockDetonationTime;
             multiLockExplosion.impactEffect = bombExplosionEffect;
-            multiLockExplosion.lifetimeExpiredSound = Modules.Content.CreateAndAddNetworkSoundEventDef("HenryBombExplosion");
 
             ProjectileController multiLockController = multiLockProjectilePrefab.GetComponent<ProjectileController>();
 
             if (_assetBundle.LoadAsset<GameObject>("AmyRoseMultiLockHeartGhost") != null)
                 multiLockController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("AmyRoseMultiLockHeartGhost");
-            
-            multiLockController.startSound = "";
+            multiLockController.startSound = "Play_amyrose_multilock_projectile_spawn";
         }
 
         private static void CreateSuperMultiLockProjectile()

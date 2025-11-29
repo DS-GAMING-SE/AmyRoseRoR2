@@ -40,9 +40,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public const float secondaryHammerAirFallDistanceForMaxCharge = 45f;
 
-        public const float secondaryHammerAirFallAcceleration = 60f;
+        public const float secondaryHammerAirFallAcceleration = 80f;
 
-        public const float secondaryHammerAirFallMaxSpeed = 80f;
+        public const float secondaryHammerAirFallMaxSpeed = 100f;
 
         public const float secondaryHammerAirFallMaxFallDuration = 4f;
 
@@ -80,7 +80,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public const float boostHammerSpinFastDamageCoefficient = 10f;
 
-        public const float boostHammerSpinProcCoefficient = 0.6f;
+        public const float boostHammerSpinMinProcCoefficient = 0.6f;
+
+        public const float boostHammerSpinMaxProcCoefficient = 1f;
 
         public const float boostHammerSpinLaunchForce = 250f;
 
@@ -105,6 +107,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         public const float dizzyDuration = 3f;
 
         public const float boostHammerSpinEndLagBaseDuration = 0.7f;
+
+        #region Super Hammer-Spin
+        public const float superBoostHammerSpinLaunchForce = 400f;
+        #endregion
 
         #endregion
         #endregion

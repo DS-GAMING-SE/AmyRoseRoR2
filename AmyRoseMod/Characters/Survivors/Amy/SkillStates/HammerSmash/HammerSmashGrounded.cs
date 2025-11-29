@@ -17,14 +17,13 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         {
             PrepareAnimationStats();
 
-            swingSoundString = "HenrySwordSwing";
-            hitSoundString = "";
+            swingSoundString = "Play_amyrose_swing_heavy";
             muzzleString = "LargeSwingDown";
             playbackRateParam = "Slash.playbackRate";
             swingEffectPrefab = AmyAssets.hammerSwingLargeEffect;
             hitEffectPrefab = AmyAssets.swordHitImpactEffect;
 
-            impactSound = AmyAssets.swordHitSoundEvent.index;
+            impactSound = AmyAssets.hammerHitSoundEvent.index;
 
             base.OnEnter();
             base.StartAimMode(duration * 1.3f);
@@ -58,6 +57,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             damageCoefficient = Mathf.Lerp(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient, AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient, charge);
             procCoefficient = charge == 1 ? AmyStaticValues.secondaryHammerChargeMaximumProcCoefficient : AmyStaticValues.secondaryHammerChargeMinimumProcCoefficient;
             pushForce = AmyStaticValues.secondaryHammerLaunchForce;
+            impactSound = AmyAssets.hammerHitHeavySoundEvent.index;
         }
 
         protected override void PushForceToTargetedLaunch()

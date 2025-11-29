@@ -22,6 +22,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             {
                 base.characterBody.AddTimedBuff(AmyBuffs.hammerSmashSpeedBuff, AmyStaticValues.secondaryHammerAirJumpBuffDuration);
             }
+            Util.PlaySound("Play_amyrose_rebound", base.gameObject);
             PrepareStats();
             duration = baseDuration / attackSpeedStat;
             if (base.isAuthority)

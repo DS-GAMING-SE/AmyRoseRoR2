@@ -107,7 +107,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             SanitizeAndFilterTargets();
 
             HurtBox hit = this.search.GetResults().FirstOrDefault(target => target.healthComponent && target.healthComponent.alive && target.healthComponent.body && 
-                !targetBodyBlacklist.Contains(BodyCatalog.GetBodyName(target.healthComponent.body.bodyIndex)));
+                !targetBodyBlacklist.Contains(BodyCatalog.GetBodyName(target.healthComponent.body.bodyIndex))
+                && (this.targets.Count == 0 || Vector3.Distance(target.transform.position, targetHurtBoxes[targetHurtBoxes.Count - 1].transform.position) < orbBounceRange));
             if (hit)
             {
                 AddTarget(hit);
@@ -142,6 +143,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             targetIndicator.indicator.active = true;
             this.targets.Add(targetIndicator);
             this.targetHurtBoxes.Add(target);
+            Util.PlaySound("Play_amyrose_multilock_lockon", base.gameObject);
         }
 
         public virtual void RemoveTarget(int index)

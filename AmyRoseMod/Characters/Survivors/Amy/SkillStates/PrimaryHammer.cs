@@ -15,7 +15,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         {
             PrepareAnimationStats();
 
-            swingSoundString = "HenrySwordSwing";
+            swingSoundString = "Play_amyrose_swing";
             hitSoundString = "";
             switch(swingIndex)
             {
@@ -36,7 +36,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             swingEffectPrefab = AmyAssets.hammerSwingEffect;
             hitEffectPrefab = AmyAssets.swordHitImpactEffect;
 
-            impactSound = AmyAssets.swordHitSoundEvent.index;
+            impactSound = AmyAssets.hammerHitSoundEvent.index;
 
             base.OnEnter();
             base.StartAimMode(duration * 1.5f);

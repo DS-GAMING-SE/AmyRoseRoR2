@@ -35,6 +35,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 TeleportHelper.TeleportBody(base.characterBody, teleportPosition, true);
                 SmallHop(base.characterMotor, 20f);
             }
+            Util.PlaySound("Play_amyrose_multilock_end", base.gameObject);
         }
         public override void FixedUpdate()
         {
@@ -45,6 +46,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 vel *= 0.7f;
                 vel.y = 1f;
                 vel *= startSpeed * (1f - (fixedAge / duration));
+                vel *= attackSpeedStat;
                 base.characterMotor.velocity = vel;
             }
             if (fixedAge >= duration * vfxDurationPercent)

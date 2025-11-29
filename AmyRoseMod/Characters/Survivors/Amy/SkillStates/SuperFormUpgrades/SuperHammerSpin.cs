@@ -15,5 +15,16 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
     {
         protected override BuffDef boostBuff => AmyBuffs.superBoostBuff;
 
+        protected override void PrepareAttackStats()
+        {
+            base.PrepareAttackStats();
+            pushForce = AmyStaticValues.superBoostHammerSpinLaunchForce;
+        }
+        protected override void PrepareBaseStats()
+        { 
+            base.PrepareBaseStats();
+            hitHopVelocity = 0;
+        }
+
     }
 }

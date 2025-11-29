@@ -42,16 +42,19 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 overlapAttack.inflictor = base.gameObject;
                 overlapAttack.hitBoxGroup = FindHitBoxGroup("Stomp");
                 overlapAttack.teamIndex = base.teamComponent.teamIndex;
+                overlapAttack.impactSound = AmyAssets.hammerHitHeavySoundEvent.index;
                 PrepareAttackStats(overlapAttack);
                 if (base.characterMotor)
                 {
-                    SmallHop(characterMotor, characterBody.jumpPower);
+                    SmallHop(characterMotor, characterBody.jumpPower * 1.2f);
                     base.characterMotor.onHitGroundAuthority += OnGroundHit;
                     startingHeight = transform.position.y;
                 }
             }
 
             PlayAnimation("FullBody, Override", "SecondaryAir");
+
+            Util.PlaySound("Play_amyrose_swing", base.gameObject);
 
             previousAirControl = characterMotor.airControl;
             characterMotor.airControl = 0.5f;

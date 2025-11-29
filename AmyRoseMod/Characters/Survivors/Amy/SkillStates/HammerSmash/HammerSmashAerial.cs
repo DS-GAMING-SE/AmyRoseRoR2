@@ -67,6 +67,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             }
             animator = GetModelAnimator();
 
+            Util.PlaySound("Play_amyrose_hit_heavy", base.gameObject);
+
             PlayJumpAnimation();
             cachedAnimationDuration = animator.GetFloat("Slash.playbackRate");
         }
