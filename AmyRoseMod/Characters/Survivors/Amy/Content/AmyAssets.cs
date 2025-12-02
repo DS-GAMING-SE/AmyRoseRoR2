@@ -14,6 +14,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 {
     public static class AmyAssets
     {
+        public static GameObject multiLockCrosshair;
+        
         // particle effects
         public static GameObject hammerSwingEffect;
         public static GameObject hammerSwingLargeEffect;
@@ -51,9 +53,22 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             hammerSpinLoopSoundDef.startSoundName = "Play_amyrose_hammer_spin_loop";
             hammerSpinLoopSoundDef.stopSoundName = "Stop_amyrose_hammer_spin_loop";
 
+            CreateMultiLockCrosshair(assetBundle);
+
             CreateEffects(assetBundle);
 
             CreateProjectiles();
+        }
+
+        private static void CreateMultiLockCrosshair(AssetBundle assetBundle)
+        {
+            AsyncOperationHandle<GameObject> asyncCrosshair = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/UI/SimpleDotCrosshair.prefab");
+            asyncCrosshair.Completed += delegate (AsyncOperationHandle<GameObject> x)
+            {
+                multiLockCrosshair = PrefabAPI.InstantiateClone(x.Result, "AmyRoseMultiLockCrosshair", false);
+                multiLockCrosshair.AddComponent<AmyMultiLockCrosshairController>();
+            };
+            AmyMultiLockCrosshairController.multiLockHeartPrefab = assetBundle.LoadAsset<GameObject>("MultiLockHeartUI");
         }
 
         #region effects

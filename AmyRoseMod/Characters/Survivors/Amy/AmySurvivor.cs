@@ -50,7 +50,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             bodyColor = amyColor,
             sortPosition = 100,
 
-            crosshair = Asset.LoadCrosshair("Standard"),
+            crosshair = Asset.LoadCrosshair("SimpleDot"),
             podPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
 
             maxHealth = 110f,

@@ -18,6 +18,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
+            if (base.isAuthority)
+            {
+                characterBody.TriggerJumpEventGlobally();
+            }
             if (NetworkServer.active)
             {
                 base.characterBody.AddTimedBuff(AmyBuffs.hammerSmashSpeedBuff, AmyStaticValues.secondaryHammerAirJumpBuffDuration);

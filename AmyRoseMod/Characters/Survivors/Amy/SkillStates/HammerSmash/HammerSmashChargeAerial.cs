@@ -46,7 +46,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 PrepareAttackStats(overlapAttack);
                 if (base.characterMotor)
                 {
-                    SmallHop(characterMotor, characterBody.jumpPower * 1.2f);
+                    SmallHop(characterMotor, 30f);
                     base.characterMotor.onHitGroundAuthority += OnGroundHit;
                     startingHeight = transform.position.y;
                 }

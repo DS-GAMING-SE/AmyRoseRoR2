@@ -148,6 +148,7 @@ namespace AmyRoseMod.Modules
             bodyComponent.bodyColor = bodyInfo.bodyColor;
 
             bodyComponent._defaultCrosshairPrefab = bodyInfo.crosshair;
+            bodyComponent.useSprintCrosshair = false;
             bodyComponent.hideCrosshair = false;
             bodyComponent.preferredPodPrefab = bodyInfo.podPrefab;
 

@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 using HedgehogUtils.Boost;
 using System.Collections.Generic;
 using System.Linq;
+using RoR2.UI;
 
 namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
@@ -22,9 +23,13 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public float orbBounceRange = AmyStaticValues.specialMultiLockBounceRange;
 
-        public int maxTargets = AmyStaticValues.specialMultiLockMaxTargets;
+        public int maxTargets;
+
+        public Action<int> OnTargetsChanged;
 
         protected static string[] targetBodyBlacklist = { "GravekeeperTrackingFireball" };
+
+        protected CrosshairUtils.OverrideRequest crosshair;
 
         
         public override void OnEnter()
@@ -33,6 +38,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             PrepareStatsStart();
             if (base.isAuthority)
             {
+                crosshair = CrosshairUtils.RequestOverrideForBody(characterBody, AmyAssets.multiLockCrosshair, CrosshairUtils.OverridePriority.PrioritySkill);
                 targets = new List<Target>();
                 targetHurtBoxes = new List<HurtBox>();
                 PrepareSearch();
@@ -67,15 +73,20 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public override void OnExit()
         {
-            foreach (var target in targets)
+            if (base.isAuthority)
             {
-                target.indicator.active = false;
+                foreach (var target in targets)
+                {
+                    target.indicator.active = false;
+                }
+                crosshair.Dispose();
             }
             base.OnExit();
         }
 
         public virtual void PrepareStatsStart()
         {
+            maxTargets = AmyStaticValues.specialMultiLockMaxTargets;
         }
 
         protected virtual void PrepareSearch()
@@ -143,6 +154,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             targetIndicator.indicator.active = true;
             this.targets.Add(targetIndicator);
             this.targetHurtBoxes.Add(target);
+            OnTargetsChanged?.Invoke(targets.Count);
             Util.PlaySound("Play_amyrose_multilock_lockon", base.gameObject);
         }
 
@@ -151,6 +163,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             targets[index].indicator.active = false;
             targets.RemoveAt(index);
             targetHurtBoxes.RemoveAt(index);
+            OnTargetsChanged?.Invoke(targets.Count);
             // update target.number
         }
 
