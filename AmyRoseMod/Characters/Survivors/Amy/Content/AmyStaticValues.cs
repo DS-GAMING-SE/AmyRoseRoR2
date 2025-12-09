@@ -26,15 +26,17 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public const float secondaryHammerChargeMinimumDamageCoefficient = 8f;
 
-        public const float secondaryHammerChargeMaximumDamageCoefficient = 24f;
+        public const float secondaryHammerChargeMaximumDamageCoefficient = 20f;
 
         public const float secondaryHammerChargeMinimumProcCoefficient = 1f;
 
         public const float secondaryHammerChargeMaximumProcCoefficient = 1.5f;
 
-        public const float secondaryHammerBaseChargeTime = 3f;
+        public const float secondaryHammerBaseChargeTime = 2f;
 
-        public const float secondaryHammerLaunchForce = 400f;
+        public const float secondaryHammerMinLaunchForce = 250f;
+
+        public const float secondaryHammerMaxLaunchForce = 400f;
 
         #region Air Version
 

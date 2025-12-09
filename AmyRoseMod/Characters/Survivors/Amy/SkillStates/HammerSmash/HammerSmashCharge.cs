@@ -94,6 +94,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         protected virtual void ReachedMaxCharge()
         {
             EffectManager.SimpleMuzzleFlash(AmyAssets.swordHitImpactEffect, base.gameObject, "Head", false);
+            Util.PlaySound("Play_amyrose_hammer_smash_charged", base.gameObject);
         }
 
         protected virtual void SetNextStateToSmash()

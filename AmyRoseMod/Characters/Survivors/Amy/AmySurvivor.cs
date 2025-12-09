@@ -64,7 +64,13 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         {
                 new CustomRendererInfo
                 {
-                    childName = "Model"
+                    childName = "Model",
+                    material = assetBundle.LoadMaterial("matAmyBase").SetHopooMaterial().SetSpecular(0.15f)
+                },
+                new CustomRendererInfo
+                {
+                    childName = "Eyes",
+                    material = assetBundle.LoadMaterial("matAmyEyes").SetHopooMaterial().SetSpecular(0.15f)
                 }
         };
 
@@ -442,9 +448,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         #region skins
         public override void InitializeSkins()
         {
-            assetBundle.LoadMaterial("matAmyBase");
-            assetBundle.LoadMaterial("matAmyEyes");
-
             ModelSkinController skinController = prefabCharacterModel.gameObject.AddComponent<ModelSkinController>();
             ModelSkinController displaySkinController = displayPrefab.gameObject.AddComponent<ModelSkinController>();
             ChildLocator childLocator = prefabCharacterModel.GetComponent<ChildLocator>();

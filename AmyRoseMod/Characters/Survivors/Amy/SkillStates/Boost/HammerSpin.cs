@@ -126,7 +126,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected virtual void PrepareAttackStats()
         {
-            float speedLerp = ((float)(GetSpinBuffCount(hammerSpinBuff.buffIndex)) - 1f) / (((float)AmyStaticValues.boostHammerSpinBuffMaxEffectiveStacks - 1));
+            float speedLerp = Mathf.Max(0f, (base.characterBody.GetBuffCount(hammerSpinBuff.buffIndex) - AmyStaticValues.boostHammerSpinBuffPercentPerEffectiveStack)) / 100f;
             hitboxGroupName = "Spin";
 
             damageType = DamageTypeCombo.GenericUtility;

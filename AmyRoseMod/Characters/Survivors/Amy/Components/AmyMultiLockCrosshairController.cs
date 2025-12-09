@@ -59,7 +59,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
                 {
                     if (numHeartsFilled > desiredFilledHearts)
                     {
-                        multiLockHearts[i].transform.Find("MultiLockHeartFill").gameObject.SetActive(false); // don't Find() all the damn time
+                        multiLockHearts[i].transform.Find("MultiLockHeartFill").gameObject.SetActive(false);
                         numHeartsFilled--;
                     }
                     else
@@ -74,7 +74,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
                 {
                     if (numHeartsFilled < desiredFilledHearts)
                     {
-                        multiLockHearts[i].transform.Find("MultiLockHeartFill").gameObject.SetActive(true); // don't Find() all the damn time
+                        multiLockHearts[i].transform.Find("MultiLockHeartFill").gameObject.SetActive(true);
                         numHeartsFilled++;
                     }
                     else

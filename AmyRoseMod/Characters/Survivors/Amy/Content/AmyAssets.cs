@@ -31,6 +31,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         // materials
         public static Material hammerSwingMaterial;
 
+        public static Material multiLockHeartMaterial;
+
         // networked hit sounds
         public static NetworkSoundEventDef hammerHitSoundEvent;
         public static NetworkSoundEventDef hammerHitHeavySoundEvent;
@@ -129,6 +131,16 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             amyBoostAuraEffect = HedgehogUtils.Assets.CreateNewBoostAura("AmyBoostAura", 1, 0.4f,
                 new Color(1, 1, 1), AmySurvivor.amyColor, new Color(0.5f, 0.07f, 0.3f), AmySurvivor.amyColor);
+
+            AsyncOperationHandle<Material> asyncMultiLockHeartMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Grandparent/matGrandParentSunCore.mat");
+            asyncMultiLockHeartMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
+            {
+                multiLockHeartMaterial = new Material(x.Result);
+                multiLockHeartMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"));
+                multiLockHeartMaterial.SetFloat("_FresnelPower", -1f);
+                multiLockHeartMaterial.SetFloat("_AlphaBoost", 7.6f);
+                multiLockHeartMaterial.SetFloat("_AlphaBias", 0.5f);
+            };
         }
 
         private static void CreateBombExplosionEffect()
@@ -182,7 +194,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             ProjectileController multiLockController = multiLockProjectilePrefab.GetComponent<ProjectileController>();
 
-            if (_assetBundle.LoadAsset<GameObject>("AmyRoseMultiLockHeartGhost") != null)
+            if (_assetBundle.LoadAsset<GameObject>("AmyRoseMultiLockHeartGhost"))
+            {
+                _assetBundle.LoadAsset<GameObject>("AmyRoseMultiLockHeartGhost").transform.Find("Mesh").GetComponent<Renderer>().sharedMaterial = multiLockHeartMaterial;
+                multiLockController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("AmyRoseMultiLockHeartGhost");
+            }
                 multiLockController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("AmyRoseMultiLockHeartGhost");
             multiLockController.startSound = "Play_amyrose_multilock_projectile_spawn";
         }

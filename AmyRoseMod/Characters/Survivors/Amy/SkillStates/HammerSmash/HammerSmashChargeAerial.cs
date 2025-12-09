@@ -22,6 +22,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public float charge;
 
+        protected bool maxCharge;
+
         private bool attackHit;
 
         public override void OnEnter()
@@ -36,7 +38,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 overlapAttack.attackerFiltering = AttackerFiltering.NeverHitSelf;
                 overlapAttack.damageType = DamageTypeCombo.GenericSecondary; 
                 overlapAttack.damageType.AddModdedDamageType(HedgehogUtils.Launch.DamageTypes.launch);
-                overlapAttack.forceVector = Vector3.down * AmyStaticValues.secondaryHammerLaunchForce;
+                overlapAttack.forceVector = Vector3.down * AmyStaticValues.secondaryHammerMinLaunchForce;
                 overlapAttack.isCrit = RollCrit();
                 overlapAttack.attacker = base.gameObject;
                 overlapAttack.inflictor = base.gameObject;
@@ -48,9 +50,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 {
                     SmallHop(characterMotor, 30f);
                     base.characterMotor.onHitGroundAuthority += OnGroundHit;
-                    startingHeight = transform.position.y;
                 }
             }
+            startingHeight = transform.position.y;
 
             PlayAnimation("FullBody, Override", "SecondaryAir");
 
@@ -88,6 +90,15 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                     return;
                 }
             }
+            if (CalculateCharge() >= 1 && !maxCharge)
+            {
+                maxCharge = true;
+                ReachedMaxCharge();
+            }
+            else if (CalculateCharge() < 0.8f && maxCharge)
+            {
+                maxCharge = false;
+            }
         }
 
         public override void OnExit()
@@ -108,6 +119,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             {
                 SetNextStateToSmash(null);
             }
+        }
+
+        protected virtual void ReachedMaxCharge()
+        {
+            EffectManager.SimpleMuzzleFlash(AmyAssets.swordHitImpactEffect, base.gameObject, "Head", false);
+            Util.PlaySound("Play_amyrose_hammer_smash_charged", base.gameObject);
         }
 
         public virtual void PrepareStats()
@@ -140,6 +157,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             float charge = Mathf.Min(this.charge + CalculateCharge(), 1f);
             overlapAttack.damage = damageStat * Mathf.Lerp(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient, AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient, charge);
             overlapAttack.procCoefficient = charge == 1 ? AmyStaticValues.secondaryHammerChargeMaximumProcCoefficient : AmyStaticValues.secondaryHammerChargeMinimumProcCoefficient;
+            overlapAttack.forceVector = Vector3.down * (charge == 1 ? AmyStaticValues.secondaryHammerMaxLaunchForce : AmyStaticValues.secondaryHammerMinLaunchForce);
         }
 
         protected void ForgeOnGroundHit()

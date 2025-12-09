@@ -26,6 +26,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             base.modelLocator.normalizeToFloor = true;
             boostLogic = base.GetComponent<BoostLogic>();
             CreateVFX();
+            Util.PlaySound("Play_amyrose_dizzy", gameObject);
         }
 
         public override void FixedUpdate()

@@ -42,7 +42,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
                 if (!hasFired)
                 {
                     hasFired = true;
-                    PlayPooledSwingEffect(swingSuperEffectPrefab, swingSuperEffectInstance, _emh_swingSuperEffectInstance, duration * (1 - superAttackStartPercentTime - (1 - superAttackEndPercentTime)));
+                    PlayPooledSwingEffect(swingSuperEffectPrefab, ref swingSuperEffectInstance, ref _emh_swingSuperEffectInstance, duration * (1 - superAttackStartPercentTime - (1 - superAttackEndPercentTime)));
                 }
                 if (base.isAuthority)
                 {
@@ -53,7 +53,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
 
         public override void OnExit()
         {
-            ReturnSwingEffect(swingSuperEffectInstance, _emh_swingSuperEffectInstance);
+            ReturnSwingEffect(ref swingSuperEffectInstance, ref _emh_swingSuperEffectInstance);
             base.OnExit();
         }
 

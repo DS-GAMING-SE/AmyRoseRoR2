@@ -56,7 +56,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             damageType.AddModdedDamageType(HedgehogUtils.Launch.DamageTypes.removeLaunchAutoAim);
             damageCoefficient = Mathf.Lerp(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient, AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient, charge);
             procCoefficient = charge == 1 ? AmyStaticValues.secondaryHammerChargeMaximumProcCoefficient : AmyStaticValues.secondaryHammerChargeMinimumProcCoefficient;
-            pushForce = AmyStaticValues.secondaryHammerLaunchForce;
+            pushForce = charge == 1  ? AmyStaticValues.secondaryHammerMaxLaunchForce : AmyStaticValues.secondaryHammerMinLaunchForce;
             impactSound = AmyAssets.hammerHitHeavySoundEvent.index;
         }
 

@@ -97,7 +97,7 @@ namespace AmyRoseMod.Modules.BaseStates
         }
         protected void PlayPooledSwingEffect()
         {
-            PlayPooledSwingEffect(swingEffectPrefab, swingEffectInstance, _emh_swingEffectInstance, duration * (1 - attackStartPercentTime - (1 - attackEndPercentTime)));
+            PlayPooledSwingEffect(swingEffectPrefab, ref swingEffectInstance, ref _emh_swingEffectInstance, duration * (1 - attackStartPercentTime - (1 - attackEndPercentTime)));
             /*if (this.swingEffectPrefab)
             {
                 Transform transform = base.FindModelChild(this.muzzleString);
@@ -122,7 +122,7 @@ namespace AmyRoseMod.Modules.BaseStates
             }*/
         }
 
-        protected virtual void PlayPooledSwingEffect(GameObject prefab, GameObject instance, EffectManagerHelper emh, float duration)
+        protected virtual void PlayPooledSwingEffect(GameObject prefab, ref GameObject instance, ref EffectManagerHelper emh, float duration)
         {
             if (prefab)
             {
@@ -149,7 +149,7 @@ namespace AmyRoseMod.Modules.BaseStates
         }
         protected void ReturnSwingEffect()
         {
-            ReturnSwingEffect(swingEffectInstance, _emh_swingEffectInstance);
+            ReturnSwingEffect(ref swingEffectInstance, ref _emh_swingEffectInstance);
             /*if (this._emh_swingEffectInstance != null && this._emh_swingEffectInstance.OwningPool != null)
             {
                 this._emh_swingEffectInstance.OwningPool.ReturnObject(this._emh_swingEffectInstance);
@@ -162,7 +162,7 @@ namespace AmyRoseMod.Modules.BaseStates
             this._emh_swingEffectInstance = null;*/
         }
 
-        protected virtual void ReturnSwingEffect(GameObject instance, EffectManagerHelper emh)
+        protected virtual void ReturnSwingEffect(ref GameObject instance, ref EffectManagerHelper emh)
         {
             if (emh != null && emh.OwningPool != null)
             {

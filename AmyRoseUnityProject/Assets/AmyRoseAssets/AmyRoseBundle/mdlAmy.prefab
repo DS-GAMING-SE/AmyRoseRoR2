@@ -10379,7 +10379,9 @@ MonoBehaviour:
   - name: MainHurtbox
     transform: {fileID: 8801724157396953430}
   - name: Model
-    transform: {fileID: 8291266385272094008}
+    transform: {fileID: 16069426736710679}
+  - name: Eyes
+    transform: {fileID: 6160449649620247353}
   - name: HammerModel
     transform: {fileID: 223639241481589434}
   - name: Root
