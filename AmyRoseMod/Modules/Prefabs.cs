@@ -651,7 +651,7 @@ namespace AmyRoseMod.Modules
         /// Creates an EntityStateMachine, and adds it to the NetworkStateMachine, CharacterDeathBehavior, and SetStateOnHurt components. 
         /// <para>See AddMainEntityStateMachine for typically your "Body" state machine.</para>
         /// </summary>
-        public static EntityStateMachine AddEntityStateMachine(GameObject prefab, string machineName, Type mainStateType = null, Type initalStateType = null, bool addToHurt = true, bool addToDeath = true)
+        public static EntityStateMachine AddEntityStateMachine(GameObject prefab, string machineName, Type mainStateType = null, Type initalStateType = null, bool addToHurt = true, bool addToDeath = true, bool addToVehicle = true)
         {
             EntityStateMachine entityStateMachine = EntityStateMachine.FindByCustomName(prefab, machineName);
             if (entityStateMachine == null)
@@ -698,6 +698,11 @@ namespace AmyRoseMod.Modules
             if (setStateOnHurt && addToHurt)
             {
                 setStateOnHurt.idleStateMachine = setStateOnHurt.idleStateMachine.Append(entityStateMachine).ToArray();
+            }
+
+            if (addToVehicle && prefab.TryGetComponent<CharacterBody>(out var body))
+            {
+                body.vehicleIdleStateMachine = body.vehicleIdleStateMachine.Append(entityStateMachine).ToArray();
             }
 
             return entityStateMachine;

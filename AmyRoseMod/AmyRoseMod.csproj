@@ -29,6 +29,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Reference Include="CustomEmotesAPI">
+	    <HintPath>..\libs\CustomEmotesAPI.dll</HintPath>
+	  </Reference>
 	  <Reference Include="HedgehogUtils">
 	    <HintPath>..\libs\HedgehogUtils.dll</HintPath>
 	  </Reference>

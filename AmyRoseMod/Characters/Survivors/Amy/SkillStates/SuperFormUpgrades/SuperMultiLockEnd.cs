@@ -12,5 +12,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
 {
     public class SuperMultiLockEnd : MultiLockEnd
     {
+        protected override void PrepareStats()
+        {
+            base.PrepareStats();
+            startSpeed = 25f;
+        }
     }
 }

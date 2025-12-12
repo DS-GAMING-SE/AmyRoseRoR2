@@ -86,6 +86,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             rollDriver.selectionRequiresOnGround = false;
             rollDriver.selectionRequiresAimTarget = false;
             rollDriver.maxTimesSelected = -1;
+            rollDriver.noRepeat = true;
 
             //Behavior
             rollDriver.moveTargetType = AISkillDriver.TargetType.CurrentEnemy;

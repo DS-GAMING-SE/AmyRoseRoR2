@@ -23,7 +23,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         public static GameObject swordSwingEffect;
         public static GameObject swordHitImpactEffect;
 
-        public static GameObject bombExplosionEffect;
+        public static GameObject multiLockExplosionEffect;
+        public static GameObject superMultiLockExplosionEffect;
 
         public static GameObject amyBoostFlashEffect;
         public static GameObject amyBoostAuraEffect;
@@ -32,6 +33,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         public static Material hammerSwingMaterial;
 
         public static Material multiLockHeartMaterial;
+
+        public static Material multiLockExplosionMaterial;
+        public static Material superMultiLockExplosionMaterial;
 
         // networked hit sounds
         public static NetworkSoundEventDef hammerHitSoundEvent;
@@ -76,7 +80,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         #region effects
         private static void CreateEffects(AssetBundle assetBundle)
         {
-            CreateBombExplosionEffect();
+            CreateMultiLockExplosionEffect(assetBundle);
 
             AsyncOperationHandle<Material> asyncHammerSwingMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Loader/matLoaderSwingThick.mat");
             asyncHammerSwingMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
@@ -92,7 +96,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 hammerSwingEffect = PrefabAPI.InstantiateClone(x.Result, "AmyRoseHammerSwingEffect", false);
                 Transform swingTrailObject = hammerSwingEffect.transform.Find("SwingTrail");
                 ParticleSystem.MainModule hammerSwingMain = swingTrailObject.GetComponent<ParticleSystem>().main;
-                // original size is (1.2, 1.2, 2.25)
+                // original radius is (1.2, 1.2, 2.25)
                 hammerSwingMain.startSizeXMultiplier = 1.4f;
                 hammerSwingMain.startSizeYMultiplier = 1.4f;
                 hammerSwingMain.startSizeZMultiplier = 3f;
@@ -102,14 +106,14 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
                 hammerSwingLargeEffect = PrefabAPI.InstantiateClone(hammerSwingEffect, "AmyRoseHammerSwingLargeEffect", false);
                 ParticleSystem.MainModule hammerSwingLargeMain = hammerSwingLargeEffect.transform.Find("SwingTrail").GetComponent<ParticleSystem>().main;
-                // original size is (1.2, 1.2, 2.25)
+                // original radius is (1.2, 1.2, 2.25)
                 hammerSwingLargeMain.startSizeXMultiplier = 1.8f;
                 hammerSwingLargeMain.startSizeYMultiplier = 1.8f;
                 hammerSwingLargeMain.startSizeZMultiplier = 4.5f;
 
                 hammerSwingSuperEffect = PrefabAPI.InstantiateClone(hammerSwingEffect, "AmyRoseHammerSwingSuperEffect", false);
                 ParticleSystem.MainModule hammerSwingSuperMain = hammerSwingSuperEffect.transform.Find("SwingTrail").GetComponent<ParticleSystem>().main;
-                // original size is (1.2, 1.2, 2.25)
+                // original radius is (1.2, 1.2, 2.25)
                 hammerSwingSuperMain.startSizeXMultiplier = 5f;
                 hammerSwingSuperMain.startSizeYMultiplier = 5f;
                 hammerSwingSuperMain.startSizeZMultiplier = 12f;
@@ -138,22 +142,50 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 multiLockHeartMaterial = new Material(x.Result);
                 multiLockHeartMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"));
                 multiLockHeartMaterial.SetFloat("_FresnelPower", -1f);
-                multiLockHeartMaterial.SetFloat("_AlphaBoost", 7.6f);
+                multiLockHeartMaterial.SetFloat("_AlphaBoost", 7.2f);
                 multiLockHeartMaterial.SetFloat("_AlphaBias", 0.5f);
             };
         }
 
-        private static void CreateBombExplosionEffect()
+        private static void CreateMultiLockExplosionEffect(AssetBundle assetBundle)
         {
-            bombExplosionEffect = _assetBundle.LoadEffect("BombExplosionEffect", "Play_amyrose_multilock_projectile_hit");
+            AsyncOperationHandle<GameObject> asyncMultiLockExplosion = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Vagrant/VagrantTrackingBombExplosion.prefab");
+            asyncMultiLockExplosion.Completed += delegate (AsyncOperationHandle<GameObject> x)
+            {
+                multiLockExplosionEffect = CreateMultiLockExplosion(x.Result, "AmyRoseMultiLockExplosionEffect", AmySurvivor.amyColor, new Color(1, 0, 0.5f), AmyStaticValues.specialMultiLockBlastRadius);
+                AddNewEffectDef(multiLockExplosionEffect, "Play_amyrose_multilock_projectile_hit");
+                superMultiLockExplosionEffect = CreateMultiLockExplosion(x.Result, "AmyRoseSuperMultiLockExplosionEffect", AmySurvivor.superAmyColor, new Color(1, 0.8f, 0.2f), AmyStaticValues.superSpecialMultiLockBlastRadius);
+                AddNewEffectDef(superMultiLockExplosionEffect, "Play_amyrose_multilock_projectile_hit");
 
-            if (!bombExplosionEffect)
-                return;
+                AsyncOperationHandle<Material> asyncMultiLockExplosionMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matJellyfishLightningSphere.mat");
+                asyncMultiLockExplosionMaterial.Completed += delegate (AsyncOperationHandle<Material> y)
+                {
+                    multiLockExplosionMaterial = new Material(y.Result);
+                    multiLockExplosionMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"));
 
-            ShakeEmitter shakeEmitter = bombExplosionEffect.AddComponent<ShakeEmitter>();
+                    multiLockExplosionEffect.transform.Find("Nova Sphere").GetComponent<ParticleSystemRenderer>().sharedMaterial = multiLockExplosionMaterial;
+
+                    superMultiLockExplosionMaterial = new Material(multiLockExplosionMaterial);
+                    superMultiLockExplosionMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmyEnergy")); // super ramp energy once that exists
+                    superMultiLockExplosionMaterial.SetFloat("_RimPower", 4f);
+
+                    superMultiLockExplosionEffect.transform.Find("Nova Sphere").GetComponent<ParticleSystemRenderer>().sharedMaterial = superMultiLockExplosionMaterial;
+                };
+            };
+
+        }
+
+        private static GameObject CreateMultiLockExplosion(GameObject original, string name, Color color1, Color color2, float radius)
+        {
+            GameObject prefab = PrefabAPI.InstantiateClone(original, name);
+            if (!prefab)
+                return prefab;
+            prefab.GetComponent<EffectComponent>().soundName = "";
+
+            ShakeEmitter shakeEmitter = prefab.GetComponent<ShakeEmitter>();
             shakeEmitter.amplitudeTimeDecay = true;
             shakeEmitter.duration = 0.2f;
-            shakeEmitter.radius = 100f;
+            shakeEmitter.radius = 50f;
             shakeEmitter.scaleShakeRadiusWithLocalScale = false;
 
             shakeEmitter.wave = new Wave
@@ -163,6 +195,23 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 cycleOffset = 0f
             };
 
+            GameObject.Destroy(prefab.transform.Find("Water, Billboard").gameObject);
+            GameObject.Destroy(prefab.transform.Find("Sparks").gameObject);
+            GameObject.Destroy(prefab.transform.Find("Lightning, Radial").gameObject);
+
+            var dashParticle = prefab.transform.Find("Dash, Bright").GetComponent<ParticleSystem>().main;
+            dashParticle.startColor = new ParticleSystem.MinMaxGradient { colorMin = color1, colorMax = color2 };
+
+            var flashClusterParticle = prefab.transform.Find("FlashCluster").GetComponent<ParticleSystem>().main;
+            flashClusterParticle.startColor = color1;
+
+            var light = prefab.transform.Find("Point Light").GetComponent<Light>();
+            light.intensity = 40f;
+            light.color = color1;
+
+            prefab.transform.localScale = Vector3.one * (radius / 4f);
+
+            return prefab;
         }
         #endregion effects
 
@@ -190,7 +239,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             multiLockExplosion.bonusBlastForce = Vector3.zero;
             multiLockExplosion.falloffModel = BlastAttack.FalloffModel.None;
             multiLockExplosion.lifetime = AmyStaticValues.specialMultiLockDetonationTime;
-            multiLockExplosion.impactEffect = bombExplosionEffect;
+            multiLockExplosion.impactEffect = multiLockExplosionEffect;
 
             ProjectileController multiLockController = multiLockProjectilePrefab.GetComponent<ProjectileController>();
 
@@ -199,7 +248,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 _assetBundle.LoadAsset<GameObject>("AmyRoseMultiLockHeartGhost").transform.Find("Mesh").GetComponent<Renderer>().sharedMaterial = multiLockHeartMaterial;
                 multiLockController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("AmyRoseMultiLockHeartGhost");
             }
-                multiLockController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("AmyRoseMultiLockHeartGhost");
             multiLockController.startSound = "Play_amyrose_multilock_projectile_spawn";
         }
 
@@ -209,9 +257,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             ProjectileImpactExplosion multiLockExplosion = superMultiLockProjectilePrefab.GetComponent<ProjectileImpactExplosion>();
             multiLockExplosion.blastRadius = AmyStaticValues.superSpecialMultiLockBlastRadius;
-            multiLockExplosion.impactEffect = bombExplosionEffect;
+            multiLockExplosion.impactEffect = superMultiLockExplosionEffect;
 
-            ProjectileController multiLockController = multiLockProjectilePrefab.GetComponent<ProjectileController>();
+            ProjectileController multiLockController = superMultiLockProjectilePrefab.GetComponent<ProjectileController>();
 
             if (_assetBundle.LoadAsset<GameObject>("AmyRoseMultiLockHeartGhost") != null)
                 multiLockController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("AmyRoseMultiLockHeartGhost");

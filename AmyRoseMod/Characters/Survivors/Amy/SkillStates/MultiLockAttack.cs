@@ -32,7 +32,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public Vector3 orbStartPosition;
 
-        public float orbSpeed = 90f;
+        public float orbSpeed = AmyStaticValues.specialMultiLockOrbSpeed;
 
         public float orbBounceRange;
 

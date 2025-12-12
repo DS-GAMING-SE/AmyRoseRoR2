@@ -125,7 +125,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public const float specialMultiLockDetonationTime = 1f;
 
-        public const float specialMultiLockOrbSpeed = 900f;
+        public const float specialMultiLockOrbSpeed = 90f;
 
         public const float specialMultiLockSearchRange = 47f;
 

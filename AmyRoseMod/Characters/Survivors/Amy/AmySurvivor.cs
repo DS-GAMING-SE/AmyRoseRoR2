@@ -13,6 +13,7 @@ using AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades;
 using HedgehogUtils.Forms;
 using HedgehogUtils;
 using HedgehogUtils.Forms.SuperForm;
+using EmotesAPI;
 
 namespace AmyRoseMod.Characters.Survivors.Amy
 {
@@ -46,7 +47,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             bodyNameToken = AMY_PREFIX + "NAME",
             subtitleNameToken = AMY_PREFIX + "SUBTITLE",
 
-            characterPortrait = assetBundle.LoadAsset<Texture>("texHenryIcon"),
+            characterPortrait = assetBundle.LoadAsset<Texture>("texAmyRoseIcon"),
             bodyColor = amyColor,
             sortPosition = 100,
 
@@ -129,7 +130,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             bodyPrefab.AddComponent<HedgehogUtils.Miscellaneous.MomentumPassive>();
             bodyPrefab.AddComponent<HedgehogUtils.Boost.BoostLogic>();
             bodyPrefab.AddComponent<HedgehogUtils.Miscellaneous.StayOnGround>();
-            //bodyPrefab.AddComponent<HuntressTrackerComopnent>();
+
+            GameObject emotePrefab = assetBundle.LoadAsset<GameObject>("EmoteAPIAmy");
+            CustomEmotesAPI.ImportArmature(bodyPrefab, emotePrefab);
+            //emotePrefab.GetComponentInChildren<BoneMapper>().scale = 0.76f;
             //anything else here
         }
 
