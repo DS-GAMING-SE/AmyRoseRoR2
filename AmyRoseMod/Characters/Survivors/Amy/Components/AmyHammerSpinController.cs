@@ -1,9 +1,12 @@
-﻿using RoR2;
-using UnityEngine;
-using R2API;
+﻿using R2API;
+using R2API.Networking;
+using R2API.Networking.Interfaces;
+using RoR2;
 using RoR2.Skills;
 using System.Runtime.InteropServices;
+using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UIElements;
 
 namespace AmyRoseMod.Characters.Survivors.Amy.Components
 {
@@ -80,6 +83,18 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
                 UpdateModelTransform();
             }
             lastPosition = modelParentTransform.position;
+        }
+
+        public void SetHighSpeed(bool newHighSpeed)
+        {
+            if (highSpeed != newHighSpeed)
+            {
+                highSpeed = newHighSpeed;
+                if (!NetworkServer.active)
+                {
+                    new NetworkHammerSpinSpeed(characterBody.netId, newHighSpeed).Send(NetworkDestination.Server);
+                }
+            }
         }
 
         private void UpdateModelTransform()
@@ -165,5 +180,46 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
         }
         #endregion
 
+    }
+    // I refuse to get weaver just for one damn bool
+    public class NetworkHammerSpinSpeed : INetMessage
+    {
+        NetworkInstanceId netId;
+        bool highSpeed;
+
+        public NetworkHammerSpinSpeed()
+        {
+
+        }
+
+        public NetworkHammerSpinSpeed(NetworkInstanceId netId, bool newHighSpeed)
+        {
+            this.netId = netId;
+            highSpeed = newHighSpeed;
+        }
+
+        public void Deserialize(NetworkReader reader)
+        {
+            netId = reader.ReadNetworkId();
+            highSpeed = reader.ReadBoolean();
+        }
+
+        public void OnReceived()
+        {
+            if (NetworkServer.active)
+            {
+                GameObject bodyObject = Util.FindNetworkObject(netId);
+                if (bodyObject && bodyObject.TryGetComponent<AmyHammerSpinController>(out var controller))
+                {
+                    controller.SetHighSpeed(highSpeed);
+                }
+            }
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            writer.Write(netId);
+            writer.Write(highSpeed);
+        }
     }
 }

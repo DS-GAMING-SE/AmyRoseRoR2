@@ -161,15 +161,20 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                     }
                 }
 
-                if (NetworkServer.active && buffStackTimer > 0)
+                if (buffStackTimer > 0)
                 {
-                    UpdateIsHighSpeed();
-
+                    if (base.isAuthority)
+                    {
+                        UpdateIsHighSpeed();
+                    }
                     buffStackTimer -= Time.fixedDeltaTime;
                     if (buffStackTimer <= 0)
                     {
                         buffStackTimer = buffsPerSecond;
-                        UpdateBuffs();
+                        if (NetworkServer.active)
+                        {
+                            UpdateBuffs();
+                        }
                     }
                 }
             }
@@ -227,7 +232,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         {
             Vector3 vel = hammerSpinController.estimatedVelocity;
             if (!base.characterMotor.isFlying) { vel.y = 0; }
-            hammerSpinController.highSpeed = vel.magnitude >= base.characterBody.moveSpeed * buffStackNeededSpeedPercent;
+            hammerSpinController.SetHighSpeed(vel.magnitude >= base.characterBody.moveSpeed * buffStackNeededSpeedPercent);
         }
 
         protected virtual void UpdateBuffs()

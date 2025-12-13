@@ -19,6 +19,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
 
         public static GameObject multiLockHeartPrefab;
         public const float circleRadius = 65;
+        // Look into component pool for multiLockHearts optimization
+        // Would probably require a separate component on Amy for storing the pool since the crosshair gets created and deleted too much, also a separate component for the hearts
+        // Use the ComponentPoolObject virtual methods to unparent/parent hearts to the crosshair when unpool/pool
         private void Awake()
         {
             hudElement = GetComponent<HudElement>();

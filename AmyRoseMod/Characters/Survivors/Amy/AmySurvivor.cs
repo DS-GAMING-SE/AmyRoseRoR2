@@ -1,19 +1,21 @@
-﻿using BepInEx.Configuration;
+﻿using AmyRoseMod.Characters.Survivors.Amy.Components;
+using AmyRoseMod.Characters.Survivors.Amy.Content;
+using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
+using AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades;
 using AmyRoseMod.Modules;
 using AmyRoseMod.Modules.Characters;
-using AmyRoseMod.Characters.Survivors.Amy.Components;
-using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
+using BepInEx.Configuration;
+using EmotesAPI;
+using HedgehogUtils;
+using HedgehogUtils.Forms;
+using HedgehogUtils.Forms.SuperForm;
+using R2API.Networking;
 using RoR2;
 using RoR2.Skills;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
-using AmyRoseMod.Characters.Survivors.Amy.Content;
-using AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades;
-using HedgehogUtils.Forms;
-using HedgehogUtils;
-using HedgehogUtils.Forms.SuperForm;
-using EmotesAPI;
 
 namespace AmyRoseMod.Characters.Survivors.Amy
 {
@@ -131,10 +133,20 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             bodyPrefab.AddComponent<HedgehogUtils.Boost.BoostLogic>();
             bodyPrefab.AddComponent<HedgehogUtils.Miscellaneous.StayOnGround>();
 
-            GameObject emotePrefab = assetBundle.LoadAsset<GameObject>("EmoteAPIAmy");
-            CustomEmotesAPI.ImportArmature(bodyPrefab, emotePrefab);
+            if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.weliveinasociety.CustomEmotesAPI"))
+            {
+                EmoteAPI();
+            }
+
+            NetworkingAPI.RegisterMessageType<NetworkHammerSpinSpeed>();
             //emotePrefab.GetComponentInChildren<BoneMapper>().scale = 0.76f;
             //anything else here
+        }
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+        private void EmoteAPI()
+        {
+            GameObject emotePrefab = assetBundle.LoadAsset<GameObject>("EmoteAPIAmy");
+            CustomEmotesAPI.ImportArmature(bodyPrefab, emotePrefab);
         }
 
         public void AddHitboxes()
