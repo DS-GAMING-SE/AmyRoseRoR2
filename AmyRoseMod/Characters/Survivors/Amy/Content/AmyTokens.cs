@@ -82,11 +82,20 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             #endregion
 
             #region Special
+            string multiLockDescription = $"Enter {Tokens.UtilityText("target painting mode")}, then bounce between targets dealing {Tokens.DamageValueText(AmyStaticValues.specialMultiLockDamageCoefficient)}. Can target up to {AmyStaticValues.specialMultiLockMaxTargets}.";
             Language.Add(prefix + "SPECIAL_MULTILOCK_NAME", "Multi-Lock");
-            Language.Add(prefix + "SPECIAL_MULTILOCK_DESCRIPTION", $"Enter {Tokens.UtilityText("target painting mode")}, then bounce between targets dealing {Tokens.DamageValueText(AmyStaticValues.specialMultiLockDamageCoefficient)}. Can target up to {AmyStaticValues.specialMultiLockMaxTargets}.");
-
+            Language.Add(prefix + "SPECIAL_MULTILOCK_DESCRIPTION", multiLockDescription);
+            string superMultiLockDescription = $"Enter {Tokens.UtilityText("target painting mode")}, then bounce between targets dealing {Tokens.DamageValueText(AmyStaticValues.specialMultiLockDamageCoefficient)} {HedgehogUtils.Helpers.SuperFormText("in a large area")}. Can target up to {HedgehogUtils.Helpers.SuperFormText(AmyStaticValues.superSpecialMultiLockMaxTargets.ToString())}.";
             Language.Add(prefix + "SUPER_SPECIAL_MULTILOCK_NAME", HedgehogUtils.Helpers.SuperFormText("Super Multi-Lock"));
-            Language.Add(prefix + "SUPER_SPECIAL_MULTILOCK_DESCRIPTION", $"Enter {Tokens.UtilityText("target painting mode")}, then bounce between targets dealing {Tokens.DamageValueText(AmyStaticValues.specialMultiLockDamageCoefficient)} {HedgehogUtils.Helpers.SuperFormText("in a large area")}. Can target up to {HedgehogUtils.Helpers.SuperFormText(AmyStaticValues.superSpecialMultiLockMaxTargets.ToString())}.");
+            Language.Add(prefix + "SUPER_SPECIAL_MULTILOCK_DESCRIPTION", superMultiLockDescription);
+            #region Ancient Scepter
+            string scepterDescription = Tokens.ScepterDescription($"Kills grant a stacking buff for {AmyStaticValues.scepterSpecialMultiLockBuffAttackSpeedPerStack * 100f}% attack speed.");
+            Language.Add(prefix + "SCEPTER_SPECIAL_MULTILOCK_NAME", $"Scepter Multi-Lock {Tokens.wipIcon}");
+            Language.Add(prefix + "SCEPTER_SPECIAL_MULTILOCK_DESCRIPTION", $"{multiLockDescription}{scepterDescription}");
+
+            Language.Add(prefix + "SCEPTER_SUPER_SPECIAL_MULTILOCK_NAME", $"{HedgehogUtils.Helpers.SuperFormText("Scepter Super Multi-Lock")}{Tokens.wipIcon}");
+            Language.Add(prefix + "SCEPTER_SUPER_SPECIAL_MULTILOCK_DESCRIPTION", $"{superMultiLockDescription}{scepterDescription}");
+            #endregion
             #endregion
 
             #region Achievements

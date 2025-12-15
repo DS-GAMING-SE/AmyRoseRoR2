@@ -20,6 +20,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
 {
     public class SuperMultiLockAttack : MultiLockAttack
     {
+        public override Type nextStateType { get { return typeof(SuperMultiLockEnd); } }
         public override void OnEnter()
         {
             base.OnEnter();
@@ -32,25 +33,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
             orb = AmyOrbs.CreateMultiLockOrb<AmyOrbs.MultiLockOrb>(AmyStaticValues.specialMultiLockDamageCoefficient * damageStat, base.gameObject, this.outer, Util.CheckRoll(this.critStat, base.characterBody.master), 
                 AmyAssets.superMultiLockProjectilePrefab, orbSpeed, orbStartPosition, target, OrbStorageUtility.Get("Prefabs/Effects/OrbEffects/HuntressGlaiveOrbEffect"));
             OrbManager.instance.AddOrb(orb);
-        }
-
-        public override void SetNextStateToOrb()
-        {
-            MultiLockAttack nextState = (MultiLockAttack)EntityStateCatalog.InstantiateState(typeof(SuperMultiLockAttack));
-            nextState.firstAttack = false;
-            nextState.orbStartPosition = targetLastPosition;
-            nextState.target = targets[0];
-            nextState.targets = targets;
-            nextState.orbBounceRange = orbBounceRange;
-            nextState.orbSpeed = orbSpeed;
-            this.outer.SetNextState(nextState);
-        }
-
-        public override void SetNextStateToEnd()
-        {
-            MultiLockEnd nextState = (MultiLockEnd)EntityStateCatalog.InstantiateState(typeof(SuperMultiLockEnd));
-            nextState.teleportPosition = targetLastPosition;
-            this.outer.SetNextState(nextState);
         }
     }
 }

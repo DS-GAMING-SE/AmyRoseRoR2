@@ -137,6 +137,18 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public const float specialMultiLockEndLingeringInvincibilityDuration = 0.4f;
 
+        #region Scepter Multi-Lock
+
+        public const int scepterSpecialMultiLockBuffMaxStack = 5;
+
+        public const float scepterSpecialMultiLockBuffDuration = 8f;
+
+        public const int scepterSuperSpecialMultiLockBuffMaxStack = 10;
+
+        public const float scepterSpecialMultiLockBuffAttackSpeedPerStack = 0.08f;
+
+        #endregion
+
         #region Super Special Multi-Lock
 
         public const float superSpecialMultiLockBlastRadius = 8f;

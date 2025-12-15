@@ -21,6 +21,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public static BuffDef hammerSpinSpeedBuff;
 
+        public static BuffDef scepterMultiLockBuff;
+
         public static void Init(AssetBundle assetBundle)
         {
             boostBuff = Modules.Content.CreateAndAddBuff("bdAmyRoseBoost",
@@ -46,6 +48,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 true,
                 false, false, BuffDef.StackingDisplayMethod.Percentage);
 
+            scepterMultiLockBuff = Modules.Content.CreateAndAddBuff("bdAmyRoseScepterMultiLock",
+                LegacyResourcesAPI.Load<BuffDef>("BuffDefs/CloakSpeed").iconSprite,
+                AmySurvivor.amyColor,
+                true,
+                false);
+
             if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(LookingGlass.PluginInfo.PLUGIN_GUID))
             {
                 RoR2Application.onLoad += LookingGlassSetup;
@@ -60,6 +68,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 RegisterLookingGlassBuff(en, superBoostBuff, "Amy Super Boost", $"Gain <style=cIsDamage>+{AmyStaticValues.boostArmor} armor</style>. Gain <style=cIsUtility>+{AmyStaticValues.superBoostListedSpeedCoefficient * 100}% movement speed</style>.");
                 RegisterLookingGlassBuff(en, hammerSmashSpeedBuff, "Amy Rebound", $"Gain <style=cIsUtility>+{AmyStaticValues.secondaryHammerAirJumpBuffSpeedCoefficient * 100f}% movement speed</style>.");
                 RegisterLookingGlassBuff(en, hammerSpinSpeedBuff, "Amy Hammer Spin", $"Gain <style=cIsUtility>+{AmyStaticValues.boostHammerSpinBuffMaxSpeedCoefficient * 100f}% movement speed</style>. Reduce {Tokens.RedText("acceleration")}. Increase hammer-spin {Tokens.DamageText("damage")}. Reduce hammer-spin {Tokens.RedText("attack speed")}.");
+                RegisterLookingGlassBuff(en, scepterMultiLockBuff, "Amy Scepter Multi-Lock Kill", $"Gain <style=cIsDamage>+{AmyStaticValues.scepterSpecialMultiLockBuffAttackSpeedPerStack * 100f}% attack speed</style>.");
             }
         }
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]

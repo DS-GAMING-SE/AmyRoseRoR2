@@ -43,7 +43,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         protected CharacterModel characterModel;
 
         public MultiLockCameraProvider camera;
-        
+
+        public virtual Type nextStateType { get { return typeof(MultiLockEnd); } }
+
         public override void OnEnter()
         {
             base.OnEnter();
@@ -160,7 +162,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public virtual void SetNextStateToOrb()
         {
-            MultiLockAttack nextState = (MultiLockAttack)EntityStateCatalog.InstantiateState(typeof(MultiLockAttack));
+            MultiLockAttack nextState = (MultiLockAttack)EntityStateCatalog.InstantiateState(this.GetType());
             nextState.firstAttack = false;
             nextState.orbStartPosition = targetLastPosition;
             nextState.target = targets[0];
@@ -172,7 +174,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public virtual void SetNextStateToEnd()
         {
-            MultiLockEnd nextState = (MultiLockEnd)EntityStateCatalog.InstantiateState(typeof(MultiLockEnd));
+            MultiLockEnd nextState = (MultiLockEnd)EntityStateCatalog.InstantiateState(nextStateType);
             nextState.teleportPosition = targetLastPosition;
             this.outer.SetNextState(nextState);
         }

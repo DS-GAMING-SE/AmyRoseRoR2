@@ -102,5 +102,31 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Content
                 return target.transform.position + (Vector3.up * target.collider.bounds.extents.y * 1.2f);
             }
         }
+
+        public class MultiLockScepterBuffOrb : Orb
+        {
+            public int buffMaxStacks = AmyStaticValues.scepterSpecialMultiLockBuffMaxStack;
+            
+            private CharacterBody targetBody;
+            public override void Begin()
+            {
+                base.duration = 0.4f;
+                EffectData effectData = new EffectData
+                {
+                    origin = this.origin,
+                    genericFloat = base.duration
+                };
+                effectData.SetHurtBoxReference(this.target);
+                EffectManager.SpawnEffect(OrbStorageUtility.Get("Prefabs/Effects/OrbEffects/HealthOrbEffect"), effectData, true);
+                targetBody = target.healthComponent ? target.healthComponent.body : null;
+            }
+            public override void OnArrival()
+            {
+                if (targetBody)
+                {
+                    targetBody.AddTimedBuff(AmyBuffs.scepterMultiLockBuff, AmyStaticValues.scepterSpecialMultiLockBuffDuration, buffMaxStacks);
+                }
+            }
+        }
     }
 }

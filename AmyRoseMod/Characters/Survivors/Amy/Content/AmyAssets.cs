@@ -5,6 +5,7 @@ using RoR2;
 using RoR2.Audio;
 using RoR2.Projectile;
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
@@ -45,6 +46,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         //projectiles
         public static GameObject multiLockProjectilePrefab;
         public static GameObject superMultiLockProjectilePrefab;
+
+        public static GameObject scepterMultiLockProjectilePrefab;
+        public static GameObject scepterSuperMultiLockProjectilePrefab;
 
         private static AssetBundle _assetBundle;
 
@@ -222,6 +226,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             CreateSuperMultiLockProjectile();
 			Modules.Content.AddProjectilePrefab(multiLockProjectilePrefab);
             Modules.Content.AddProjectilePrefab(superMultiLockProjectilePrefab);
+
+            if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.DestroyedClone.AncientScepter"))
+            {
+                CreateScepterMultiLockProjectiles();
+            }
         }
 
         private static void CreateMultiLockProjectile()
@@ -263,6 +272,19 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             if (_assetBundle.LoadAsset<GameObject>("AmyRoseMultiLockHeartGhost") != null)
                 multiLockController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("AmyRoseMultiLockHeartGhost");
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+        private static void CreateScepterMultiLockProjectiles()
+        {
+            scepterMultiLockProjectilePrefab = PrefabAPI.InstantiateClone(multiLockProjectilePrefab, "AmyRoseScepterMultiLockProjectile");
+            scepterMultiLockProjectilePrefab.AddComponent<ScepterBuffOrbOnKill>();
+
+            scepterSuperMultiLockProjectilePrefab = PrefabAPI.InstantiateClone(superMultiLockProjectilePrefab, "AmyRoseScepterSuperMultiLockProjectile");
+            scepterSuperMultiLockProjectilePrefab.AddComponent<ScepterBuffOrbOnKill>().buffMaxStacks = AmyStaticValues.scepterSuperSpecialMultiLockBuffMaxStack;
+
+            Modules.Content.AddProjectilePrefab(scepterMultiLockProjectilePrefab);
+            Modules.Content.AddProjectilePrefab(scepterSuperMultiLockProjectilePrefab);
         }
         #endregion projectiles
 

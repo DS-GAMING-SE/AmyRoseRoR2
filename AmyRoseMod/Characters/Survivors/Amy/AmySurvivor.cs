@@ -4,6 +4,7 @@ using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
 using AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades;
 using AmyRoseMod.Modules;
 using AmyRoseMod.Modules.Characters;
+using AncientScepter;
 using BepInEx.Configuration;
 using EmotesAPI;
 using HedgehogUtils;
@@ -16,6 +17,8 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using static HedgehogUtils.Boost.SkillDefs;
+using static RoR2.TeleporterInteraction;
 
 namespace AmyRoseMod.Characters.Survivors.Amy
 {
@@ -249,6 +252,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         public static SkillDef utilityBoostHammerSpin;
         public static SkillDef specialMultilock;
 
+        public static SkillDef scepterSpecialMultiLock;
+
         //if this is your first look at skilldef creation, take a look at Secondary first
         private void AddPrimarySkills()
         {
@@ -458,9 +463,38 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             AmySuperFormComponent.superSpecialMultiLock.skillDescriptionToken = AMY_PREFIX + "SUPER_SPECIAL_MULTILOCK_DESCRIPTION";
             AmySuperFormComponent.superSpecialMultiLock.activationState = new EntityStates.SerializableEntityStateType(typeof(SuperMultiLockTargeting));
             AmySuperFormComponent.superSpecialMultiLock.requiredForm = SuperFormDef.superFormDef;
+
+            if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.DestroyedClone.AncientScepter"))
+            {
+                AddScepterSkills();
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+        private void AddScepterSkills()
+        {
+            scepterSpecialMultiLock = HedgehogUtils.Helpers.CopySkillDef<SkillDef>(specialMultilock);
+            scepterSpecialMultiLock.skillNameToken = AMY_PREFIX + "SCEPTER_SPECIAL_MULTILOCK_NAME";
+            scepterSpecialMultiLock.skillDescriptionToken = AMY_PREFIX + "SCEPTER_SPECIAL_MULTILOCK_DESCRIPTION";
+            scepterSpecialMultiLock.icon = assetBundle.LoadAsset<Sprite>("texSpecialMultiLockIcon");
+
+            scepterSpecialMultiLock.activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ScepterUpgrades.ScepterMultiLockTargeting));
+            
+            ItemBase<AncientScepterItem>.instance.RegisterScepterSkill(scepterSpecialMultiLock, "AmyRoseBody", specialMultilock);
+
+            AmySuperFormComponent.scepterSuperSpecialMultiLock = HedgehogUtils.Helpers.CopySkillDef<HedgehogUtils.Forms.SkillDefs.RequiresFormSkillDef>(AmySuperFormComponent.superSpecialMultiLock);
+            AmySuperFormComponent.scepterSuperSpecialMultiLock.requiredForm = SuperFormDef.superFormDef;
+            AmySuperFormComponent.scepterSuperSpecialMultiLock.skillNameToken = AMY_PREFIX + "SCEPTER_SUPER_SPECIAL_MULTILOCK_NAME";
+            AmySuperFormComponent.scepterSuperSpecialMultiLock.skillDescriptionToken = AMY_PREFIX + "SCEPTER_SUPER_SPECIAL_MULTILOCK_DESCRIPTION";
+            AmySuperFormComponent.scepterSuperSpecialMultiLock.icon = assetBundle.LoadAsset<Sprite>("texSuperSpecialMultiLockIcon");
+
+            AmySuperFormComponent.scepterSuperSpecialMultiLock.activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ScepterUpgrades.ScepterSuperMultiLockTargeting));
+
+            ItemBase<AncientScepterItem>.instance.RegisterScepterSkill(AmySuperFormComponent.scepterSuperSpecialMultiLock, "AmyRoseBody", AmySuperFormComponent.superSpecialMultiLock);
+
         }
         #endregion skills
-        
+
         #region skins
         public override void InitializeSkins()
         {

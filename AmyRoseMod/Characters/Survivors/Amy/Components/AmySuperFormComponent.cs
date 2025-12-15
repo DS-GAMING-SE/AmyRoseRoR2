@@ -15,6 +15,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
         public static SkillDefs.RequiresFormSkillDef superSecondarySmash;
         public static AmySkillDefs.AmyRequiresFormBoostSkillDef superUtilityBoost;
         public static SkillDefs.RequiresFormSkillDef superSpecialMultiLock;
+        public static SkillDefs.RequiresFormSkillDef scepterSuperSpecialMultiLock;
 
         private void Awake()
         {

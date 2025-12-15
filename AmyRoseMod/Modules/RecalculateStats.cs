@@ -39,6 +39,11 @@ namespace AmyRoseMod.Modules
                 {
                     stats.moveSpeedMultAdd += ((((float)self.GetBuffCount(AmyBuffs.hammerSpinSpeedBuff)) - AmyStaticValues.boostHammerSpinBuffPercentPerEffectiveStack) / 80f) * AmyStaticValues.boostHammerSpinBuffMaxSpeedCoefficient;
                 }
+
+                if (self.HasBuff(AmyBuffs.scepterMultiLockBuff))
+                {
+                    stats.attackSpeedMultAdd += self.GetBuffCount(AmyBuffs.scepterMultiLockBuff) * AmyStaticValues.scepterSpecialMultiLockBuffAttackSpeedPerStack;
+                }
             }
         }
         private static void RecalcStatAPIDoesntHaveAcceleration(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)

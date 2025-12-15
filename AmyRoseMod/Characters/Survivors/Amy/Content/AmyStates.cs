@@ -1,5 +1,6 @@
 ﻿using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
 using AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades;
+using AmyRoseMod.Characters.Survivors.Amy.SkillStates.ScepterUpgrades;
 
 namespace AmyRoseMod.Characters.Survivors.Amy
 {
@@ -41,6 +42,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             Modules.Content.AddEntityState(typeof(SuperMultiLockTargeting));
             Modules.Content.AddEntityState(typeof(SuperMultiLockAttack));
             Modules.Content.AddEntityState(typeof(SuperMultiLockEnd));
+
+            Modules.Content.AddEntityState(typeof(ScepterMultiLockTargeting));
+            Modules.Content.AddEntityState(typeof(ScepterMultiLockAttack));
+            Modules.Content.AddEntityState(typeof(ScepterSuperMultiLockTargeting));
+            Modules.Content.AddEntityState(typeof(ScepterSuperMultiLockAttack));
         }
     }
 }

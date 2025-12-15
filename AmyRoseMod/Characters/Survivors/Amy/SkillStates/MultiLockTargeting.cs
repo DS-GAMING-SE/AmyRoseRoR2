@@ -31,7 +31,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected CrosshairUtils.OverrideRequest crosshair;
 
-        
+        public virtual Type nextStateType { get { return typeof(MultiLockAttack); } }
+
+
         public override void OnEnter()
         {
             base.OnEnter();
@@ -173,7 +175,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             EntityStateMachine body = EntityStateMachine.FindByCustomName(base.gameObject, "Body");
             if (body)
             {
-                MultiLockAttack state = (MultiLockAttack)EntityStateCatalog.InstantiateState(typeof(MultiLockAttack));
+                MultiLockAttack state = (MultiLockAttack)EntityStateCatalog.InstantiateState(nextStateType);
                 state.target = targetHurtBoxes[0];
                 state.targets = targetHurtBoxes;
                 state.orbStartPosition = base.transform.position;

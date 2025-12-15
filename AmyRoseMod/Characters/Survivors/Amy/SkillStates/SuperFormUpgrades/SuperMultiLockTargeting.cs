@@ -13,6 +13,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
 {
     public class SuperMultiLockTargeting : MultiLockTargeting
     {
+        public override Type nextStateType { get { return typeof(SuperMultiLockAttack); } }
         public override void PrepareStatsStart()
         {
             maxTargets = AmyStaticValues.superSpecialMultiLockMaxTargets;
@@ -22,22 +23,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
         {
             orbBounceRange = AmyStaticValues.superSpecialMultiLockBounceRange;
             this.search.maxDistanceFilter = AmyStaticValues.superSpecialMultiLockSearchRange;
-        }
-
-        public override void SetNextStateToAttack()
-        {
-            this.outer.SetNextStateToMain();
-            EntityStateMachine body = EntityStateMachine.FindByCustomName(base.gameObject, "Body");
-            if (body)
-            {
-                MultiLockAttack state = (MultiLockAttack)EntityStateCatalog.InstantiateState(typeof(SuperMultiLockAttack));
-                state.target = targetHurtBoxes[0];
-                state.targets = targetHurtBoxes;
-                state.orbStartPosition = base.transform.position;
-                state.firstAttack = true;
-                state.orbBounceRange = this.orbBounceRange;
-                body.SetNextState(state);
-            }
         }
     }
 }
