@@ -14,7 +14,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
     public class MultiLockTargeting : BaseState
     {
-        public List<Target> targets;
+        public List<Indicator> targets;
         public List<HurtBox> targetHurtBoxes;
 
         public BullseyeSearch search;
@@ -41,7 +41,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             if (base.isAuthority)
             {
                 crosshair = CrosshairUtils.RequestOverrideForBody(characterBody, AmyAssets.multiLockCrosshair, CrosshairUtils.OverridePriority.PrioritySkill);
-                targets = new List<Target>();
+                targets = new List<Indicator>();
                 targetHurtBoxes = new List<HurtBox>();
                 PrepareSearch();
             }
@@ -79,7 +79,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             {
                 foreach (var target in targets)
                 {
-                    target.indicator.active = false;
+                    target.active = false;
                 }
                 crosshair.Dispose();
             }
@@ -149,24 +149,21 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public virtual void AddTarget(HurtBox target)
         {
-            Target targetIndicator = new Target();
-            targetIndicator.number = this.targets.Count;
-            targetIndicator.indicator = new Indicator(base.gameObject, LegacyResourcesAPI.Load<GameObject>("Prefabs/EngiMissileTrackingIndicator"));
-            targetIndicator.indicator.targetTransform = target.transform;
-            targetIndicator.indicator.active = true;
+            Indicator targetIndicator = new Indicator(base.gameObject, LegacyResourcesAPI.Load<GameObject>("Prefabs/EngiMissileTrackingIndicator"));
+            targetIndicator.targetTransform = target.transform;
+            targetIndicator.active = true;
             this.targets.Add(targetIndicator);
             this.targetHurtBoxes.Add(target);
             OnTargetsChanged?.Invoke(targets.Count);
-            Util.PlaySound("Play_amyrose_multilock_lockon", base.gameObject);
+            Util.PlaySound("Play_hedgehogutils_lockon", base.gameObject);
         }
 
         public virtual void RemoveTarget(int index)
         {
-            targets[index].indicator.active = false;
+            targets[index].active = false;
             targets.RemoveAt(index);
             targetHurtBoxes.RemoveAt(index);
             OnTargetsChanged?.Invoke(targets.Count);
-            // update target.number
         }
 
         public virtual void SetNextStateToAttack()
@@ -189,12 +186,5 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         {
             return InterruptPriority.Skill;
         }
-    }
-
-    public struct Target
-    {
-        public Indicator indicator;
-
-        public int number;
     }
 }

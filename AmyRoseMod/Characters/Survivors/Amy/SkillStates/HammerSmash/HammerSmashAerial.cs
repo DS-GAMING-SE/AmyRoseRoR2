@@ -136,6 +136,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public override void OnExit()
         {
+            if (!hasJumped && animator)
+            {
+                animator.SetFloat("Slash.playbackRate", cachedAnimationDuration);
+            }
             base.OnExit();
         }
 

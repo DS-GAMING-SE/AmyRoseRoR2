@@ -2,7 +2,7 @@
 
 namespace AmyRoseMod.Characters.Survivors.Amy.Components
 {
-    internal class AmyComponent : MonoBehaviour
+    public class AmyComponent : MonoBehaviour
     {
         private void Awake()
         {

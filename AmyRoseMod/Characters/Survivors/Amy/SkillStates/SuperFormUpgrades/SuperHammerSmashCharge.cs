@@ -34,5 +34,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
                 this.outer.SetNextState(state);
             }
         }
+        protected override void ReachedMaxCharge()
+        {
+            EffectManager.SimpleMuzzleFlash(AmyAssets.superSecondaryChargedEffect, base.gameObject, "Head", false);
+            Util.PlaySound("Play_amyrose_hammer_smash_charged", base.gameObject);
+        }
     }
 }

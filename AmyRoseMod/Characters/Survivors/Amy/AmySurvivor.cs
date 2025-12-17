@@ -35,7 +35,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         //the names of the prefabs you set up in unity that we will use to build your character
         public override string modelPrefabName => "mdlAmy";
-        public override string displayPrefabName => "HenryDisplay";
+        public override string displayPrefabName => "AmyDisplay";
 
         public const string AMY_PREFIX = AmyPlugin.DEVELOPER_PREFIX + "_AMY_ROSE_";
 
@@ -142,8 +142,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             }
 
             NetworkingAPI.RegisterMessageType<NetworkHammerSpinSpeed>();
-            //emotePrefab.GetComponentInChildren<BoneMapper>().scale = 0.76f;
-            //anything else here
+
+            displayPrefab.AddComponent<AmyDisplaySound>();
         }
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
         private void EmoteAPI()
@@ -476,7 +476,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             scepterSpecialMultiLock = HedgehogUtils.Helpers.CopySkillDef<SkillDef>(specialMultilock);
             scepterSpecialMultiLock.skillNameToken = AMY_PREFIX + "SCEPTER_SPECIAL_MULTILOCK_NAME";
             scepterSpecialMultiLock.skillDescriptionToken = AMY_PREFIX + "SCEPTER_SPECIAL_MULTILOCK_DESCRIPTION";
-            scepterSpecialMultiLock.icon = assetBundle.LoadAsset<Sprite>("texSpecialMultiLockIcon");
+            scepterSpecialMultiLock.icon = assetBundle.LoadAsset<Sprite>("texScepterSpecialMultiLockIcon");
 
             scepterSpecialMultiLock.activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ScepterUpgrades.ScepterMultiLockTargeting));
             

@@ -34,7 +34,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         }
         protected virtual void PlayAnimation()
         {
-            PlayAnimation("FullBody, Override", "HammerSpinEnd", "Slash.playbackRate", duration);
+            PlayAnimation("FullBody, Override", "HammerSpinEnd", "Slash.playbackRate", duration * 0.8f);
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()

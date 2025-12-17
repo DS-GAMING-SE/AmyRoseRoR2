@@ -22,7 +22,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         public static GameObject hammerSwingLargeEffect;
         public static GameObject hammerSwingSuperEffect;
         public static GameObject swordSwingEffect;
-        public static GameObject swordHitImpactEffect;
+        public static GameObject hammerHitImpactEffect;
+
+        public static GameObject secondaryChargedEffect;
+        public static GameObject superSecondaryChargedEffect;
 
         public static GameObject multiLockExplosionEffect;
         public static GameObject superMultiLockExplosionEffect;
@@ -32,6 +35,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         // materials
         public static Material hammerSwingMaterial;
+        public static Material heartImpactMaterial;
 
         public static Material multiLockHeartMaterial;
 
@@ -68,6 +72,17 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             CreateEffects(assetBundle);
 
             CreateProjectiles();
+
+            AsyncOperationHandle<Material> asyncSparkleMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matWideGlow.mat");
+            asyncSparkleMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
+            {
+                _assetBundle.LoadAsset<GameObject>("AmyRoseMultiLockHeartGhost").transform.Find("MultiLockHeartSparkles").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
+                _assetBundle.LoadAsset<GameObject>("AmyRoseSuperMultiLockHeartGhost").transform.Find("MultiLockHeartSparkles").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
+                secondaryChargedEffect = _assetBundle.LoadEffect("AmySecondaryChargedEffect", true, 0.3f);
+                secondaryChargedEffect.GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
+                superSecondaryChargedEffect = _assetBundle.LoadEffect("AmySuperSecondaryChargedEffect", true, 0.3f);
+                superSecondaryChargedEffect.GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
+            };
         }
 
         private static void CreateMultiLockCrosshair(AssetBundle assetBundle)
@@ -130,8 +145,21 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 hammerSwingSuperBlurMain.startDelay = 0.2f;
             };
 
-            swordSwingEffect = _assetBundle.LoadEffect("HenrySwordSwingEffect", true);
-            swordHitImpactEffect = _assetBundle.LoadEffect("ImpactHenrySlash");
+            hammerHitImpactEffect = _assetBundle.LoadEffect("AmyHammerHitEffect", false, 0);
+            hammerHitImpactEffect.AddComponent<DestroyOnParticleEnd>().trackedParticleSystem = hammerHitImpactEffect.transform.Find("HammerHitHeartImpact").GetComponent<ParticleSystem>();
+            AsyncOperationHandle<Material> asyncTracerMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matTracerBright.mat");
+            asyncTracerMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
+            {
+                hammerHitImpactEffect.transform.Find("HammerHitSparks").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
+            };
+            AsyncOperationHandle<Material> asyncHeartImpactMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matOmniRing1Generic.mat");
+            asyncHeartImpactMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
+            {
+                heartImpactMaterial = new Material(x.Result);
+                heartImpactMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"));
+                heartImpactMaterial.SetTexture("_MainTex", assetBundle.LoadAsset<Texture>("texAmyVFXHeartImpact"));
+                hammerHitImpactEffect.transform.Find("HammerHitHeartImpact").GetComponent<ParticleSystemRenderer>().sharedMaterial = heartImpactMaterial;
+            };
 
             amyBoostFlashEffect = HedgehogUtils.Assets.CreateNewBoostFlash("AmyBoostFlash", 1, 1f,
                 new Color(1, 1, 1), AmySurvivor.amyColor, new Color(0.5f, 0.07f, 0.3f), AmySurvivor.amyColor);
@@ -270,8 +298,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             ProjectileController multiLockController = superMultiLockProjectilePrefab.GetComponent<ProjectileController>();
 
-            if (_assetBundle.LoadAsset<GameObject>("AmyRoseMultiLockHeartGhost") != null)
-                multiLockController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("AmyRoseMultiLockHeartGhost");
+            if (_assetBundle.LoadAsset<GameObject>("AmyRoseSuperMultiLockHeartGhost"))
+            {
+                _assetBundle.LoadAsset<GameObject>("AmyRoseSuperMultiLockHeartGhost").transform.Find("Mesh").GetComponent<Renderer>().sharedMaterial = multiLockHeartMaterial;
+                multiLockController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("AmyRoseSuperMultiLockHeartGhost");
+            }
         }
 
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]

@@ -49,8 +49,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 false, false, BuffDef.StackingDisplayMethod.Percentage);
 
             scepterMultiLockBuff = Modules.Content.CreateAndAddBuff("bdAmyRoseScepterMultiLock",
-                LegacyResourcesAPI.Load<BuffDef>("BuffDefs/CloakSpeed").iconSprite,
-                AmySurvivor.amyColor,
+                assetBundle.LoadAsset<Sprite>("texScepterBuffIcon"),
+                Color.white,
                 true,
                 false);
 

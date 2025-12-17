@@ -21,7 +21,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             muzzleString = "LargeSwingDown";
             playbackRateParam = "Slash.playbackRate";
             swingEffectPrefab = AmyAssets.hammerSwingLargeEffect;
-            hitEffectPrefab = AmyAssets.swordHitImpactEffect;
+            hitEffectPrefab = AmyAssets.hammerHitImpactEffect;
 
             impactSound = AmyAssets.hammerHitSoundEvent.index;
 

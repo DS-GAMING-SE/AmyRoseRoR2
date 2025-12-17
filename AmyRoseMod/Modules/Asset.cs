@@ -97,9 +97,9 @@ namespace AmyRoseMod.Modules
 
             return loadedCrosshair;
         }
-        internal static GameObject LoadEffect(this AssetBundle assetBundle, string resourceName, bool parentToTransform, bool destroyOnTimer) => LoadEffect(assetBundle, resourceName, "", parentToTransform, destroyOnTimer);
-        internal static GameObject LoadEffect(this AssetBundle assetBundle, string resourceName, bool parentToTransform) => LoadEffect(assetBundle, resourceName, "", parentToTransform, true);
-        internal static GameObject LoadEffect(this AssetBundle assetBundle, string resourceName, string soundName = "", bool parentToTransform = false, bool destroyOnTimer = true)
+        internal static GameObject LoadEffect(this AssetBundle assetBundle, string resourceName, bool parentToTransform, float destroyTimer) => LoadEffect(assetBundle, resourceName, "", parentToTransform, destroyTimer);
+        internal static GameObject LoadEffect(this AssetBundle assetBundle, string resourceName, bool parentToTransform) => LoadEffect(assetBundle, resourceName, "", parentToTransform, 12f);
+        internal static GameObject LoadEffect(this AssetBundle assetBundle, string resourceName, string soundName = "", bool parentToTransform = false, float destroyTimer = 12f)
         {
             GameObject newEffect = assetBundle.LoadAsset<GameObject>(resourceName);
 
@@ -109,7 +109,7 @@ namespace AmyRoseMod.Modules
                 return null;
             }
 
-            if (destroyOnTimer) { newEffect.AddComponent<DestroyOnTimer>().duration = 12; }
+            if (destroyTimer > 0) { newEffect.AddComponent<DestroyOnTimer>().duration = destroyTimer; }
             newEffect.AddComponent<NetworkIdentity>();
             newEffect.AddComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
             EffectComponent effect = newEffect.AddComponent<EffectComponent>();

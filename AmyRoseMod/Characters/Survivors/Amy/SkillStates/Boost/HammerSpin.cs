@@ -76,7 +76,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             animator = GetModelAnimator();
             playbackRateParam = "Slash.playbackRate";
             swingEffectPrefab = AmyAssets.swordSwingEffect;
-            hitEffectPrefab = AmyAssets.swordHitImpactEffect;
+            hitEffectPrefab = AmyAssets.hammerHitImpactEffect;
             PlayAnimation("FullBody, Override", "HammerSpin");
 
             impactSound = AmyAssets.hammerHitSoundEvent.index;
@@ -181,7 +181,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             else
             {
                 if (characterMotor) characterMotor.velocity = Vector3.zero;
-                if (animator) animator.SetFloat(playbackRateParam, 0f);
+                if (animator) animator.SetFloat(playbackRateParam, 0.1f);
             }
 
             if (base.characterMotor && !base.characterMotor.isFlying)
@@ -200,8 +200,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             if (base.isAuthority)
             {
                 UpdateOverlapStats();
+                FireAttack();
             }
-            FireAttack();
 
             if (stopwatch >= minDuration && isAuthority && ((!inputBank || !boostLogic || !inputBank.skill1.down)))
             {
@@ -369,10 +369,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             PlayAnimation("FullBody, Override", "BufferEmpty");
             boostLogic.boostDraining = false;
             boostLogic.boostBeingUsed = false;
-            if (hammerSpinController) 
-            { 
-                hammerSpinController.DeactivateSpin();
-            }
+            hammerSpinController.DeactivateSpin();
+            hammerSpinController.leanFrozen = false;
             if (NetworkServer.active)
             {
                 base.characterBody.RemoveBuff(boostBuff);
