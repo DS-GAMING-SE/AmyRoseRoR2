@@ -33,9 +33,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         public static GameObject amyBoostFlashEffect;
         public static GameObject amyBoostAuraEffect;
 
+        public static GameObject multiLockEndEffect;
+
         // materials
         public static Material hammerSwingMaterial;
         public static Material heartImpactMaterial;
+        public static Material heartMaterial;
 
         public static Material multiLockHeartMaterial;
 
@@ -78,10 +81,13 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             {
                 _assetBundle.LoadAsset<GameObject>("AmyRoseMultiLockHeartGhost").transform.Find("MultiLockHeartSparkles").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
                 _assetBundle.LoadAsset<GameObject>("AmyRoseSuperMultiLockHeartGhost").transform.Find("MultiLockHeartSparkles").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
+                
                 secondaryChargedEffect = _assetBundle.LoadEffect("AmySecondaryChargedEffect", true, 0.3f);
                 secondaryChargedEffect.GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
                 superSecondaryChargedEffect = _assetBundle.LoadEffect("AmySuperSecondaryChargedEffect", true, 0.3f);
                 superSecondaryChargedEffect.GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
+
+                multiLockEndEffect.transform.Find("AmyMultiLockEndSparkles").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
             };
         }
 
@@ -101,6 +107,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         {
             CreateMultiLockExplosionEffect(assetBundle);
 
+            multiLockEndEffect = assetBundle.LoadEffect("AmyMultiLockEndEffect", true, 1f);
+            var multiLockEndVFXAttributes = multiLockEndEffect.GetComponent<VFXAttributes>();
+            multiLockEndVFXAttributes.secondaryParticleSystem = new ParticleSystem[]{ multiLockEndEffect.transform.Find("AmyMultiLockEndSparklesTiny").GetComponent<ParticleSystem>() };
+            multiLockEndVFXAttributes.vfxIntensity = VFXAttributes.VFXIntensity.Medium;
             AsyncOperationHandle<Material> asyncHammerSwingMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Loader/matLoaderSwingThick.mat");
             asyncHammerSwingMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
             {
@@ -151,6 +161,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             asyncTracerMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
             {
                 hammerHitImpactEffect.transform.Find("HammerHitSparks").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
+                multiLockEndEffect.transform.Find("AmyMultiLockEndSparklesTiny").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
             };
             AsyncOperationHandle<Material> asyncHeartImpactMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matOmniRing1Generic.mat");
             asyncHeartImpactMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
@@ -159,6 +170,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 heartImpactMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"));
                 heartImpactMaterial.SetTexture("_MainTex", assetBundle.LoadAsset<Texture>("texAmyVFXHeartImpact"));
                 hammerHitImpactEffect.transform.Find("HammerHitHeartImpact").GetComponent<ParticleSystemRenderer>().sharedMaterial = heartImpactMaterial;
+
+                heartMaterial = new Material(x.Result);
+                heartMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"));
+                heartMaterial.SetTexture("_MainTex", assetBundle.LoadAsset<Texture>("texAmyVFXHeart"));
+                multiLockEndEffect.transform.Find("AmyMultiLockEndHearts").GetComponent<ParticleSystemRenderer>().sharedMaterial = heartMaterial;
             };
 
             amyBoostFlashEffect = HedgehogUtils.Assets.CreateNewBoostFlash("AmyBoostFlash", 1, 1f,
@@ -271,7 +287,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             multiLockProjectilePrefab.AddComponent<ProjectileTargetComponent>();
             multiLockProjectilePrefab.AddComponent<ProjectileAttachToTargetComponent>();
 
-            multiLockExplosion.blastRadius = AmyStaticValues.specialMultiLockBlastRadius;
+            multiLockExplosion.blastRadius = AmyStaticValues.specialMultiLockBlastRadius + 0.5f;
             multiLockExplosion.blastDamageCoefficient = 1f;
             multiLockExplosion.bonusBlastForce = Vector3.zero;
             multiLockExplosion.falloffModel = BlastAttack.FalloffModel.None;

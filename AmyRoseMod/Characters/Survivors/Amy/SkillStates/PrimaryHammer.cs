@@ -106,7 +106,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected override void PlayAttackAnimation()
         {
-            PlayCrossfade("FullBody, Override", "Swing" + (1 + swingIndex), playbackRateParam, duration * 1.35f, 0.1f * duration);
+            PlayCrossfade("FullBody, Override", "Swing" + (1 + swingIndex), playbackRateParam, duration * 1.45f, 0.1f * duration);
         }
 
         protected override void OnHitEnemyAuthority()

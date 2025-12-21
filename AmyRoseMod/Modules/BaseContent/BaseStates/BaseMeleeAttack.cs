@@ -98,28 +98,6 @@ namespace AmyRoseMod.Modules.BaseStates
         protected void PlayPooledSwingEffect()
         {
             PlayPooledSwingEffect(swingEffectPrefab, ref swingEffectInstance, ref _emh_swingEffectInstance, duration * (1 - attackStartPercentTime - (1 - attackEndPercentTime)));
-            /*if (this.swingEffectPrefab)
-            {
-                Transform transform = base.FindModelChild(this.muzzleString);
-                if (transform)
-                {
-                    if (!EffectManager.ShouldUsePooledEffect(this.swingEffectPrefab))
-                    {
-                        this.swingEffectInstance = GameObject.Instantiate(this.swingEffectPrefab, transform);
-                    }
-                    else
-                    {
-                        this._emh_swingEffectInstance = EffectManager.GetAndActivatePooledEffect(this.swingEffectPrefab, transform, true);
-                        this.swingEffectInstance = this._emh_swingEffectInstance.gameObject;
-                    }
-                    ScaleParticleSystemDuration component = this.swingEffectInstance.GetComponent<ScaleParticleSystemDuration>();
-                    if (component)
-                    {
-                        component.newDuration = duration * (1 - attackStartPercentTime - (1 - attackEndPercentTime));
-                    }
-                    swingEffectInstance.transform.localRotation = Quaternion.Euler(90, 0, 0);
-                }
-            }*/
         }
 
         protected virtual void PlayPooledSwingEffect(GameObject prefab, ref GameObject instance, ref EffectManagerHelper emh, float duration)
@@ -150,16 +128,6 @@ namespace AmyRoseMod.Modules.BaseStates
         protected void ReturnSwingEffect()
         {
             ReturnSwingEffect(ref swingEffectInstance, ref _emh_swingEffectInstance);
-            /*if (this._emh_swingEffectInstance != null && this._emh_swingEffectInstance.OwningPool != null)
-            {
-                this._emh_swingEffectInstance.OwningPool.ReturnObject(this._emh_swingEffectInstance);
-            }
-            else if (this.swingEffectInstance)
-            {
-                GameObject.Destroy(this.swingEffectInstance);
-            }
-            this.swingEffectInstance = null;
-            this._emh_swingEffectInstance = null;*/
         }
 
         protected virtual void ReturnSwingEffect(ref GameObject instance, ref EffectManagerHelper emh)

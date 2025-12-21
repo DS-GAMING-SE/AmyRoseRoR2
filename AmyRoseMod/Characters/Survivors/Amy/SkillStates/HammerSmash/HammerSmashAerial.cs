@@ -87,41 +87,49 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         {
             base.FixedUpdate();
 
-            if (base.isAuthority)
-            {
-                base.characterBody.isSprinting = true;
-            }
             if (fixedAge <= hitStopDuration)
             {
-                if (base.inputBank.skill2.down)
-                {
-                    bufferedJump = true;
-                }
                 if (animator) animator.SetFloat("Slash.playbackRate", 0.1f);
-                base.characterMotor.velocity = Vector3.zero;
-                overlapAttack.Fire();
             }
             else if (!hasJumped)
             {
-                hasJumped = true;
-                if (base.inputBank.skill2.down || bufferedJump)
-                {
-                    base.inputBank.skill2.hasPressBeenClaimed = true;
-                    Jump();
-                    return;
-                }
-                else
-                {
-                    SmallHop(base.characterMotor, 12f);
-                    if (animator) animator.SetFloat("Slash.playbackRate", cachedAnimationDuration);
-                }
-            }
-            if (hasJumped && fixedAge > duration)
-            {
-                this.outer.SetNextStateToMain();
-                return;
+                if (animator) animator.SetFloat("Slash.playbackRate", cachedAnimationDuration);
+                if (!base.isAuthority) hasJumped = true;
             }
 
+            if (base.isAuthority)
+            {
+                base.characterBody.isSprinting = true;
+
+                if (fixedAge <= hitStopDuration)
+                {
+                    if (base.inputBank.skill2.down)
+                    {
+                        bufferedJump = true;
+                    }
+                    base.characterMotor.velocity = Vector3.zero;
+                    overlapAttack.Fire();
+                }
+                else if (!hasJumped)
+                {
+                    hasJumped = true;
+                    if (base.inputBank.skill2.down || bufferedJump)
+                    {
+                        base.inputBank.skill2.hasPressBeenClaimed = true;
+                        Jump();
+                        return;
+                    }
+                    else
+                    {
+                        SmallHop(base.characterMotor, 12f);
+                    }
+                }
+                if (hasJumped && fixedAge > duration)
+                {
+                    this.outer.SetNextStateToMain();
+                    return;
+                }
+            }
         }
 
         protected virtual void PlayJumpAnimation()

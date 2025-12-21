@@ -10339,6 +10339,7 @@ Transform:
   - {fileID: 682684662111504493}
   - {fileID: 2277885042881704068}
   - {fileID: 4012126720709864062}
+  - {fileID: 23595142589684868}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10448,6 +10449,8 @@ MonoBehaviour:
     transform: {fileID: 2277885042881704068}
   - name: SuperSwingHitbox
     transform: {fileID: 4012126720709864062}
+  - name: MultiLockEndTransform
+    transform: {fileID: 23595142589684868}
 --- !u!1 &8319807031018358940
 GameObject:
   m_ObjectHideFlags: 0
@@ -10825,6 +10828,37 @@ Transform:
   - {fileID: 6200990647660906634}
   m_Father: {fileID: 5997021883182150801}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8960558955720518890
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 23595142589684868}
+  m_Layer: 0
+  m_Name: MultiLockEndTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &23595142589684868
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8960558955720518890}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.247, z: 0.477}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8315140139193319990}
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9021009512100956091
 GameObject:

@@ -90,10 +90,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             Language.Add(prefix + "SUPER_SPECIAL_MULTILOCK_DESCRIPTION", superMultiLockDescription);
             #region Ancient Scepter
             string scepterDescription = Tokens.ScepterDescription($"Kills grant a stacking buff for {AmyStaticValues.scepterSpecialMultiLockBuffAttackSpeedPerStack * 100f}% attack speed.");
-            Language.Add(prefix + "SCEPTER_SPECIAL_MULTILOCK_NAME", $"Scepter Multi-Lock {Tokens.wipIcon}");
+            Language.Add(prefix + "SCEPTER_SPECIAL_MULTILOCK_NAME", $"Love's Attachment");
             Language.Add(prefix + "SCEPTER_SPECIAL_MULTILOCK_DESCRIPTION", $"{multiLockDescription}{scepterDescription}");
 
-            Language.Add(prefix + "SCEPTER_SUPER_SPECIAL_MULTILOCK_NAME", $"{HedgehogUtils.Helpers.SuperFormText("Scepter Super Multi-Lock")}{Tokens.wipIcon}");
+            Language.Add(prefix + "SCEPTER_SUPER_SPECIAL_MULTILOCK_NAME", $"{HedgehogUtils.Helpers.SuperFormText("Super Love's Attachment")}");
             Language.Add(prefix + "SCEPTER_SUPER_SPECIAL_MULTILOCK_DESCRIPTION", $"{superMultiLockDescription}{scepterDescription}");
             #endregion
             #endregion

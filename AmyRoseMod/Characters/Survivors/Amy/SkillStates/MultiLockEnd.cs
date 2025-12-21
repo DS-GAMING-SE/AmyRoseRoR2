@@ -14,7 +14,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
     {
         protected float baseDuration;
         protected float duration;
-        protected const float vfxDurationPercent = 0.6f;
+        protected const float vfxDurationPercent = 0.2f;
+        private bool vfxPlayed;
 
         protected float startSpeed;
 
@@ -49,9 +50,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 vel *= attackSpeedStat;
                 base.characterMotor.velocity = vel;
             }
-            if (fixedAge >= duration * vfxDurationPercent)
+            if (fixedAge >= duration * vfxDurationPercent && !vfxPlayed)
             {
                 PlayVFX();
+                vfxPlayed = true;
             }
             if (fixedAge >= duration && base.isAuthority)
             {
@@ -80,7 +82,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected virtual void PlayVFX()
         {
-
+            EffectManager.SimpleMuzzleFlash(AmyAssets.multiLockEndEffect, base.gameObject, "MultiLockEndTransform", false);
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()

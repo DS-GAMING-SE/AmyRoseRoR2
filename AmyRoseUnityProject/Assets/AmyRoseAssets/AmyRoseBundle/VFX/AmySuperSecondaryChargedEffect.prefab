@@ -79,6 +79,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3683828517156251964, guid: b05aeb83fbdb3fe4aaf1084dda16cdc2,
         type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3683828517156251964, guid: b05aeb83fbdb3fe4aaf1084dda16cdc2,
+        type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 0.25943398
       objectReference: {fileID: 0}
