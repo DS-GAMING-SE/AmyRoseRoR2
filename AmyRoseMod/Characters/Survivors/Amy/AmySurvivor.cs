@@ -11,6 +11,7 @@ using HedgehogUtils;
 using HedgehogUtils.Forms;
 using HedgehogUtils.Forms.SuperForm;
 using R2API.Networking;
+using RiskOfOptions;
 using RoR2;
 using RoR2.Skills;
 using System;
@@ -140,6 +141,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             {
                 EmoteAPI();
             }
+            if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.rune580.riskofoptions"))
+            {
+                RiskOfOptionsIcon();
+            }
 
             NetworkingAPI.RegisterMessageType<NetworkHammerSpinSpeed>();
 
@@ -150,6 +155,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         {
             GameObject emotePrefab = assetBundle.LoadAsset<GameObject>("EmoteAPIAmy");
             CustomEmotesAPI.ImportArmature(bodyPrefab, emotePrefab);
+        }
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
+        private void RiskOfOptionsIcon()
+        {
+            ModSettingsManager.SetModIcon(assetBundle.LoadAsset<Sprite>("texAmyRoseIcon"));
         }
 
         public void AddHitboxes()
@@ -190,6 +200,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             AddSecondarySkills();
             AddUtilitySkills();
             AddSpecialSkills();
+            AddVoicelineSkills();
 
             InitializeSuperSkills();
         }
@@ -418,6 +429,29 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             });
 
             Skills.AddSpecialSkills(bodyPrefab, specialMultilock);
+        }
+
+        private void AddVoicelineSkills()
+        {
+            GenericSkill voicelinesGenericSkill = Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, "Voicelines", true);
+            voicelinesGenericSkill.loadoutTitleToken = AMY_PREFIX + "VOICELINES_TITLE";
+            SkillDef voicelinesEnable = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "AmyVoicelinesEnable",
+                skillNameToken = AMY_PREFIX + "VOICELINES_ENABLE_NAME",
+                skillDescriptionToken = AMY_PREFIX + "VOICELINES_ENABLE_DESCRIPTION",
+                skillIcon = assetBundle.LoadAsset<Sprite>("texVoicelinesEnableIcon")
+
+            });
+            SkillDef voicelinesDisable = Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = "AmyVoicelinesDisable",
+                skillNameToken = AMY_PREFIX + "VOICELINES_DISABLE_NAME",
+                skillDescriptionToken = "",
+                skillIcon = assetBundle.LoadAsset<Sprite>("texVoicelinesDisableIcon")
+
+            });
+            Skills.AddSkillsToFamily(voicelinesGenericSkill.skillFamily, voicelinesEnable, voicelinesDisable);
         }
 
         private void InitializeSuperSkills()

@@ -125,6 +125,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Content
                 if (targetBody)
                 {
                     targetBody.AddTimedBuff(AmyBuffs.scepterMultiLockBuff, AmyStaticValues.scepterSpecialMultiLockBuffDuration, buffMaxStacks);
+                    if (targetBody.healthComponent)
+                    {
+                        targetBody.healthComponent.HealFraction(AmyStaticValues.scepterSpecialMultiLockHealAmount, default);
+                    }
                 }
             }
         }

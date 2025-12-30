@@ -89,13 +89,21 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             Language.Add(prefix + "SUPER_SPECIAL_MULTILOCK_NAME", HedgehogUtils.Helpers.SuperFormText("Super Multi-Lock"));
             Language.Add(prefix + "SUPER_SPECIAL_MULTILOCK_DESCRIPTION", superMultiLockDescription);
             #region Ancient Scepter
-            string scepterDescription = Tokens.ScepterDescription($"Kills grant a stacking buff for {AmyStaticValues.scepterSpecialMultiLockBuffAttackSpeedPerStack * 100f}% attack speed.");
+            string scepterDescription = Tokens.ScepterDescription($"Kills heal {AmyStaticValues.scepterSpecialMultiLockHealAmount * 100f}% HP and grant a stacking buff for {AmyStaticValues.scepterSpecialMultiLockBuffAttackSpeedPerStack * 100f}% attack speed.");
             Language.Add(prefix + "SCEPTER_SPECIAL_MULTILOCK_NAME", $"Love's Attachment");
             Language.Add(prefix + "SCEPTER_SPECIAL_MULTILOCK_DESCRIPTION", $"{multiLockDescription}{scepterDescription}");
 
             Language.Add(prefix + "SCEPTER_SUPER_SPECIAL_MULTILOCK_NAME", $"{HedgehogUtils.Helpers.SuperFormText("Super Love's Attachment")}");
             Language.Add(prefix + "SCEPTER_SUPER_SPECIAL_MULTILOCK_DESCRIPTION", $"{superMultiLockDescription}{scepterDescription}");
             #endregion
+            #endregion
+
+            #region Voicelines
+            LanguageAPI.Add(prefix + "VOICELINES_TITLE", "Voicelines");
+            LanguageAPI.Add(prefix + "VOICELINES_ENABLE_NAME", "Enable Voicelines");
+            LanguageAPI.Add(prefix + "VOICELINES_ENABLE_DESCRIPTION", $"Voicelines recorded by {Tokens.UtilityText("Izziibel")}.");
+
+            LanguageAPI.Add(prefix + "VOICELINES_DISABLE_NAME", "Disable Voicelines");
             #endregion
 
             #region Achievements

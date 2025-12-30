@@ -147,6 +147,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public const float scepterSpecialMultiLockBuffAttackSpeedPerStack = 0.08f;
 
+        public const float scepterSpecialMultiLockHealAmount = 0.02f;
+
         #endregion
 
         #region Super Special Multi-Lock

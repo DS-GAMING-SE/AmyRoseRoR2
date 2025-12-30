@@ -95,6 +95,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             previousAirControl = characterMotor.airControl;
             characterMotor.airControl = 1f;
 
+            aimAnimator.enabled = false;
+
             if (NetworkServer.active)
             {
                 base.characterBody.AddBuff(boostBuff);

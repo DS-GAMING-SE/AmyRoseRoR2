@@ -24,7 +24,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 AmySurvivor.instance.assetBundle.LoadAsset<Sprite>("texMainSkinIcon"));
             masterySkinUnlockableConfig = CreateUnlockableConfig("Mastery");
             masterySkinUnlockableConfig.SettingChanged += new EventHandler(delegate (object o, EventArgs a)
-            { UnlockableConfigChanged(masterySkinUnlockableConfig.Value, masterySkinUnlockableDef, AmyMasteryAchievement.unlockableIdentifier); });
+            { UnlockableConfigChanged(masterySkinUnlockableConfig.Value, ref masterySkinUnlockableDef, AmyMasteryAchievement.unlockableIdentifier); });
 
             // Grand Mastery
             grandMasterySkinUnlockableDef = Modules.Content.CreateAndAddUnlockbleDef(
@@ -33,20 +33,34 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 AmySurvivor.instance.assetBundle.LoadAsset<Sprite>("texPaladinSkinIcon"));
             grandMasterySkinUnlockableConfig = CreateUnlockableConfig("Grand Mastery");
             grandMasterySkinUnlockableConfig.SettingChanged += new EventHandler(delegate (object o, EventArgs a)
-            { UnlockableConfigChanged(grandMasterySkinUnlockableConfig.Value, grandMasterySkinUnlockableDef, AmyGrandMasteryAchievement.unlockableIdentifier); });
+            { UnlockableConfigChanged(grandMasterySkinUnlockableConfig.Value, ref grandMasterySkinUnlockableDef, AmyGrandMasteryAchievement.unlockableIdentifier); });
 
             On.RoR2.UserProfile.OnLogin += ConfigUnlocks;
         }
         private static void ConfigUnlocks(On.RoR2.UserProfile.orig_OnLogin orig, UserProfile self)
         {
             orig(self);
-            if (!self.HasAchievement(AmyMasteryAchievement.unlockableIdentifier) && masterySkinUnlockableConfig.Value)
+            if (masterySkinUnlockableConfig.Value)
             {
-                self.AddAchievement(AmyMasteryAchievement.unlockableIdentifier, true);
+                if (!self.HasAchievement(AmyMasteryAchievement.unlockableIdentifier))
+                {
+                    self.AddAchievement(AmyMasteryAchievement.unlockableIdentifier, true);
+                }
+                if (!self.HasUnlockable(masterySkinUnlockableDef))
+                {
+                    self.GrantUnlockable(masterySkinUnlockableDef);
+                }
             }
-            if (!self.HasAchievement(AmyGrandMasteryAchievement.unlockableIdentifier) && grandMasterySkinUnlockableConfig.Value)
+            if (grandMasterySkinUnlockableConfig.Value)
             {
-                self.AddAchievement(AmyGrandMasteryAchievement.unlockableIdentifier, true);
+                if (!self.HasAchievement(AmyGrandMasteryAchievement.unlockableIdentifier))
+                {
+                    self.AddAchievement(AmyGrandMasteryAchievement.unlockableIdentifier, true);
+                }
+                if (!self.HasUnlockable(grandMasterySkinUnlockableDef))
+                {
+                    self.GrantUnlockable(grandMasterySkinUnlockableDef);
+                }
             }
         }
 
@@ -55,7 +69,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             return Config.BindAndOptions("Unlockables", achievementName, false, $"Unlock or relock the achievement \"Amy: {achievementName}\". Locking the achievement may require restarting the game for the achievement to be obtainable again.");
         }
 
-        private static void UnlockableConfigChanged(bool configValue, UnlockableDef unlockableDef, string achievementToken)
+        private static void UnlockableConfigChanged(bool configValue, ref UnlockableDef unlockableDef, string achievementToken)
         {
             UserProfile user = LocalUserManager.readOnlyLocalUsersList.FirstOrDefault(v => v != null)?.userProfile;
 
