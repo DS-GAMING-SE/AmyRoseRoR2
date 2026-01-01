@@ -31,7 +31,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         protected float hitHopVelocity;
 
         protected string playbackRateParam = "Slash.playbackRate";
-        protected GameObject swingEffectPrefab;
+        protected GameObject spinEffectPrefab;
         protected GameObject hitEffectPrefab;
         protected NetworkSoundEventIndex impactSound = AmyAssets.hammerHitSoundEvent.index;
         protected OverlapAttack attack;
@@ -68,6 +68,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         private float previousAirControl;
 
         protected LoopSoundManager.SoundLoopPtr hammerSpinLoopSound;
+        protected GameObject spinEffectInstance;
+        protected EffectManagerHelper emh;
+
+        private bool exitToEndLag;
 
         public override void OnEnter()
         {
@@ -75,7 +79,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             buffStackTimer = buffsPerSecond;
             animator = GetModelAnimator();
             playbackRateParam = "Slash.playbackRate";
-            swingEffectPrefab = AmyAssets.swordSwingEffect;
+            spinEffectPrefab = AmyAssets.hammerSpinSpinningEffect;
             hitEffectPrefab = AmyAssets.hammerHitImpactEffect;
             PlayAnimation("FullBody, Override", "HammerSpin");
 
@@ -95,6 +99,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             previousAirControl = characterMotor.airControl;
             characterMotor.airControl = 1f;
 
+            animator.SetFloat("AimPitch", 0.5f);
+            animator.SetFloat("AimYaw", 0.5f);
             aimAnimator.enabled = false;
 
             if (NetworkServer.active)
@@ -114,6 +120,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 attack.inflictor = gameObject;
                 attack.teamIndex = GetTeam();
             }
+            emh = EffectManager.GetAndActivatePooledEffect(spinEffectPrefab, FindModelChild("MainHurtbox"), true);
+            spinEffectInstance = emh.gameObject;
         }
 
         protected virtual void PrepareBaseStats()
@@ -349,12 +357,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected virtual void SetNextStateToEndLag()
         {
-            EntityStateMachine weapon = EntityStateMachine.FindByCustomName(base.gameObject, "Weapon");
-            if (weapon)
-            {
-                weapon.SetNextState(EntityStateCatalog.InstantiateState(typeof(HammerSpinEndLag)));
-            }
             this.outer.SetNextStateToMain();
+            exitToEndLag = true;
         }
 
         protected virtual void SetNextStateToDizzy()
@@ -369,6 +373,14 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 base.characterBody.skillLocator.primary.onSkillChanged -= OnSkillChanged;
             }
             PlayAnimation("FullBody, Override", "BufferEmpty");
+            if (exitToEndLag)
+            {
+                EntityStateMachine weapon = EntityStateMachine.FindByCustomName(base.gameObject, "Weapon");
+                if (weapon)
+                {
+                    weapon.SetNextState(EntityStateCatalog.InstantiateState(typeof(HammerSpinEndLag)));
+                }
+            }
             boostLogic.boostDraining = false;
             boostLogic.boostBeingUsed = false;
             hammerSpinController.DeactivateSpin();
@@ -380,6 +392,16 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             }
             LoopSoundManager.StopSoundLoopLocal(hammerSpinLoopSound);
             base.characterMotor.airControl = previousAirControl;
+            if (spinEffectInstance.TryGetComponent(out DisableParticleEmissionAndDestroyOnTimer disable))
+            {
+                disable.DisableParticlesStartTimer();
+            }
+            if (spinEffectInstance.transform.GetChild(0).TryGetComponent(out AnimateShaderAlpha alpha))
+            {
+                alpha.enabled = true;
+                alpha.Restart();
+            }
+            else { Destroy(spinEffectInstance); }
             base.OnExit();
         }
 

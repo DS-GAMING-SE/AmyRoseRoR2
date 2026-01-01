@@ -21,6 +21,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
+            PlayAnimation("FullBody, Override", "BufferEmpty");
             if (base.modelLocator)
             {
                 modelLocator.normalizeToFloor = true;

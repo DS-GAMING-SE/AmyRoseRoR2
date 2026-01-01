@@ -90,12 +90,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                     return;
                 }
             }
-            if (CalculateCharge() >= 1 && !maxCharge)
+            if (charge != 1 && CalculateCharge() + charge >= 1 && !maxCharge)
             {
                 maxCharge = true;
                 ReachedMaxCharge();
             }
-            else if (CalculateCharge() < 0.8f && maxCharge)
+            else if (CalculateCharge() + charge < 0.8f && maxCharge)
             {
                 maxCharge = false;
             }

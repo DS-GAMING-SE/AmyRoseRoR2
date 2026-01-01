@@ -62,6 +62,10 @@ namespace AmyRoseMod.Modules.Characters
                 Modules.ItemDisplays.queuedDisplays++;
                 RoR2.ContentManagement.ContentManager.onContentPacksAssigned += SetItemDisplays;
             }
+            else
+            {
+                R2API.ItemAPI.DoNotAutoIDRSFor(bodyPrefab);
+            }
         }
 
         public void SetItemDisplays(HG.ReadOnlyArray<RoR2.ContentManagement.ReadOnlyContentPack> obj) {

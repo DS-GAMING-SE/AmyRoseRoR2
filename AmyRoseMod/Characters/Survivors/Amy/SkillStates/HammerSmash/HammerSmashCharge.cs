@@ -43,7 +43,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             base.OnEnter();
             PrepareStats();
             chargeTime = baseChargeTime / characterBody.attackSpeed;
-
+            PlayAnimation("FullBody, Override", "BufferEmpty");
             PlayAnimation("UpperBody, Override", "SecondaryCharge");
 
             this.camOverrideHandle = base.cameraTargetParams.AddParamsOverride(new CameraTargetParams.CameraParamsOverrideRequest
