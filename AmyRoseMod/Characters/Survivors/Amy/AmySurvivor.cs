@@ -136,6 +136,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             bodyPrefab.AddComponent<HedgehogUtils.Miscellaneous.MomentumPassive>();
             bodyPrefab.AddComponent<HedgehogUtils.Boost.BoostLogic>();
             bodyPrefab.AddComponent<HedgehogUtils.Miscellaneous.StayOnGround>();
+            bodyPrefab.GetComponent<SfxLocator>().deathSound = "Play_hedgehogutils_death";
 
             if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.weliveinasociety.CustomEmotesAPI"))
             {
@@ -421,7 +422,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
                 baseMaxStock = 1,
                 stockToConsume = 0,
-                baseRechargeInterval = 8f,
+                baseRechargeInterval = 10f,
 
                 isCombatSkill = true,
                 mustKeyPress = true,
@@ -434,11 +435,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         private void AddVoicelineSkills()
         {
             GenericSkill voicelinesGenericSkill = Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, "Voicelines", true);
-            voicelinesGenericSkill.loadoutTitleToken = AMY_PREFIX + "VOICELINES_TITLE";
+            voicelinesGenericSkill.loadoutTitleToken = HedgehogUtils.Language.voicelinesTitleToken;
             SkillDef voicelinesEnable = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "AmyVoicelinesEnable",
-                skillNameToken = AMY_PREFIX + "VOICELINES_ENABLE_NAME",
+                skillNameToken = HedgehogUtils.Language.voicelinesEnableToken,
                 skillDescriptionToken = AMY_PREFIX + "VOICELINES_ENABLE_DESCRIPTION",
                 skillIcon = assetBundle.LoadAsset<Sprite>("texVoicelinesEnableIcon")
 
@@ -446,7 +447,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             SkillDef voicelinesDisable = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = "AmyVoicelinesDisable",
-                skillNameToken = AMY_PREFIX + "VOICELINES_DISABLE_NAME",
+                skillNameToken = HedgehogUtils.Language.voicelinesDisableToken,
                 skillDescriptionToken = "",
                 skillIcon = assetBundle.LoadAsset<Sprite>("texVoicelinesDisableIcon")
 

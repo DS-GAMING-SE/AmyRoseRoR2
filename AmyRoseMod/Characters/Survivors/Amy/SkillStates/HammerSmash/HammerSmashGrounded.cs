@@ -74,7 +74,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         {
             base.FixedUpdate();
             //float minY = Mathf.Lerp(-2f, -4f, (fixedAge - (duration * attackEndPercentTime)) * (1 / (duration * attackEndPercentTime)));
-            if (base.characterMotor && stopwatch <= duration * attackEndPercentTime)
+            if (base.characterMotor && !base.characterMotor.isFlying && stopwatch <= duration * attackEndPercentTime)
             {
                 base.characterMotor.velocity.y = Mathf.Max(characterMotor.velocity.y, -3);
             }

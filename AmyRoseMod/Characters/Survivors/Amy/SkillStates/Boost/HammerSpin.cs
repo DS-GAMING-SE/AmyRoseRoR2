@@ -392,14 +392,17 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             }
             LoopSoundManager.StopSoundLoopLocal(hammerSpinLoopSound);
             base.characterMotor.airControl = previousAirControl;
-            if (spinEffectInstance.TryGetComponent(out DisableParticleEmissionAndDestroyOnTimer disable))
+            if (spinEffectInstance)
             {
-                disable.DisableParticlesStartTimer();
-            }
-            if (spinEffectInstance.transform.GetChild(0).TryGetComponent(out AnimateShaderAlpha alpha))
-            {
-                alpha.enabled = true;
-                alpha.Restart();
+                if (spinEffectInstance.TryGetComponent(out DisableParticleEmissionAndDestroyOnTimer disable))
+                {
+                    disable.DisableParticlesStartTimer();
+                }
+                if (spinEffectInstance.transform.GetChild(0).TryGetComponent(out AnimateShaderAlpha alpha))
+                {
+                    alpha.enabled = true;
+                    alpha.Restart();
+                }
             }
             else { Destroy(spinEffectInstance); }
             base.OnExit();

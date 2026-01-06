@@ -18,6 +18,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             {
                 modelLocator.normalizeToFloor = true;
             }
+            Util.PlaySound("Play_hedgehogutils_brake", base.gameObject);
         }
 
         public override void OnExit()

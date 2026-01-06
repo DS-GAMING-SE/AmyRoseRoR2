@@ -318,6 +318,16 @@ namespace AmyRoseMod.Modules
             characterModel.invisibilityCount = 0;
             characterModel.temporaryOverlays = new List<TemporaryOverlayInstance>();
 
+            ModelPanelParameters panel = characterModel.gameObject.GetComponent<ModelPanelParameters>();
+            if (!panel) panel = characterModel.gameObject.AddComponent<ModelPanelParameters>();
+
+            panel.focusPointTransform = characterModel.gameObject.transform.Find("FocusPoint");
+
+            panel.cameraPositionTransform = characterModel.gameObject.transform.Find("FocusPoint/CameraPosition");
+
+            panel.minDistance = 0.7f;
+            panel.maxDistance = 2.5f;
+
             if (!preattached)
             {
                 SetupCustomRendererInfos(characterModel, customInfos);
@@ -753,6 +763,7 @@ namespace AmyRoseMod.Modules
             if (deathBehavior)
             {
                 deathBehavior.deathStateMachine = entityStateMachine;
+                deathBehavior.deathState = new EntityStates.SerializableEntityStateType(typeof(HedgehogUtils.Miscellaneous.Death));
             }
 
             //Add to the main state machine field of SetStateOnHurt for when the character is Stunned/Frozen/etc,

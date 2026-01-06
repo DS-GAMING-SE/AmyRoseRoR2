@@ -44,6 +44,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 targets = new List<Indicator>();
                 targetHurtBoxes = new List<HurtBox>();
                 PrepareSearch();
+                base.characterBody.skillLocator.special.onSkillChanged += OnSkillChanged;
             }
         }
 
@@ -82,6 +83,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                     target.active = false;
                 }
                 crosshair.Dispose();
+                base.characterBody.skillLocator.special.onSkillChanged -= OnSkillChanged;
             }
             base.OnExit();
         }
@@ -180,6 +182,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 state.orbBounceRange = this.orbBounceRange;
                 body.SetNextState(state);
             }
+        }
+
+        private void OnSkillChanged(GenericSkill skill)
+        {
+            this.outer.SetNextStateToMain();
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()
