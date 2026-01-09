@@ -9,6 +9,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
 {
     public class SuperPrimaryHammer : PrimaryHammer
     {
+        protected override GameObject hitEffectPrefab { get { return AmyAssets.superHammerHitImpactEffect; } }
+
         protected GameObject swingSuperEffectPrefab;
         private GameObject swingSuperEffectInstance;
         private EffectManagerHelper _emh_swingSuperEffectInstance;
@@ -25,7 +27,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
         public override void OnEnter()
         {
             base.OnEnter();
-            swingSuperEffectPrefab = AmyAssets.hammerSwingSuperEffect;
+            swingSuperEffectPrefab = AmyAssets.superHammerSwingEffect;
             PrepareSuperOverlapAttack();
         }
 

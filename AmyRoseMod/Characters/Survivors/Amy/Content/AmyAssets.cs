@@ -21,14 +21,16 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         // particle effects
         public static GameObject hammerSwingEffect;
         public static GameObject hammerSwingLargeEffect;
-        public static GameObject hammerSwingSuperEffect;
+        public static GameObject superHammerSwingEffect;
         public static GameObject swordSwingEffect;
         public static GameObject hammerHitImpactEffect;
+        public static GameObject superHammerHitImpactEffect;
 
         public static GameObject secondaryChargedEffect;
         public static GameObject superSecondaryChargedEffect;
 
         public static GameObject hammerSpinSpinningEffect;
+        public static GameObject superHammerSpinSpinningEffect;
 
         public static GameObject multiLockExplosionEffect;
         public static GameObject superMultiLockExplosionEffect;
@@ -36,16 +38,25 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         public static GameObject amyBoostFlashEffect;
         public static GameObject amyBoostAuraEffect;
 
+        public static GameObject superAmyBoostFlashEffect;
+        public static GameObject superAmyBoostAuraEffect;
+
         public static GameObject multiLockEndEffect;
+        public static GameObject superMultiLockEndEffect;
 
         // materials
         public static Material hammerSwingMaterial;
+        public static Material superHammerSwingMaterial;
         public static Material heartImpactMaterial;
+        public static Material superHeartImpactMaterial;
         public static Material heartMaterial;
+        public static Material superHeartMaterial;
 
         public static Material hammerSpinMaterial;
+        public static Material superHammerSpinMaterial;
 
         public static Material multiLockHeartMaterial;
+        public static Material superMultiLockHeartMaterial;
 
         public static Material multiLockExplosionMaterial;
         public static Material superMultiLockExplosionMaterial;
@@ -93,6 +104,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 superSecondaryChargedEffect.GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
 
                 multiLockEndEffect.transform.Find("AmyMultiLockEndSparkles").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
+                superMultiLockEndEffect.transform.Find("AmyMultiLockEndSparkles").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
             };
         }
 
@@ -108,6 +120,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         }
 
         #region effects
+        // Spaghetti... Async loading makes everything cool and good but it makes code ugly and hard to organize
         private static void CreateEffects(AssetBundle assetBundle)
         {
             CreateMultiLockExplosionEffect(assetBundle);
@@ -117,41 +130,34 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             var multiLockEndVFXAttributes = multiLockEndEffect.GetComponent<VFXAttributes>();
             multiLockEndVFXAttributes.secondaryParticleSystem = new ParticleSystem[]{ multiLockEndEffect.transform.Find("AmyMultiLockEndSparklesTiny").GetComponent<ParticleSystem>() };
             multiLockEndVFXAttributes.vfxIntensity = VFXAttributes.VFXIntensity.Medium;
+            superMultiLockEndEffect = assetBundle.LoadEffect("AmySuperMultiLockEndEffect", true, 1f);
+            var superMultiLockEndVFXAttributes = superMultiLockEndEffect.GetComponent<VFXAttributes>();
+            superMultiLockEndVFXAttributes.secondaryParticleSystem = new ParticleSystem[] { superMultiLockEndEffect.transform.Find("AmyMultiLockEndSparklesTiny").GetComponent<ParticleSystem>() };
+            superMultiLockEndVFXAttributes.vfxIntensity = VFXAttributes.VFXIntensity.Medium;
 
-            hammerSpinSpinningEffect = assetBundle.LoadAsset<GameObject>("AmyHammerSpinEffect");
-            hammerSpinSpinningEffect.AddComponent<VFXAttributes>().DoNotCullPool = true;
+            hammerSpinSpinningEffect = CreateHammerSpinEffect(assetBundle.LoadAsset<GameObject>("AmyHammerSpinEffect"));
+            superHammerSpinSpinningEffect = CreateHammerSpinEffect(assetBundle.LoadAsset<GameObject>("AmySuperHammerSpinEffect"));
             var hammerSpinSpinningMesh = hammerSpinSpinningEffect.transform.GetChild(0).GetComponent<MeshFilter>();
-            hammerSpinSpinningMesh.gameObject.AddComponent<RotateObject>().rotationSpeed = new Vector3(0, 0, -1200);
-            var hammerSpinSpinningAnimateAlpha = hammerSpinSpinningMesh.gameObject.AddComponent<AnimateShaderAlpha>();
-            hammerSpinSpinningAnimateAlpha.timeMax = 0.4f;
-            hammerSpinSpinningAnimateAlpha.alphaCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
-            hammerSpinSpinningAnimateAlpha.disableOnEnd = true;
-            hammerSpinSpinningAnimateAlpha.enabled = false;
-            var hammerSpinSpinningDisable = hammerSpinSpinningEffect.AddComponent<DisableParticleEmissionAndDestroyOnTimer>();
-            hammerSpinSpinningDisable.waitDuration = 0.65f;
+            var superHammerSpinSpinningMesh = superHammerSpinSpinningEffect.transform.GetChild(0).GetComponent<MeshFilter>();
             var hammerSpinRing = hammerSpinSpinningEffect.transform.GetChild(1).GetComponent<ParticleSystemRenderer>();
-            hammerSpinSpinningDisable.particleSystems = new List<ParticleSystem> { hammerSpinSpinningMesh.transform.GetChild(0).GetComponent<ParticleSystem>(), hammerSpinRing.GetComponent<ParticleSystem>() };
+            var superHammerSpinRing = superHammerSpinSpinningEffect.transform.GetChild(1).GetComponent<ParticleSystemRenderer>();
             AsyncOperationHandle<Mesh> asyncTorusMesh = Addressables.LoadAssetAsync<Mesh>("RoR2/DLC3/mdlTorusVFXRing04.fbx");
             asyncTorusMesh.Completed += delegate (AsyncOperationHandle<Mesh> x)
             {
                 hammerSpinRing.mesh = x.Result;
+                superHammerSpinRing.mesh = x.Result;
             };
             AsyncOperationHandle<Material> asyncHammerSpinMaterial = Addressables.LoadAssetAsync<Material>("RoR2/DLC3/Drifter/matDrifterTornadoStreaks_02.mat");
             asyncHammerSpinMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
             {
                 hammerSpinMaterial = new Material(x.Result);
                 hammerSpinMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"));
+                hammerSpinMaterial.SetFloat("_AlphaBoost", 6.3f);
                 hammerSpinRing.sharedMaterial = hammerSpinMaterial;
-            };
-
-            // Hammer Swing Material
-            AsyncOperationHandle<Material> asyncHammerSwingMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Loader/matLoaderSwingThick.mat");
-            asyncHammerSwingMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
-            {
-                hammerSwingMaterial = new Material(x.Result);
-                hammerSwingMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmyHammer"));
-                hammerSwingMaterial.SetVector("_TintColor", new Vector4(0.3f, 0.3f, 0.3f, 1f));
-                hammerSpinSpinningMesh.GetComponent<MeshRenderer>().sharedMaterial = hammerSwingMaterial;
+                superHammerSpinMaterial = new Material(x.Result);
+                superHammerSpinMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmySuperEnergy"));
+                superHammerSpinMaterial.SetFloat("_AlphaBoost", 9f);
+                superHammerSpinRing.sharedMaterial = superHammerSpinMaterial;
             };
 
             // Hammer Swing VFX
@@ -167,7 +173,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 hammerSwingMain.startSizeZMultiplier = 3f;
 
                 ParticleSystemRenderer hammerSwingRender = swingTrailObject.GetComponent<ParticleSystemRenderer>();
-                hammerSwingRender.sharedMaterial = hammerSwingMaterial;
 
                 hammerSwingLargeEffect = PrefabAPI.InstantiateClone(hammerSwingEffect, "AmyRoseHammerSwingLargeEffect", false);
                 ParticleSystem.MainModule hammerSwingLargeMain = hammerSwingLargeEffect.transform.Find("SwingTrail").GetComponent<ParticleSystem>().main;
@@ -176,13 +181,13 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 hammerSwingLargeMain.startSizeYMultiplier = 1.8f;
                 hammerSwingLargeMain.startSizeZMultiplier = 4.5f;
 
-                hammerSwingSuperEffect = PrefabAPI.InstantiateClone(hammerSwingEffect, "AmyRoseHammerSwingSuperEffect", false);
-                ParticleSystem.MainModule hammerSwingSuperMain = hammerSwingSuperEffect.transform.Find("SwingTrail").GetComponent<ParticleSystem>().main;
+                superHammerSwingEffect = PrefabAPI.InstantiateClone(hammerSwingEffect, "AmyRoseHammerSwingSuperEffect", false);
+                ParticleSystem.MainModule hammerSwingSuperMain = superHammerSwingEffect.transform.Find("SwingTrail").GetComponent<ParticleSystem>().main;
                 // original radius is (1.2, 1.2, 2.25)
                 hammerSwingSuperMain.startSizeXMultiplier = 5f;
                 hammerSwingSuperMain.startSizeYMultiplier = 5f;
                 hammerSwingSuperMain.startSizeZMultiplier = 12f;
-                GameObject hammerSwingSuperBlur = GameObject.Instantiate(hammerSwingSuperEffect.transform.Find("SwingTrail").gameObject, hammerSwingSuperEffect.transform);
+                GameObject hammerSwingSuperBlur = GameObject.Instantiate(superHammerSwingEffect.transform.Find("SwingTrail").gameObject, superHammerSwingEffect.transform);
                 hammerSwingSuperBlur.GetComponent<ParticleSystemRenderer>().sharedMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Croco/matCrocoSlashDistortion.mat").WaitForCompletion();
                 ParticleSystem.MainModule hammerSwingSuperBlurMain = hammerSwingSuperBlur.GetComponent<ParticleSystem>().main;
                 hammerSwingSuperBlurMain.startSizeXMultiplier = 4f;
@@ -190,18 +195,41 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 hammerSwingSuperBlurMain.startSizeZMultiplier = 2f;
                 hammerSwingSuperBlurMain.startDelay = 0.2f;
 
-                hammerSpinSpinningMesh.GetComponent<MeshFilter>().sharedMesh = hammerSwingRender.mesh;
+                hammerSpinSpinningMesh.sharedMesh = hammerSwingRender.mesh;
+                superHammerSpinSpinningMesh.sharedMesh = hammerSwingRender.mesh;
+
+                // Hammer Swing Material
+                AsyncOperationHandle<Material> asyncHammerSwingMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Loader/matLoaderSwingThick.mat");
+                asyncHammerSwingMaterial.Completed += delegate (AsyncOperationHandle<Material> y)
+                {
+                    hammerSwingMaterial = new Material(y.Result);
+                    hammerSwingMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmyHammer"));
+                    hammerSwingMaterial.SetVector("_TintColor", new Vector4(0.3f, 0.3f, 0.3f, 1f));
+                    hammerSwingRender.sharedMaterial = hammerSwingMaterial;
+                    hammerSwingLargeEffect.transform.Find("SwingTrail").GetComponent<ParticleSystemRenderer>().sharedMaterial = hammerSwingMaterial;
+                    hammerSpinSpinningMesh.GetComponent<MeshRenderer>().sharedMaterial = hammerSwingMaterial;
+                    superHammerSpinSpinningMesh.GetComponent<MeshRenderer>().sharedMaterial = hammerSwingMaterial;
+                    superHammerSwingMaterial = new Material(y.Result);
+                    superHammerSwingMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmySuperEnergy"));
+                    superHammerSwingMaterial.SetVector("_TintColor", new Vector4(0.6f, 0.6f, 0.6f, 1f));
+                    superHammerSwingEffect.transform.Find("SwingTrail").GetComponent<ParticleSystemRenderer>().sharedMaterial = superHammerSwingMaterial;
+                };
             };
 
             hammerHitImpactEffect = _assetBundle.LoadEffect("AmyHammerHitEffect", false, 0);
             hammerHitImpactEffect.AddComponent<DestroyOnParticleEnd>().trackedParticleSystem = hammerHitImpactEffect.transform.Find("HammerHitHeartImpact").GetComponent<ParticleSystem>();
-            
+            superHammerHitImpactEffect = _assetBundle.LoadEffect("AmySuperHammerHitEffect", false, 0);
+            superHammerHitImpactEffect.AddComponent<DestroyOnParticleEnd>().trackedParticleSystem = superHammerHitImpactEffect.transform.Find("HammerHitHeartImpact").GetComponent<ParticleSystem>();
+
             // Tracer Glow Material
             AsyncOperationHandle<Material> asyncTracerMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matTracerBright.mat");
             asyncTracerMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
             {
                 hammerHitImpactEffect.transform.Find("HammerHitSparks").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
+                superHammerHitImpactEffect.transform.Find("HammerHitSparks").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
+
                 multiLockEndEffect.transform.Find("AmyMultiLockEndSparklesTiny").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
+                superMultiLockEndEffect.transform.Find("AmyMultiLockEndSparklesTiny").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
             };
 
             // Heart/Impact Material
@@ -211,13 +239,26 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 heartImpactMaterial = new Material(x.Result);
                 heartImpactMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"));
                 heartImpactMaterial.SetTexture("_MainTex", assetBundle.LoadAsset<Texture>("texAmyVFXHeartImpact"));
+                heartImpactMaterial.SetFloat("_AlphaBoost", 4.5f);
                 hammerHitImpactEffect.transform.Find("HammerHitHeartImpact").GetComponent<ParticleSystemRenderer>().sharedMaterial = heartImpactMaterial;
+                
+                superHeartImpactMaterial = new Material(x.Result);
+                superHeartImpactMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmySuperEnergy"));
+                superHeartImpactMaterial.SetTexture("_MainTex", assetBundle.LoadAsset<Texture>("texAmyVFXHeartImpact"));
+                superHeartImpactMaterial.SetFloat("_AlphaBoost", 4.5f);
+                superHammerHitImpactEffect.transform.Find("HammerHitHeartImpact").GetComponent<ParticleSystemRenderer>().sharedMaterial = superHeartImpactMaterial;
 
                 heartMaterial = new Material(x.Result);
                 heartMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"));
                 heartMaterial.SetTexture("_MainTex", assetBundle.LoadAsset<Texture>("texAmyVFXHeart"));
                 multiLockEndEffect.transform.Find("AmyMultiLockEndHearts").GetComponent<ParticleSystemRenderer>().sharedMaterial = heartMaterial;
                 hammerSpinSpinningMesh.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().sharedMaterial = heartMaterial;
+
+                superHeartMaterial = new Material(x.Result);
+                superHeartMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmySuperEnergy"));
+                superHeartMaterial.SetTexture("_MainTex", assetBundle.LoadAsset<Texture>("texAmyVFXHeart"));
+                superMultiLockEndEffect.transform.Find("AmyMultiLockEndHearts").GetComponent<ParticleSystemRenderer>().sharedMaterial = superHeartMaterial;
+                superHammerSpinSpinningMesh.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().sharedMaterial = superHeartMaterial;
             };
 
             // Boost
@@ -225,17 +266,45 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 new Color(1, 1, 1), AmySurvivor.amyColor, new Color(0.5f, 0.07f, 0.3f), AmySurvivor.amyColor);
             amyBoostAuraEffect = HedgehogUtils.Assets.CreateNewBoostAura("AmyBoostAura", 1, 0.4f,
                 new Color(1, 1, 1), AmySurvivor.amyColor, new Color(0.5f, 0.07f, 0.3f), AmySurvivor.amyColor);
+            superAmyBoostFlashEffect = HedgehogUtils.Assets.CreateNewBoostFlash("AmySuperBoostFlash", 1.3f, 1.6f,
+                new Color(1, 1, 1), AmySurvivor.superAmyColor, new Color(1f, 0.2f, 0.3f), AmySurvivor.superAmyColor);
+            superAmyBoostAuraEffect = HedgehogUtils.Assets.CreateNewBoostAura("AmySuperBoostAura", 1.3f, 0.8f,
+                new Color(1, 1, 1), AmySurvivor.superAmyColor, new Color(1f, 0.2f, 0.3f), AmySurvivor.superAmyColor);
 
             // Multi-Lock Heart Material
             AsyncOperationHandle<Material> asyncMultiLockHeartMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Grandparent/matGrandParentSunCore.mat");
             asyncMultiLockHeartMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
             {
-                multiLockHeartMaterial = new Material(x.Result);
-                multiLockHeartMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"));
-                multiLockHeartMaterial.SetFloat("_FresnelPower", -1f);
-                multiLockHeartMaterial.SetFloat("_AlphaBoost", 7.2f);
-                multiLockHeartMaterial.SetFloat("_AlphaBias", 0.5f);
+                multiLockHeartMaterial = CreateMultiLockHeart(x.Result, assetBundle.LoadAsset<Texture>("texRampAmyEnergy"));
+                superMultiLockHeartMaterial = CreateMultiLockHeart(x.Result, assetBundle.LoadAsset<Texture>("texRampAmySuperEnergy"));
             };
+        }
+        private static GameObject CreateHammerSpinEffect(GameObject start)
+        {
+            GameObject newSpin = start;
+            newSpin.AddComponent<VFXAttributes>().DoNotCullPool = true;
+            var hammerSpinSpinningMesh = newSpin.transform.GetChild(0).GetComponent<MeshFilter>();
+            hammerSpinSpinningMesh.gameObject.AddComponent<RotateObject>().rotationSpeed = new Vector3(0, 0, -1200);
+            var hammerSpinSpinningAnimateAlpha = hammerSpinSpinningMesh.gameObject.AddComponent<AnimateShaderAlpha>();
+            hammerSpinSpinningAnimateAlpha.timeMax = 0.4f;
+            hammerSpinSpinningAnimateAlpha.alphaCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
+            hammerSpinSpinningAnimateAlpha.disableOnEnd = true;
+            hammerSpinSpinningAnimateAlpha.enabled = false;
+            var hammerSpinSpinningDisable = newSpin.AddComponent<DisableParticleEmissionAndDestroyOnTimer>();
+            hammerSpinSpinningDisable.waitDuration = 0.65f;
+            var hammerSpinRing = newSpin.transform.GetChild(1).GetComponent<ParticleSystemRenderer>();
+            hammerSpinSpinningDisable.particleSystems = new List<ParticleSystem> { hammerSpinSpinningMesh.transform.GetChild(0).GetComponent<ParticleSystem>(), hammerSpinRing.GetComponent<ParticleSystem>() };
+            return newSpin;
+        }
+
+        private static Material CreateMultiLockHeart(Material input, Texture ramp)
+        {
+            Material newMat = new Material(input);
+            newMat.SetTexture("_RemapTex", ramp);
+            newMat.SetFloat("_FresnelPower", -1f);
+            newMat.SetFloat("_AlphaBoost", 7.2f);
+            newMat.SetFloat("_AlphaBias", 0.5f);
+            return newMat;
         }
 
         private static void CreateMultiLockExplosionEffect(AssetBundle assetBundle)
@@ -245,7 +314,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             {
                 multiLockExplosionEffect = CreateMultiLockExplosion(x.Result, "AmyRoseMultiLockExplosionEffect", AmySurvivor.amyColor, new Color(1, 0, 0.5f), AmyStaticValues.specialMultiLockBlastRadius);
                 AddNewEffectDef(multiLockExplosionEffect, "Play_amyrose_multilock_projectile_hit");
-                superMultiLockExplosionEffect = CreateMultiLockExplosion(x.Result, "AmyRoseSuperMultiLockExplosionEffect", AmySurvivor.superAmyColor, new Color(1, 0.8f, 0.2f), AmyStaticValues.superSpecialMultiLockBlastRadius);
+                superMultiLockExplosionEffect = CreateMultiLockExplosion(x.Result, "AmyRoseSuperMultiLockExplosionEffect", AmySurvivor.superAmyColor, new Color(1, 0.3f, 0.3f), AmyStaticValues.superSpecialMultiLockBlastRadius);
                 AddNewEffectDef(superMultiLockExplosionEffect, "Play_amyrose_multilock_projectile_hit");
 
                 AsyncOperationHandle<Material> asyncMultiLockExplosionMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matJellyfishLightningSphere.mat");
@@ -257,7 +326,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                     multiLockExplosionEffect.transform.Find("Nova Sphere").GetComponent<ParticleSystemRenderer>().sharedMaterial = multiLockExplosionMaterial;
 
                     superMultiLockExplosionMaterial = new Material(multiLockExplosionMaterial);
-                    superMultiLockExplosionMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmyEnergy")); // super ramp energy once that exists
+                    superMultiLockExplosionMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmySuperEnergy"));
                     superMultiLockExplosionMaterial.SetFloat("_RimPower", 4f);
 
                     superMultiLockExplosionEffect.transform.Find("Nova Sphere").GetComponent<ParticleSystemRenderer>().sharedMaterial = superMultiLockExplosionMaterial;
@@ -359,7 +428,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             if (_assetBundle.LoadAsset<GameObject>("AmyRoseSuperMultiLockHeartGhost"))
             {
-                _assetBundle.LoadAsset<GameObject>("AmyRoseSuperMultiLockHeartGhost").transform.Find("Mesh").GetComponent<Renderer>().sharedMaterial = multiLockHeartMaterial;
+                _assetBundle.LoadAsset<GameObject>("AmyRoseSuperMultiLockHeartGhost").transform.Find("Mesh").GetComponent<Renderer>().sharedMaterial = superMultiLockHeartMaterial;
                 multiLockController.ghostPrefab = _assetBundle.CreateProjectileGhostPrefab("AmyRoseSuperMultiLockHeartGhost");
             }
         }

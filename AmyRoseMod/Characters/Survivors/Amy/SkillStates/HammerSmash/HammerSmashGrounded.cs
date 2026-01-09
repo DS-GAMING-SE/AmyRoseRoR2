@@ -12,6 +12,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
     public class HammerSmashGrounded : BaseMeleeAttack
     {
+        protected override GameObject swingEffectPrefab { get { return AmyAssets.hammerSwingLargeEffect; } }
+        protected override GameObject hitEffectPrefab { get { return AmyAssets.hammerHitImpactEffect; } }
         public float charge;
         public override void OnEnter()
         {
@@ -20,8 +22,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             swingSoundString = "Play_amyrose_swing_heavy";
             muzzleString = "LargeSwingDown";
             playbackRateParam = "Slash.playbackRate";
-            swingEffectPrefab = AmyAssets.hammerSwingLargeEffect;
-            hitEffectPrefab = AmyAssets.hammerHitImpactEffect;
 
             impactSound = AmyAssets.hammerHitSoundEvent.index;
 

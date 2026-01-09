@@ -44,7 +44,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         public override string survivorTokenPrefix => AMY_PREFIX;
 
         public static Color amyColor = new Color(1f, 0.5f, 0.9f);
-        public static Color superAmyColor = new Color(1f, 0.55f, 0.35f);
+        public static Color superAmyColor = new Color(1f, 0.7f, 0.3f);
+
+
+        public static Material amySuperMaterial;
+        public static Material amySuperEyesMaterial;
 
 
         public override BodyInfo bodyInfo => new BodyInfo
@@ -285,7 +289,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 ));
             primaryMelee.stepCount = 4;
             primaryMelee.stepGraceDuration = 0.5f;
-            primaryMelee.keywordTokens = new string[] { "KEYWORD_AGILE", HedgehogUtils.Language.launchKeyword };
+            primaryMelee.keywordTokens = new string[] { HedgehogUtils.Language.launchKeyword, "KEYWORD_AGILE" };
 
             Skills.AddPrimarySkills(bodyPrefab, primaryMelee);
         }
@@ -521,7 +525,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             AmySuperFormComponent.scepterSuperSpecialMultiLock.requiredForm = SuperFormDef.superFormDef;
             AmySuperFormComponent.scepterSuperSpecialMultiLock.skillNameToken = AMY_PREFIX + "SCEPTER_SUPER_SPECIAL_MULTILOCK_NAME";
             AmySuperFormComponent.scepterSuperSpecialMultiLock.skillDescriptionToken = AMY_PREFIX + "SCEPTER_SUPER_SPECIAL_MULTILOCK_DESCRIPTION";
-            AmySuperFormComponent.scepterSuperSpecialMultiLock.icon = assetBundle.LoadAsset<Sprite>("texSuperSpecialMultiLockIcon");
+            AmySuperFormComponent.scepterSuperSpecialMultiLock.icon = assetBundle.LoadAsset<Sprite>("texScepterSuperSpecialMultiLockIcon");
 
             AmySuperFormComponent.scepterSuperSpecialMultiLock.activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.ScepterUpgrades.ScepterSuperMultiLockTargeting));
 
@@ -540,6 +544,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             CharacterModel.RendererInfo[] defaultRendererinfos = prefabCharacterModel.baseRendererInfos;
 
             List<SkinDef> skins = new List<SkinDef>();
+
+            amySuperMaterial = assetBundle.LoadMaterial("matAmySuper").SetHopooMaterial().SetSpecular(0.15f).SetEmission(0.8f);
+            amySuperEyesMaterial = assetBundle.LoadMaterial("matAmyEyesSuper").SetHopooMaterial().SetSpecular(0.15f);
 
             #region DefaultSkin
             //this creates a SkinDef with all default fields

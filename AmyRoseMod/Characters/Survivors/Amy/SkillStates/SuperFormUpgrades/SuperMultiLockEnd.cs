@@ -17,5 +17,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
             base.PrepareStats();
             startSpeed = 25f;
         }
+        protected override void PlayVFX()
+        {
+            EffectManager.SimpleMuzzleFlash(AmyAssets.superMultiLockEndEffect, base.gameObject, "MultiLockEndTransform", false);
+        }
     }
 }

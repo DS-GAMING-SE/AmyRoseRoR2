@@ -38,13 +38,13 @@ namespace AmyRoseMod.Modules.BaseStates
         protected string hitSoundString = "";
         protected string muzzleString = "SwingCenter";
         protected string playbackRateParam = "Slash.playbackRate";
-        protected GameObject swingEffectPrefab;
+        protected virtual GameObject swingEffectPrefab { get { return AmyAssets.hammerSwingEffect; } }
 
         protected bool poolSwingEffect = true;
         private GameObject swingEffectInstance;
         private EffectManagerHelper _emh_swingEffectInstance;
 
-        protected GameObject hitEffectPrefab;
+        protected virtual GameObject hitEffectPrefab { get { return AmyAssets.hammerHitImpactEffect; } }
         protected NetworkSoundEventIndex impactSound = NetworkSoundEventIndex.Invalid;
         protected OverlapAttack attack;
 

@@ -17,12 +17,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
 
         public override GameObject GetFlashPrefab()
         {
-            return AmyAssets.amyBoostFlashEffect;
+            return AmyAssets.superAmyBoostFlashEffect;
         }
 
         public override GameObject GetAuraPrefab()
         {
-            return AmyAssets.amyBoostAuraEffect;
+            return AmyAssets.superAmyBoostAuraEffect;
         }
 
         public override Material GetOverlayMaterial()

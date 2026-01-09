@@ -33,8 +33,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                     break;
             }
             playbackRateParam = "Slash.playbackRate";
-            swingEffectPrefab = AmyAssets.hammerSwingEffect;
-            hitEffectPrefab = AmyAssets.hammerHitImpactEffect;
 
             impactSound = AmyAssets.hammerHitSoundEvent.index;
 

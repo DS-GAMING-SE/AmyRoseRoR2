@@ -31,8 +31,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         protected float hitHopVelocity;
 
         protected string playbackRateParam = "Slash.playbackRate";
-        protected GameObject spinEffectPrefab;
-        protected GameObject hitEffectPrefab;
+        protected virtual GameObject spinEffectPrefab { get { return AmyAssets.hammerSpinSpinningEffect; } }
+        protected virtual GameObject hitEffectPrefab { get { return AmyAssets.hammerHitImpactEffect; } }
         protected NetworkSoundEventIndex impactSound = AmyAssets.hammerHitSoundEvent.index;
         protected OverlapAttack attack;
 
@@ -79,8 +79,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             buffStackTimer = buffsPerSecond;
             animator = GetModelAnimator();
             playbackRateParam = "Slash.playbackRate";
-            spinEffectPrefab = AmyAssets.hammerSpinSpinningEffect;
-            hitEffectPrefab = AmyAssets.hammerHitImpactEffect;
             PlayAnimation("FullBody, Override", "HammerSpin");
 
             impactSound = AmyAssets.hammerHitSoundEvent.index;

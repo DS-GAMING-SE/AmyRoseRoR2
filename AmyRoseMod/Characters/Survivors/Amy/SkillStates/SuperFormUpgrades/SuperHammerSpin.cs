@@ -14,6 +14,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
     public class SuperHammerSpin : HammerSpin, ISkillState
     {
         protected override BuffDef boostBuff => AmyBuffs.superBoostBuff;
+        protected override GameObject spinEffectPrefab { get { return AmyAssets.superHammerSpinSpinningEffect; } }
+        protected override GameObject hitEffectPrefab { get { return AmyAssets.superHammerHitImpactEffect; } }
 
         protected override void PrepareAttackStats()
         {

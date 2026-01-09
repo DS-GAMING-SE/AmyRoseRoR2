@@ -10458,7 +10458,7 @@ MonoBehaviour:
   - name: HeadCenter
     transform: {fileID: 5206612409247185252}
   - name: Chest
-    transform: {fileID: 8642529363770582498}
+    transform: {fileID: 5107358748499821414}
   - name: HandL
     transform: {fileID: 8626133654053110223}
   - name: HandR

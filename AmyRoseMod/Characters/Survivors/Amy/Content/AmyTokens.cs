@@ -99,11 +99,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             #endregion
 
             #region Voicelines
-            LanguageAPI.Add(prefix + "VOICELINES_TITLE", "Voicelines");
-            LanguageAPI.Add(prefix + "VOICELINES_ENABLE_NAME", "Enable Voicelines");
             LanguageAPI.Add(prefix + "VOICELINES_ENABLE_DESCRIPTION", $"Voicelines recorded by {Tokens.UtilityText("Izziibel")}.");
-
-            LanguageAPI.Add(prefix + "VOICELINES_DISABLE_NAME", "Disable Voicelines");
             #endregion
 
             #region Achievements
