@@ -66,6 +66,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             {
                 FireOrb();
                 base.characterBody.AddBuff(RoR2Content.Buffs.Intangible);
+                base.characterBody.AddBuff(DLC3Content.Buffs.Untargetable);
             }
             if (target)
             {
@@ -188,6 +189,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             if (NetworkServer.active)
             {
                 base.characterBody.RemoveBuff(RoR2Content.Buffs.Intangible);
+                base.characterBody.RemoveBuff(DLC3Content.Buffs.Untargetable);
             }
             if (characterDirection)
             {

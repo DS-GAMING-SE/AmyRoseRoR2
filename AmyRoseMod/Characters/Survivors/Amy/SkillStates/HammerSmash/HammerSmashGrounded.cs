@@ -15,6 +15,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         protected override GameObject swingEffectPrefab { get { return AmyAssets.hammerSwingLargeEffect; } }
         protected override GameObject hitEffectPrefab { get { return AmyAssets.hammerHitImpactEffect; } }
         public float charge;
+        private bool hasHitGround;
+        protected float hammerHitGroundPercentTime;
         public override void OnEnter()
         {
             PrepareAnimationStats();
@@ -35,8 +37,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
             //0-1 multiplier of baseduration, used to time when the hitbox is out (usually based on the run time of the animation)
             //for example, if attackStartPercentTime is 0.5, the attack will start hitting halfway through the ability. if baseduration is 3 seconds, the attack will start happening at 1.5 seconds
-            attackStartPercentTime = 0.15f;
-            attackEndPercentTime = 0.3f;
+            attackStartPercentTime = 0.12f;
+            attackEndPercentTime = 0.25f;
+            hammerHitGroundPercentTime = 0.19f;
 
             //this is the point at which the attack can be interrupted by itself, continuing a combo
             earlyExitPercentTime = 0.75f;
@@ -74,9 +77,20 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         {
             base.FixedUpdate();
             //float minY = Mathf.Lerp(-2f, -4f, (fixedAge - (duration * attackEndPercentTime)) * (1 / (duration * attackEndPercentTime)));
-            if (base.characterMotor && !base.characterMotor.isFlying && stopwatch <= duration * attackEndPercentTime)
+            if (stopwatch <= duration * attackEndPercentTime)
             {
-                base.characterMotor.velocity.y = Mathf.Max(characterMotor.velocity.y, -3);
+                if (base.characterMotor && !base.characterMotor.isFlying)
+                {
+                    base.characterMotor.velocity.y = Mathf.Max(characterMotor.velocity.y, -3);
+                }
+            }
+            if (stopwatch > duration * hammerHitGroundPercentTime && !hasHitGround)
+            {
+                hasHitGround = true;
+                if (base.isAuthority && base.characterMotor.isGrounded)
+                {
+                    EffectManager.SimpleMuzzleFlash(AmyAssets.secondaryHitGroundEffect, base.gameObject, "SecondaryGround", true);
+                }
             }
         }
 
@@ -87,7 +101,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected override void PlayAttackAnimation()
         {
-            PlayAnimation("FullBody, Override", "SecondaryAttack", "Slash.playbackRate", duration);
+            PlayAnimation("FullBody, Override", "SecondaryAttack", "Slash.playbackRate", duration * 1.1f);
         }
 
         protected override void PlaySwingEffect()

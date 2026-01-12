@@ -57,8 +57,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 overlapAttack.inflictor = base.gameObject;
                 overlapAttack.attacker = base.gameObject;
                 overlapAttack.teamIndex = GetTeam();
-                overlapAttack.pushAwayForce = 200f;
-                overlapAttack.forceVector = Vector3.up * 500f;
+                overlapAttack.pushAwayForce = 500f;
+                overlapAttack.forceVector = Vector3.up * 1500f;
                 if (targetToIgnore)
                 {
                     overlapAttack.addIgnoredHitList(targetToIgnore);
@@ -71,6 +71,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
             PlayJumpAnimation();
             cachedAnimationDuration = animator.GetFloat("Slash.playbackRate");
+
+            if (base.isAuthority && base.characterMotor.isGrounded)
+            {
+                EffectManager.SimpleMuzzleFlash(AmyAssets.secondaryHitGroundAerialEffect, base.gameObject, "SecondaryGround", true);
+            }
         }
 
         public virtual void PrepareStats()

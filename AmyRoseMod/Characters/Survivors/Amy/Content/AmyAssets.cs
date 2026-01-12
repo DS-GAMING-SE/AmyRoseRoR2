@@ -29,6 +29,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         public static GameObject secondaryChargedEffect;
         public static GameObject superSecondaryChargedEffect;
 
+        public static GameObject secondaryHitGroundEffect;
+        public static GameObject secondaryHitGroundAerialEffect;
+
         public static GameObject hammerSpinSpinningEffect;
         public static GameObject superHammerSpinSpinningEffect;
 
@@ -277,6 +280,84 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             {
                 multiLockHeartMaterial = CreateMultiLockHeart(x.Result, assetBundle.LoadAsset<Texture>("texRampAmyEnergy"));
                 superMultiLockHeartMaterial = CreateMultiLockHeart(x.Result, assetBundle.LoadAsset<Texture>("texRampAmySuperEnergy"));
+            };
+
+            CreateSecondaryGroundHit(assetBundle);
+        }
+        private static void CreateSecondaryGroundHit(AssetBundle assetBundle)
+        {
+            AsyncOperationHandle<GameObject> asyncHitGround = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/BeetleGuard/BeetleGuardGroundSlam.prefab");
+            asyncHitGround.Completed += delegate (AsyncOperationHandle<GameObject> x)
+            {
+                // Secondary hit ground
+                secondaryHitGroundEffect = PrefabAPI.InstantiateClone(x.Result, "AmySecondaryGroundHitEffect");
+                secondaryHitGroundEffect.AddComponent<NetworkIdentity>();
+                ShakeEmitter[] shakeEmitters = secondaryHitGroundEffect.GetComponents<ShakeEmitter>();
+                GameObject.Destroy(shakeEmitters[0]);
+                shakeEmitters[1].wave.amplitude = 0.6f;
+                Transform particleParent = secondaryHitGroundEffect.transform.GetChild(0);
+                particleParent.transform.localPosition = Vector3.zero;
+                GameObject.Destroy(particleParent.GetChild(4).gameObject);
+                GameObject.Destroy(particleParent.GetChild(3).gameObject);
+                GameObject.Destroy(particleParent.GetChild(2).gameObject);
+                GameObject.Destroy(particleParent.GetChild(1).gameObject);
+                GameObject.Destroy(particleParent.GetChild(0).gameObject);
+                ParticleSystem.MainModule dustRingMain = particleParent.Find("DustRing").GetComponent<ParticleSystem>().main;
+                dustRingMain.startLifetime = 0.5f;
+                dustRingMain.startSize = 1.2f;
+
+                ParticleSystem dust = particleParent.Find("Dust").GetComponent<ParticleSystem>();
+                ParticleSystem.MainModule dustMain = dust.main;
+                dustMain.startSize = new ParticleSystem.MinMaxCurve(0.3f, 0.7f);
+                ParticleSystem.EmissionModule dustEmission = dust.emission;
+                ParticleSystem.Burst dustBurst = dustEmission.GetBurst(0);
+                dustBurst.count = 3;
+                dust.emission.SetBurst(0, dustBurst);
+                ParticleSystem.ShapeModule dustShape = dust.shape;
+                dustShape.radius = 1.7f;
+
+                ParticleSystem debris = particleParent.Find("Debris").gameObject.GetComponent<ParticleSystem>();
+                ParticleSystem.EmissionModule debrisEmission = debris.emission;
+                ParticleSystem.Burst debrisBurst = debrisEmission.GetBurst(0);
+                debrisBurst.count = 7;
+                debris.emission.SetBurst(0, debrisBurst);
+
+                Transform decal = particleParent.Find("Decal");
+                decal.GetComponent<AnimateShaderAlpha>().timeMax = 0.6f;
+                decal.localScale = new Vector3(3.5f, 3.5f, 3.5f);
+
+                AddNewEffectDef(secondaryHitGroundEffect);
+                // Larger/Aerial version
+                secondaryHitGroundAerialEffect = PrefabAPI.InstantiateClone(x.Result, "AmySecondaryGroundAerialHitEffect");
+                secondaryHitGroundAerialEffect.AddComponent<NetworkIdentity>();
+                ShakeEmitter[] aerialShakeEmitters = secondaryHitGroundAerialEffect.GetComponents<ShakeEmitter>();
+                GameObject.Destroy(aerialShakeEmitters[0]);
+                aerialShakeEmitters[1].wave.amplitude = 1f;
+                Transform aerialParticleParent = secondaryHitGroundAerialEffect.transform.GetChild(0);
+                aerialParticleParent.transform.localPosition = new Vector3(0f, 0.3f, 0f);
+                GameObject.Destroy(aerialParticleParent.GetChild(4).gameObject);
+                GameObject.Destroy(aerialParticleParent.GetChild(3).gameObject);
+                GameObject.Destroy(aerialParticleParent.GetChild(2).gameObject);
+                GameObject.Destroy(aerialParticleParent.GetChild(0).gameObject);
+                ParticleSystem.MainModule aerialDustRingMain = aerialParticleParent.Find("DustRing").GetComponent<ParticleSystem>().main;
+                aerialDustRingMain.startLifetime = 0.65f;
+                aerialDustRingMain.startSize = 3f;
+                Transform aerialDecal = aerialParticleParent.Find("Decal");
+                aerialDecal.GetComponent<AnimateShaderAlpha>().timeMax = 0.8f;
+                aerialDecal.localScale = new Vector3(6f, 6f, 6f);
+
+                ParticleSystem aerialDust = aerialParticleParent.Find("Dust").GetComponent<ParticleSystem>();
+                ParticleSystem.MainModule aerialDustMain = aerialDust.main;
+                aerialDustMain.startSize = new ParticleSystem.MinMaxCurve(0.6f, 1.3f);
+                ParticleSystem.ShapeModule aerialDustShape = aerialDust.shape;
+                aerialDustShape.radius = 4.7f;
+
+                ParticleSystem aerialDebris = aerialParticleParent.Find("Debris").gameObject.GetComponent<ParticleSystem>();
+                ParticleSystem.EmissionModule aerialDebrisEmission = aerialDebris.emission;
+                ParticleSystem.Burst aerialDebrisBurst = aerialDebrisEmission.GetBurst(0);
+                aerialDebrisBurst.count = 14;
+                aerialDebris.emission.SetBurst(0, aerialDebrisBurst);
+                AddNewEffectDef(secondaryHitGroundAerialEffect);
             };
         }
         private static GameObject CreateHammerSpinEffect(GameObject start)
