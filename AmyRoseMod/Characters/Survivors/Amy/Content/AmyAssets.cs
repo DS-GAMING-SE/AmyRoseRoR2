@@ -3,6 +3,7 @@ using AmyRoseMod.Modules;
 using R2API;
 using RoR2;
 using RoR2.Audio;
+using RoR2.Orbs;
 using RoR2.Projectile;
 using System;
 using System.Collections.Generic;
@@ -44,8 +45,13 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         public static GameObject superAmyBoostFlashEffect;
         public static GameObject superAmyBoostAuraEffect;
 
+        public static GameObject multiLockHeartSpawnEffect;
+        public static GameObject superMultiLockHeartSpawnEffect;
         public static GameObject multiLockEndEffect;
         public static GameObject superMultiLockEndEffect;
+
+        public static GameObject scepterMultiLockOrbEffect;
+        public static GameObject scepterMultiLockOrbFlash;
 
         // materials
         public static Material hammerSwingMaterial;
@@ -54,6 +60,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         public static Material superHeartImpactMaterial;
         public static Material heartMaterial;
         public static Material superHeartMaterial;
+        public static Material scepterHeartMaterial;
+        public static Material scepterHeartImpactMaterial;
 
         public static Material hammerSpinMaterial;
         public static Material superHammerSpinMaterial;
@@ -108,6 +116,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
                 multiLockEndEffect.transform.Find("AmyMultiLockEndSparkles").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
                 superMultiLockEndEffect.transform.Find("AmyMultiLockEndSparkles").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
+
+                multiLockHeartSpawnEffect.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
+                superMultiLockHeartSpawnEffect.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
             };
         }
 
@@ -223,6 +234,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             hammerHitImpactEffect.AddComponent<DestroyOnParticleEnd>().trackedParticleSystem = hammerHitImpactEffect.transform.Find("HammerHitHeartImpact").GetComponent<ParticleSystem>();
             superHammerHitImpactEffect = _assetBundle.LoadEffect("AmySuperHammerHitEffect", false, 0);
             superHammerHitImpactEffect.AddComponent<DestroyOnParticleEnd>().trackedParticleSystem = superHammerHitImpactEffect.transform.Find("HammerHitHeartImpact").GetComponent<ParticleSystem>();
+            multiLockHeartSpawnEffect = _assetBundle.LoadEffect("AmyMultiLockSpawnHeartEffect", false, 0.7f);
+            superMultiLockHeartSpawnEffect = _assetBundle.LoadEffect("AmySuperMultiLockSpawnHeartEffect", false, 0.7f);
 
             // Tracer Glow Material
             AsyncOperationHandle<Material> asyncTracerMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matTracerBright.mat");
@@ -233,6 +246,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
                 multiLockEndEffect.transform.Find("AmyMultiLockEndSparklesTiny").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
                 superMultiLockEndEffect.transform.Find("AmyMultiLockEndSparklesTiny").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
+
+                multiLockHeartSpawnEffect.transform.GetChild(1).GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
+                superMultiLockHeartSpawnEffect.transform.GetChild(1).GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
             };
 
             // Heart/Impact Material
@@ -242,13 +258,15 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 heartImpactMaterial = new Material(x.Result);
                 heartImpactMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"));
                 heartImpactMaterial.SetTexture("_MainTex", assetBundle.LoadAsset<Texture>("texAmyVFXHeartImpact"));
-                heartImpactMaterial.SetFloat("_AlphaBoost", 4.5f);
+                heartImpactMaterial.SetFloat("_AlphaBoost", 3f);
+                heartImpactMaterial.SetFloat("_AlphaBias", 0.2f);
                 hammerHitImpactEffect.transform.Find("HammerHitHeartImpact").GetComponent<ParticleSystemRenderer>().sharedMaterial = heartImpactMaterial;
                 
                 superHeartImpactMaterial = new Material(x.Result);
                 superHeartImpactMaterial.SetTexture("_RemapTex", assetBundle.LoadAsset<Texture>("texRampAmySuperEnergy"));
                 superHeartImpactMaterial.SetTexture("_MainTex", assetBundle.LoadAsset<Texture>("texAmyVFXHeartImpact"));
-                superHeartImpactMaterial.SetFloat("_AlphaBoost", 4.5f);
+                superHeartImpactMaterial.SetFloat("_AlphaBoost", 3f);
+                superHeartImpactMaterial.SetFloat("_AlphaBoost", 0.2f);
                 superHammerHitImpactEffect.transform.Find("HammerHitHeartImpact").GetComponent<ParticleSystemRenderer>().sharedMaterial = superHeartImpactMaterial;
 
                 heartMaterial = new Material(x.Result);
@@ -262,6 +280,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 superHeartMaterial.SetTexture("_MainTex", assetBundle.LoadAsset<Texture>("texAmyVFXHeart"));
                 superMultiLockEndEffect.transform.Find("AmyMultiLockEndHearts").GetComponent<ParticleSystemRenderer>().sharedMaterial = superHeartMaterial;
                 superHammerSpinSpinningMesh.transform.GetChild(0).GetComponent<ParticleSystemRenderer>().sharedMaterial = superHeartMaterial;
+
+                CreateScepterMultiLockOrb(assetBundle);
             };
 
             // Boost
@@ -283,6 +303,40 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             };
 
             CreateSecondaryGroundHit(assetBundle);
+        }
+        private static void CreateScepterMultiLockOrb(AssetBundle assetBundle)
+        {
+            AsyncOperationHandle<Texture> asyncScepterRamp = Addressables.LoadAssetAsync<Texture>("RoR2/Base/Common/ColorRamps/texRampEngi.png");
+            asyncScepterRamp.Completed += delegate (AsyncOperationHandle<Texture> x)
+            {
+                scepterHeartMaterial = new Material(heartMaterial);
+                scepterHeartMaterial.SetTexture("_RemapTex", x.Result);
+                scepterHeartMaterial.SetFloat("_AlphaBoost", 1.5f);
+                scepterHeartMaterial.SetFloat("_Boost", 1.5f);
+                scepterHeartMaterial.SetFloat("_AlphaBias", 0.4f);
+                scepterHeartImpactMaterial = new Material(scepterHeartMaterial);
+                scepterHeartImpactMaterial.SetTexture("_MainTex", assetBundle.LoadAsset<Texture>("texAmyVFXHeartImpact"));
+                scepterHeartImpactMaterial.SetFloat("_DepthOffset", -3f);
+                scepterHeartImpactMaterial.SetFloat("_ZTest", 8f);
+                AsyncOperationHandle<GameObject> asyncHealthOrb = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/HealthOrbEffect.prefab");
+                asyncHealthOrb.Completed += delegate (AsyncOperationHandle<GameObject> y)
+                {
+                    scepterMultiLockOrbEffect = PrefabAPI.InstantiateClone(y.Result, "AmyScepterMultiLockOrbEffect");
+                    GameObject.Destroy(scepterMultiLockOrbEffect.transform.GetChild(1).GetChild(0).gameObject);
+                    var orbVFX = GameObject.Instantiate(assetBundle.LoadAsset<GameObject>("AmyScepterMultiLockOrbEffect"), scepterMultiLockOrbEffect.transform.GetChild(1));
+                    orbVFX.GetComponent<ParticleSystemRenderer>().sharedMaterial = scepterHeartMaterial;
+
+                    var trail = scepterMultiLockOrbEffect.transform.GetChild(0).GetChild(0).GetComponent<TrailRenderer>();
+                    var trailMat = new Material(trail.sharedMaterial);
+                    trailMat.SetTexture("_RemapTex", x.Result);
+                    trail.sharedMaterial = trailMat;
+
+                    scepterMultiLockOrbFlash = assetBundle.LoadEffect("AmyScepterMultiLockOrbFlash", true, 0.35f);
+                    scepterMultiLockOrbFlash.GetComponent<ParticleSystemRenderer>().sharedMaterial = scepterHeartImpactMaterial;
+
+                    AddNewEffectDef(scepterMultiLockOrbEffect);
+                };
+            };
         }
         private static void CreateSecondaryGroundHit(AssetBundle assetBundle)
         {

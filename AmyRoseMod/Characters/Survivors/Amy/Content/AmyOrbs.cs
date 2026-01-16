@@ -117,7 +117,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Content
                     genericFloat = base.duration
                 };
                 effectData.SetHurtBoxReference(this.target);
-                EffectManager.SpawnEffect(OrbStorageUtility.Get("Prefabs/Effects/OrbEffects/HealthOrbEffect"), effectData, true);
+                EffectManager.SpawnEffect(AmyAssets.scepterMultiLockOrbEffect, effectData, true);
                 targetBody = target.healthComponent ? target.healthComponent.body : null;
             }
             public override void OnArrival()
@@ -129,6 +129,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Content
                     {
                         targetBody.healthComponent.HealFraction(AmyStaticValues.scepterSpecialMultiLockHealAmount, default);
                     }
+                    EffectData data = new EffectData
+                    {
+                        rootObject = targetBody.gameObject,
+                        start = targetBody.corePosition
+                    };
+                    EffectManager.SpawnEffect(AmyAssets.scepterMultiLockOrbFlash, data, true);
                 }
             }
         }
