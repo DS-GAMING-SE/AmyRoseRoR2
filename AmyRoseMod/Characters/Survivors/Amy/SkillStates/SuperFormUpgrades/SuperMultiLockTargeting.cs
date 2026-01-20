@@ -24,5 +24,16 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
             orbBounceRange = AmyStaticValues.superSpecialMultiLockBounceRange;
             this.search.maxDistanceFilter = AmyStaticValues.superSpecialMultiLockSearchRange;
         }
+        protected override Indicator CreateIndicator(Transform targetTransform)
+        {
+            Indicator targetIndicator = new Indicator(base.gameObject, HedgehogUtils.Assets.lockOnIndicator);
+            targetIndicator.targetTransform = targetTransform;
+            targetIndicator.active = true;
+            if (targetIndicator.hasVisualizer)
+            {
+                targetIndicator.visualizerInstance.GetComponent<HedgehogUtils.Miscellaneous.LockOnIndicator>().SetColors(AmySurvivor.superAmyColor, AmySurvivor.amyColor2);
+            }
+            return targetIndicator;
+        }
     }
 }

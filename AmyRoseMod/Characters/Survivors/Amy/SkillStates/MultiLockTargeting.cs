@@ -151,13 +151,21 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public virtual void AddTarget(HurtBox target)
         {
-            Indicator targetIndicator = new Indicator(base.gameObject, LegacyResourcesAPI.Load<GameObject>("Prefabs/EngiMissileTrackingIndicator"));
-            targetIndicator.targetTransform = target.transform;
-            targetIndicator.active = true;
-            this.targets.Add(targetIndicator);
+            this.targets.Add(CreateIndicator(target.transform));
             this.targetHurtBoxes.Add(target);
             OnTargetsChanged?.Invoke(targets.Count);
             Util.PlaySound("Play_hedgehogutils_lockon", base.gameObject);
+        }
+        protected virtual Indicator CreateIndicator(Transform targetTransform)
+        {
+            Indicator targetIndicator = new Indicator(base.gameObject, HedgehogUtils.Assets.lockOnIndicator);
+            targetIndicator.targetTransform = targetTransform;
+            targetIndicator.active = true;
+            if (targetIndicator.hasVisualizer)
+            {
+                targetIndicator.visualizerInstance.GetComponent<HedgehogUtils.Miscellaneous.LockOnIndicator>().SetColors(AmySurvivor.amyColor, AmySurvivor.amyColor2);
+            }
+            return targetIndicator;
         }
 
         public virtual void RemoveTarget(int index)

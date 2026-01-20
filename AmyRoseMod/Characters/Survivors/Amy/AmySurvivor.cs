@@ -44,7 +44,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         public override string survivorTokenPrefix => AMY_PREFIX;
 
         public static Color amyColor = new Color(1f, 0.5f, 0.9f);
+        public static Color amyColor2 = new Color(1, 0, 0.5f);
         public static Color superAmyColor = new Color(1f, 0.7f, 0.3f);
+        public static Color scepterAmyColor = new Color(0.05f, 0.9f, 0.5f);
 
 
         public static Material amySuperMaterial;

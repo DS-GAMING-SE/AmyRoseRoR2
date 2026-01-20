@@ -447,7 +447,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             AsyncOperationHandle<GameObject> asyncMultiLockExplosion = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Vagrant/VagrantTrackingBombExplosion.prefab");
             asyncMultiLockExplosion.Completed += delegate (AsyncOperationHandle<GameObject> x)
             {
-                multiLockExplosionEffect = CreateMultiLockExplosion(x.Result, "AmyRoseMultiLockExplosionEffect", AmySurvivor.amyColor, new Color(1, 0, 0.5f), AmyStaticValues.specialMultiLockBlastRadius);
+                multiLockExplosionEffect = CreateMultiLockExplosion(x.Result, "AmyRoseMultiLockExplosionEffect", AmySurvivor.amyColor, AmySurvivor.amyColor2, AmyStaticValues.specialMultiLockBlastRadius);
                 AddNewEffectDef(multiLockExplosionEffect, "Play_amyrose_multilock_projectile_hit");
                 superMultiLockExplosionEffect = CreateMultiLockExplosion(x.Result, "AmyRoseSuperMultiLockExplosionEffect", AmySurvivor.superAmyColor, new Color(1, 0.3f, 0.3f), AmyStaticValues.superSpecialMultiLockBlastRadius);
                 AddNewEffectDef(superMultiLockExplosionEffect, "Play_amyrose_multilock_projectile_hit");
