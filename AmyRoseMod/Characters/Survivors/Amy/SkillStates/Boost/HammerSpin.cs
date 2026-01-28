@@ -97,8 +97,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             previousAirControl = characterMotor.airControl;
             characterMotor.airControl = 1f;
 
-            animator.SetFloat("AimPitch", 0.5f);
-            animator.SetFloat("AimYaw", 0.5f);
+            animator.SetBool("ignoreAim", true);
             aimAnimator.enabled = false;
 
             if (NetworkServer.active)
@@ -371,6 +370,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 base.characterBody.skillLocator.primary.onSkillChanged -= OnSkillChanged;
             }
             PlayAnimation("FullBody, Override", "BufferEmpty");
+            animator.SetBool("ignoreAim", false);
             if (exitToEndLag)
             {
                 EntityStateMachine weapon = EntityStateMachine.FindByCustomName(base.gameObject, "Weapon");
