@@ -15,6 +15,15 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         public static UnlockableDef grandMasterySkinUnlockableDef = null;
         public static ConfigEntry<bool> grandMasterySkinUnlockableConfig;
+
+        public static UnlockableDef meridianSkinUnlockableDef = null;
+        public static ConfigEntry<bool> meridianSkinUnlockableConfig;
+
+        public static UnlockableDef decompileSkinUnlockableDef = null;
+        public static ConfigEntry<bool> decompileSkinUnlockableConfig;
+
+        public static UnlockableDef purgeSkinUnlockableDef = null;
+        public static ConfigEntry<bool> purgeSkinUnlockableConfig;
         public static void Init()
         {
             // Mastery
@@ -34,6 +43,33 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             grandMasterySkinUnlockableConfig = CreateUnlockableConfig("Grand Mastery");
             grandMasterySkinUnlockableConfig.SettingChanged += new EventHandler(delegate (object o, EventArgs a)
             { UnlockableConfigChanged(grandMasterySkinUnlockableConfig.Value, ref grandMasterySkinUnlockableDef, AmyGrandMasteryAchievement.unlockableIdentifier); });
+
+            // Prime Meridian
+            meridianSkinUnlockableDef = Modules.Content.CreateAndAddUnlockbleDef(
+                AmyMeridianEventTriggerAchievement.unlockableIdentifier,
+                Modules.Tokens.GetAchievementNameToken(AmyMeridianEventTriggerAchievement.unlockableIdentifier),
+                AmySurvivor.instance.assetBundle.LoadAsset<Sprite>("texMainSkinIcon"));
+            meridianSkinUnlockableConfig = CreateUnlockableConfig("Prime Meridian");
+            meridianSkinUnlockableConfig.SettingChanged += new EventHandler(delegate (object o, EventArgs a)
+            { UnlockableConfigChanged(meridianSkinUnlockableConfig.Value, ref meridianSkinUnlockableDef, AmyMeridianEventTriggerAchievement.unlockableIdentifier); });
+
+            // Decompile
+            decompileSkinUnlockableDef = Modules.Content.CreateAndAddUnlockbleDef(
+                AmyDecompileAchievement.unlockableIdentifier,
+                Modules.Tokens.GetAchievementNameToken(AmyDecompileAchievement.unlockableIdentifier),
+                AmySurvivor.instance.assetBundle.LoadAsset<Sprite>("texMalwareSkinIcon"));
+            decompileSkinUnlockableConfig = CreateUnlockableConfig("Decompile");
+            decompileSkinUnlockableConfig.SettingChanged += new EventHandler(delegate (object o, EventArgs a)
+            { UnlockableConfigChanged(decompileSkinUnlockableConfig.Value, ref decompileSkinUnlockableDef, AmyDecompileAchievement.unlockableIdentifier); });
+
+            // Purge
+            purgeSkinUnlockableDef = Modules.Content.CreateAndAddUnlockbleDef(
+                AmyPurgeAchievement.unlockableIdentifier,
+                Modules.Tokens.GetAchievementNameToken(AmyPurgeAchievement.unlockableIdentifier),
+                AmySurvivor.instance.assetBundle.LoadAsset<Sprite>("texMainSkinIcon"));
+            purgeSkinUnlockableConfig = CreateUnlockableConfig("Purge");
+            purgeSkinUnlockableConfig.SettingChanged += new EventHandler(delegate (object o, EventArgs a)
+            { UnlockableConfigChanged(purgeSkinUnlockableConfig.Value, ref purgeSkinUnlockableDef, AmyPurgeAchievement.unlockableIdentifier); });
 
             On.RoR2.UserProfile.OnLogin += ConfigUnlocks;
         }
@@ -60,6 +96,39 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 if (!self.HasUnlockable(grandMasterySkinUnlockableDef))
                 {
                     self.GrantUnlockable(grandMasterySkinUnlockableDef);
+                }
+            }
+            if (meridianSkinUnlockableConfig.Value)
+            {
+                if (!self.HasAchievement(AmyMeridianEventTriggerAchievement.unlockableIdentifier))
+                {
+                    self.AddAchievement(AmyMeridianEventTriggerAchievement.unlockableIdentifier, true);
+                }
+                if (!self.HasUnlockable(meridianSkinUnlockableDef))
+                {
+                    self.GrantUnlockable(meridianSkinUnlockableDef);
+                }
+            }
+            if (decompileSkinUnlockableConfig.Value)
+            {
+                if (!self.HasAchievement(AmyDecompileAchievement.unlockableIdentifier))
+                {
+                    self.AddAchievement(AmyDecompileAchievement.unlockableIdentifier, true);
+                }
+                if (!self.HasUnlockable(decompileSkinUnlockableDef))
+                {
+                    self.GrantUnlockable(decompileSkinUnlockableDef);
+                }
+            }
+            if (purgeSkinUnlockableConfig.Value)
+            {
+                if (!self.HasAchievement(AmyPurgeAchievement.unlockableIdentifier))
+                {
+                    self.AddAchievement(AmyPurgeAchievement.unlockableIdentifier, true);
+                }
+                if (!self.HasUnlockable(purgeSkinUnlockableDef))
+                {
+                    self.GrantUnlockable(purgeSkinUnlockableDef);
                 }
             }
         }

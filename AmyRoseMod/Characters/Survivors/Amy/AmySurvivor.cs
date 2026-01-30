@@ -593,7 +593,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 assetBundle.LoadAsset<Sprite>("texMalwareSkinIcon"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject,
-                AmyUnlockables.masterySkinUnlockableDef);
+                AmyUnlockables.decompileSkinUnlockableDef);
 
             ////adding the mesh replacements as above. 
             ////if you don't want to replace the mesh (for example, you only want to replace the material), pass in null so the order is preserved

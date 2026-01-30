@@ -103,7 +103,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             CreateProjectiles();
 
-            AsyncOperationHandle<Material> asyncSparkleMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matWideGlow.mat");
+            AsyncOperationHandle<Material> asyncSparkleMaterial = Addressables.LoadAssetAsync<Material>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_Base_Common_VFX.matWideGlow_mat);
             asyncSparkleMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
             {
                 _assetBundle.LoadAsset<GameObject>("AmyRoseMultiLockHeartGhost").transform.Find("MultiLockHeartSparkles").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
@@ -124,7 +124,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         private static void CreateMultiLockCrosshair(AssetBundle assetBundle)
         {
-            AsyncOperationHandle<GameObject> asyncCrosshair = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/UI/SimpleDotCrosshair.prefab");
+            AsyncOperationHandle<GameObject> asyncCrosshair = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_Base_UI.SimpleDotCrosshair_prefab);
             asyncCrosshair.Completed += delegate (AsyncOperationHandle<GameObject> x)
             {
                 multiLockCrosshair = PrefabAPI.InstantiateClone(x.Result, "AmyRoseMultiLockCrosshair", false);
@@ -155,13 +155,13 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             var superHammerSpinSpinningMesh = superHammerSpinSpinningEffect.transform.GetChild(0).GetComponent<MeshFilter>();
             var hammerSpinRing = hammerSpinSpinningEffect.transform.GetChild(1).GetComponent<ParticleSystemRenderer>();
             var superHammerSpinRing = superHammerSpinSpinningEffect.transform.GetChild(1).GetComponent<ParticleSystemRenderer>();
-            AsyncOperationHandle<Mesh> asyncTorusMesh = Addressables.LoadAssetAsync<Mesh>("RoR2/DLC3/mdlTorusVFXRing04.fbx");
+            AsyncOperationHandle<Mesh> asyncTorusMesh = Addressables.LoadAssetAsync<Mesh>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_DLC3.mdlTorusVFXRing04_fbx_mdlTorusVFXRing04_);
             asyncTorusMesh.Completed += delegate (AsyncOperationHandle<Mesh> x)
             {
                 hammerSpinRing.mesh = x.Result;
                 superHammerSpinRing.mesh = x.Result;
             };
-            AsyncOperationHandle<Material> asyncHammerSpinMaterial = Addressables.LoadAssetAsync<Material>("RoR2/DLC3/Drifter/matDrifterTornadoStreaks_02.mat");
+            AsyncOperationHandle<Material> asyncHammerSpinMaterial = Addressables.LoadAssetAsync<Material>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_DLC3_Drifter.matDrifterTornadoStreaks_02_mat);
             asyncHammerSpinMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
             {
                 hammerSpinMaterial = new Material(x.Result);
@@ -175,7 +175,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             };
 
             // Hammer Swing VFX
-            AsyncOperationHandle<GameObject> asyncHammerSwingParticle = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Loader/LoaderSwingBasic.prefab");
+            AsyncOperationHandle<GameObject> asyncHammerSwingParticle = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_Base_Loader.LoaderSwingBasic_prefab);
             asyncHammerSwingParticle.Completed += delegate (AsyncOperationHandle<GameObject> x)
             {
                 hammerSwingEffect = PrefabAPI.InstantiateClone(x.Result, "AmyRoseHammerSwingEffect", false);
@@ -202,7 +202,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 hammerSwingSuperMain.startSizeYMultiplier = 5f;
                 hammerSwingSuperMain.startSizeZMultiplier = 12f;
                 GameObject hammerSwingSuperBlur = GameObject.Instantiate(superHammerSwingEffect.transform.Find("SwingTrail").gameObject, superHammerSwingEffect.transform);
-                hammerSwingSuperBlur.GetComponent<ParticleSystemRenderer>().sharedMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Croco/matCrocoSlashDistortion.mat").WaitForCompletion();
+                hammerSwingSuperBlur.GetComponent<ParticleSystemRenderer>().sharedMaterial = Addressables.LoadAssetAsync<Material>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_Base_Croco.matCrocoSlashDistortion_mat).WaitForCompletion();
                 ParticleSystem.MainModule hammerSwingSuperBlurMain = hammerSwingSuperBlur.GetComponent<ParticleSystem>().main;
                 hammerSwingSuperBlurMain.startSizeXMultiplier = 4f;
                 hammerSwingSuperBlurMain.startSizeYMultiplier = 4f;
@@ -213,7 +213,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 superHammerSpinSpinningMesh.sharedMesh = hammerSwingRender.mesh;
 
                 // Hammer Swing Material
-                AsyncOperationHandle<Material> asyncHammerSwingMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Loader/matLoaderSwingThick.mat");
+                AsyncOperationHandle<Material> asyncHammerSwingMaterial = Addressables.LoadAssetAsync<Material>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_Base_Loader.matLoaderSwingThick_mat);
                 asyncHammerSwingMaterial.Completed += delegate (AsyncOperationHandle<Material> y)
                 {
                     hammerSwingMaterial = new Material(y.Result);
@@ -238,7 +238,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             superMultiLockHeartSpawnEffect = _assetBundle.LoadEffect("AmySuperMultiLockSpawnHeartEffect", false, 0.7f);
 
             // Tracer Glow Material
-            AsyncOperationHandle<Material> asyncTracerMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matTracerBright.mat");
+            AsyncOperationHandle<Material> asyncTracerMaterial = Addressables.LoadAssetAsync<Material>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_Base_Common_VFX.matTracerBright_mat);
             asyncTracerMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
             {
                 hammerHitImpactEffect.transform.Find("HammerHitSparks").GetComponent<ParticleSystemRenderer>().sharedMaterial = x.Result;
@@ -252,7 +252,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             };
 
             // Heart/Impact Material
-            AsyncOperationHandle<Material> asyncHeartImpactMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matOmniRing1Generic.mat");
+            AsyncOperationHandle<Material> asyncHeartImpactMaterial = Addressables.LoadAssetAsync<Material>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_Base_Common_VFX.matOmniRing1Generic_mat);
             asyncHeartImpactMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
             {
                 heartImpactMaterial = new Material(x.Result);
@@ -295,7 +295,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 new Color(1, 1, 1), AmySurvivor.superAmyColor, new Color(1f, 0.2f, 0.3f), AmySurvivor.superAmyColor);
 
             // Multi-Lock Heart Material
-            AsyncOperationHandle<Material> asyncMultiLockHeartMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Grandparent/matGrandParentSunCore.mat");
+            AsyncOperationHandle<Material> asyncMultiLockHeartMaterial = Addressables.LoadAssetAsync<Material>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_Base_Grandparent.matGrandParentSunCore_mat);
             asyncMultiLockHeartMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
             {
                 multiLockHeartMaterial = CreateMultiLockHeart(x.Result, assetBundle.LoadAsset<Texture>("texRampAmyEnergy"));
@@ -306,7 +306,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         }
         private static void CreateScepterMultiLockOrb(AssetBundle assetBundle)
         {
-            AsyncOperationHandle<Texture> asyncScepterRamp = Addressables.LoadAssetAsync<Texture>("RoR2/Base/Common/ColorRamps/texRampEngi.png");
+            AsyncOperationHandle<Texture> asyncScepterRamp = Addressables.LoadAssetAsync<Texture>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_Base_Common_ColorRamps.texRampEngi_png);
             asyncScepterRamp.Completed += delegate (AsyncOperationHandle<Texture> x)
             {
                 scepterHeartMaterial = new Material(heartMaterial);
@@ -318,7 +318,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 scepterHeartImpactMaterial.SetTexture("_MainTex", assetBundle.LoadAsset<Texture>("texAmyVFXHeartImpact"));
                 scepterHeartImpactMaterial.SetFloat("_DepthOffset", -3f);
                 scepterHeartImpactMaterial.SetFloat("_ZTest", 8f);
-                AsyncOperationHandle<GameObject> asyncHealthOrb = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/HealthOrbEffect.prefab");
+                AsyncOperationHandle<GameObject> asyncHealthOrb = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_Base_Common_VFX.HealthOrbEffect_prefab);
                 asyncHealthOrb.Completed += delegate (AsyncOperationHandle<GameObject> y)
                 {
                     scepterMultiLockOrbEffect = PrefabAPI.InstantiateClone(y.Result, "AmyScepterMultiLockOrbEffect");
@@ -340,7 +340,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
         }
         private static void CreateSecondaryGroundHit(AssetBundle assetBundle)
         {
-            AsyncOperationHandle<GameObject> asyncHitGround = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/BeetleGuard/BeetleGuardGroundSlam.prefab");
+            AsyncOperationHandle<GameObject> asyncHitGround = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_Base_BeetleGuard.BeetleGuardGroundSlam_prefab);
             asyncHitGround.Completed += delegate (AsyncOperationHandle<GameObject> x)
             {
                 // Secondary hit ground
@@ -444,7 +444,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         private static void CreateMultiLockExplosionEffect(AssetBundle assetBundle)
         {
-            AsyncOperationHandle<GameObject> asyncMultiLockExplosion = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Vagrant/VagrantTrackingBombExplosion.prefab");
+            AsyncOperationHandle<GameObject> asyncMultiLockExplosion = Addressables.LoadAssetAsync<GameObject>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_Base_Vagrant.VagrantTrackingBombExplosion_prefab);
             asyncMultiLockExplosion.Completed += delegate (AsyncOperationHandle<GameObject> x)
             {
                 multiLockExplosionEffect = CreateMultiLockExplosion(x.Result, "AmyRoseMultiLockExplosionEffect", AmySurvivor.amyColor, AmySurvivor.amyColor2, AmyStaticValues.specialMultiLockBlastRadius);
@@ -452,7 +452,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 superMultiLockExplosionEffect = CreateMultiLockExplosion(x.Result, "AmyRoseSuperMultiLockExplosionEffect", AmySurvivor.superAmyColor, new Color(1, 0.3f, 0.3f), AmyStaticValues.superSpecialMultiLockBlastRadius);
                 AddNewEffectDef(superMultiLockExplosionEffect, "Play_amyrose_multilock_projectile_hit");
 
-                AsyncOperationHandle<Material> asyncMultiLockExplosionMaterial = Addressables.LoadAssetAsync<Material>("RoR2/Base/Common/VFX/matJellyfishLightningSphere.mat");
+                AsyncOperationHandle<Material> asyncMultiLockExplosionMaterial = Addressables.LoadAssetAsync<Material>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_Base_Common_VFX.matJellyfishLightningSphere_mat);
                 asyncMultiLockExplosionMaterial.Completed += delegate (AsyncOperationHandle<Material> y)
                 {
                     multiLockExplosionMaterial = new Material(y.Result);

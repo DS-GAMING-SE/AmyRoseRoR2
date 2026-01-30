@@ -46,6 +46,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             PlayAnimation("FullBody, Override", "BufferEmpty");
             PlayAnimation("UpperBody, Override", "SecondaryCharge");
 
+            if (base.isAuthority)
+            {
+                base.characterBody.skillLocator.secondary.onSkillChanged += OnSkillChanged;
+            }
+
             this.camOverrideHandle = base.cameraTargetParams.AddParamsOverride(new CameraTargetParams.CameraParamsOverrideRequest
             {
                 cameraParamsData = aimingCameraParams,
@@ -88,6 +93,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         {
             PlayAnimation("UpperBody, Override", "BufferEmpty");
             base.cameraTargetParams.RemoveParamsOverride(this.camOverrideHandle, 0.5f);
+            if (base.isAuthority)
+            {
+                base.characterBody.skillLocator.secondary.onSkillChanged -= OnSkillChanged;
+            }
             base.OnExit();
         }
 
@@ -117,6 +126,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 }
                 this.outer.SetNextState(state);
             }
+        }
+        public void OnSkillChanged(GenericSkill skill)
+        {
+            this.outer.SetNextStateToMain();
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()

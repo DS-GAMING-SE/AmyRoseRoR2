@@ -108,6 +108,15 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             Language.Add(Tokens.GetAchievementNameToken(AmyGrandMasteryAchievement.identifier), "Amy: Grand Mastery");
             Language.Add(Tokens.GetAchievementDescriptionToken(AmyGrandMasteryAchievement.identifier), "As Amy, beat the game or obliterate on Typhoon or Eclipse.");
+
+            Language.Add(Tokens.GetAchievementNameToken(AmyMeridianEventTriggerAchievement.identifier), "Amy: Cleared Prime Meridian");
+            Language.Add(Tokens.GetAchievementDescriptionToken(AmyMeridianEventTriggerAchievement.identifier), "As Amy, complete the Event on Prime Meridian.");
+
+            Language.Add(Tokens.GetAchievementNameToken(AmyDecompileAchievement.identifier), "Amy: Accept and Decompile");
+            Language.Add(Tokens.GetAchievementDescriptionToken(AmyDecompileAchievement.identifier), "As Amy, accept the offering of the Collective.");
+
+            Language.Add(Tokens.GetAchievementNameToken(AmyPurgeAchievement.identifier), "Amy: Purge");
+            Language.Add(Tokens.GetAchievementDescriptionToken(AmyPurgeAchievement.identifier), "As Amy, reject the offering of the Collective.");
             #endregion
         }
     }
