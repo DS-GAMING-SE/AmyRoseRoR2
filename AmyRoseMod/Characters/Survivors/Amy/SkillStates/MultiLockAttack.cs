@@ -59,6 +59,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                     {
                         skillLocator.special.DeductStock(1);
                     }
+                    characterBody.OnSkillActivated(base.skillLocator.special);
                 }
                 finalAttack = targets.Count == 1;
             }

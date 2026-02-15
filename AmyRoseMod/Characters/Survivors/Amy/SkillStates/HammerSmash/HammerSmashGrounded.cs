@@ -13,8 +13,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
     public class HammerSmashGrounded : BaseMeleeAttack
     {
         protected override GameObject swingEffectPrefab { get { return AmyAssets.hammerSwingLargeEffect; } }
-        protected override GameObject hitEffectPrefab { get { return AmyAssets.hammerHitImpactEffect; } }
+        protected override GameObject hitEffectPrefab { get { return null; } }
         public float charge;
+        private bool hasHit;
         private bool hasHitGround;
         protected float hammerHitGroundPercentTime;
         public override void OnEnter()
@@ -112,6 +113,15 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         protected override void OnHitEnemyAuthority()
         {
             base.OnHitEnemyAuthority();
+            if (!hasHit)
+            {
+                hasHit = true;
+                PlayHitEffect(base.transform.position + bonusForce.normalized + new Vector3(0,0.5f,0f), Quaternion.LookRotation(bonusForce));
+            }
+        }
+        protected virtual void PlayHitEffect(Vector3 position, Quaternion direction)
+        {
+            EffectManager.SimpleEffect(AmyAssets.secondaryHitEffect, position, direction, true);
         }
         public override InterruptPriority GetMinimumInterruptPriority()
         {

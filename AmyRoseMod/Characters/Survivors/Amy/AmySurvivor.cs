@@ -61,7 +61,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             characterPortrait = assetBundle.LoadAsset<Texture>("texAmyRoseIcon"),
             bodyColor = amyColor,
-            sortPosition = 100,
+            sortPosition = 140,
 
             crosshair = Asset.LoadCrosshair("SimpleDot"),
             podPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
@@ -432,7 +432,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
                 isCombatSkill = true,
                 mustKeyPress = true,
-                cancelSprintingOnActivation = false
+                cancelSprintingOnActivation = false,
+
+                suppressSkillActivation = true
             });
 
             Skills.AddSpecialSkills(bodyPrefab, specialMultilock);

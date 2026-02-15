@@ -45,6 +45,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             Language.Add(prefix + "RIDERS_SKIN_NAME", "Riders");
             Language.Add(prefix + "FORTUNE_TELLER_SKIN_NAME", "Fortune Teller");
             Language.Add(prefix + "MALWARE_SKIN_NAME", "Malware");
+
+            Language.Add(prefix + "CHIMERA_SKIN_DESC", "I gave it a small and light form. Speed is war. I gave it a hammer, which it will swing with incredible might, just as I do. He gave it soul. Too much. A construct should be driven by nothing but the instinct to serve its master. This defect is driven by something else. By an emotion that stirs from deep within the soul.\nToo volatile.");
             #endregion
 
             #region Primary

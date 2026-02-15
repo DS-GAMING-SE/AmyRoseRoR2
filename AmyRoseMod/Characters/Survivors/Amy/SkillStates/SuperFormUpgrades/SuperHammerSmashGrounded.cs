@@ -17,5 +17,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
             base.PrepareAttackStats();
             pushForce = AmyStaticValues.superSecondaryHammerLaunchForce;
         }
+        protected override void PlayHitEffect(Vector3 position, Quaternion direction)
+        {
+            EffectManager.SimpleEffect(AmyAssets.superSecondaryHitEffect, position, direction, true);
+        }
     }
 }

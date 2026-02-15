@@ -185,6 +185,12 @@ namespace AmyRoseMod.Modules
 
             skillDef.keywordTokens = skillDefInfo.keywordTokens;
 
+            skillDef.suppressSkillActivation = skillDefInfo.suppressSkillActivation;
+            skillDef.hideCooldown = skillDefInfo.hideCooldown;
+            skillDef.hideStockCount = skillDefInfo.hideStockCount;
+            skillDef.autoHandleLuminousShot = skillDefInfo.autoHandleLuminousShot;
+            skillDef.triggeredByPressRelease = skillDefInfo.triggeredByPressRelease;
+
             AmyRoseMod.Modules.Content.AddSkillDef(skillDef);
 
 
@@ -220,11 +226,18 @@ namespace AmyRoseMod.Modules
         public bool dontAllowPastMaxStocks = false;
         public bool beginSkillCooldownOnSkillEnd = false;
         public bool mustKeyPress = false;
+        public bool triggeredByPressRelease = false;
 
         public bool isCombatSkill = true;
         public bool canceledFromSprinting = false;
         public bool cancelSprintingOnActivation = true;
         public bool forceSprintDuringState = false;
+
+        public bool suppressSkillActivation = false;
+        public bool autoHandleLuminousShot = true;
+
+        public bool hideStockCount = false;
+        public bool hideCooldown = false;
 
         #region constructors
         public SkillDefInfo() { }
@@ -259,7 +272,6 @@ namespace AmyRoseMod.Modules
 
             this.requiredStock = 0;
             this.stockToConsume = 0;
-
         }
         #endregion construction complete
     }

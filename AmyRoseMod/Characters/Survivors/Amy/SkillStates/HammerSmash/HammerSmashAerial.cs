@@ -72,9 +72,21 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             PlayJumpAnimation();
             cachedAnimationDuration = animator.GetFloat("Slash.playbackRate");
 
-            if (base.isAuthority && base.characterMotor.isGrounded)
+            if (base.isAuthority)
             {
-                EffectManager.SimpleMuzzleFlash(AmyAssets.secondaryHitGroundAerialEffect, base.gameObject, "SecondaryGround", true);
+                if (base.characterMotor.isGrounded && targetToIgnore == null)
+                {
+                    EffectManager.SimpleMuzzleFlash(AmyAssets.secondaryHitGroundAerialEffect, base.gameObject, "SecondaryGround", true);
+                }
+                else if (modelLocator && modelLocator.modelChildLocator)
+                {
+                    EffectData data = new EffectData
+                    {
+                        rotation = Quaternion.Euler(90f, 0f, 0f),
+                        origin = modelLocator.modelChildLocator.FindChild("SecondaryGround").transform.position - new Vector3(0, 0.5f, 0)
+                    };
+                    PlayHitEffect(data);
+                }
             }
         }
 
@@ -86,6 +98,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         public virtual void PrepareAttack()
         {
 
+        }
+        public virtual void PlayHitEffect(EffectData data)
+        {
+            EffectManager.SpawnEffect(AmyAssets.secondaryHitEffect, data, true);
         }
 
         public override void FixedUpdate()
