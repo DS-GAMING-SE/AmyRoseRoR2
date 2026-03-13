@@ -158,8 +158,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             var hammerSpinRing = hammerSpinSpinningEffect.transform.GetChild(1).GetComponent<ParticleSystemRenderer>();
             var superHammerSpinRing = superHammerSpinSpinningEffect.transform.GetChild(1).GetComponent<ParticleSystemRenderer>();
 
-            secondaryHitEffect = _assetBundle.LoadEffect("AmySecondaryHitEffect", false, 1f);
-            superSecondaryHitEffect = _assetBundle.LoadEffect("AmySuperSecondaryHitEffect", false, 1f);
+            secondaryHitEffect = _assetBundle.LoadEffect("AmySecondaryHitEffect", "Play_amyrose_hit_heavy", false, 1f);
+            superSecondaryHitEffect = _assetBundle.LoadEffect("AmySuperSecondaryHitEffect", "Play_amyrose_hit_heavy", false, 1f);
             var secondaryShake = secondaryHitEffect.AddComponent<ShakeEmitter>();
             secondaryShake.wave.amplitude = 1f;
             secondaryShake.wave.frequency = 5f;
@@ -410,7 +410,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 decal.GetComponent<AnimateShaderAlpha>().timeMax = 0.6f;
                 decal.localScale = new Vector3(3.5f, 3.5f, 3.5f);
 
-                AddNewEffectDef(secondaryHitGroundEffect);
+                AddNewEffectDef(secondaryHitGroundEffect, "Play_amyrose_hit_subtle");
                 // Larger/Aerial version
                 secondaryHitGroundAerialEffect = PrefabAPI.InstantiateClone(x.Result, "AmySecondaryGroundAerialHitEffect");
                 secondaryHitGroundAerialEffect.AddComponent<NetworkIdentity>();
@@ -441,7 +441,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 ParticleSystem.Burst aerialDebrisBurst = aerialDebrisEmission.GetBurst(0);
                 aerialDebrisBurst.count = 14;
                 aerialDebris.emission.SetBurst(0, aerialDebrisBurst);
-                AddNewEffectDef(secondaryHitGroundAerialEffect);
+                AddNewEffectDef(secondaryHitGroundAerialEffect, "Play_amyrose_hit_heavy");
             };
         }
         private static GameObject CreateHammerSpinEffect(GameObject start)

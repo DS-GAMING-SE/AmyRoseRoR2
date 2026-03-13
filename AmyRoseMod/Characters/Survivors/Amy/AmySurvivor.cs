@@ -597,6 +597,16 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 prefabCharacterModel.gameObject,
                 AmyUnlockables.decompileSkinUnlockableDef);
 
+            /* SKIN MATERIAL EDIT NOTES
+             * texAmyBase.SetHopooMaterial().SetSpecular(0.15f);
+             * texAmyBaseSuper.SetHopooMaterial().SetSpecular(0.15f).SetEmission(0.8f);
+             * texAmyDefaultOutfit.SetHopooMaterial().SetSpecular(0.15f).GoldFresnel(texAmyDefaultOutfitFresnelMask);
+             * texAmyPaladinOutfit.SetHopooMaterial().SetSpecular(0.15f).MetalFresnel(texAmyPaladinOutfitFresnelMask);
+             * texAmyFortuneTellerOutfit.SetHopooMaterial().SetSpecular(0.15f).GoldFresnel(texAmyFortuneTellerOutfitFresnelMask);
+             * texAmyMalware.SetHopooMaterial().SetSpecular(0.15f).SetKeyword("FORCE_SPEC");
+             * texAmyRustyOutfit.SetHopooMaterial().SetSpecular(0.15f).SetEmission(0.8f).SetKeyword("FORCE_SPEC");
+             */
+
             ////adding the mesh replacements as above. 
             ////if you don't want to replace the mesh (for example, you only want to replace the material), pass in null so the order is preserved
             //paladinSkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,

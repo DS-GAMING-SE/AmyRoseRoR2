@@ -215,6 +215,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             base.OnSerialize(writer);
             writer.Write(HurtBoxReference.FromHurtBox(target));
             writer.Write(orbStartPosition);
+            writer.Write(firstAttack);
             writer.Write(finalAttack);
         }
 
@@ -223,6 +224,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             base.OnDeserialize(reader);
             target = reader.ReadHurtBoxReference().ResolveHurtBox();
             orbStartPosition = reader.ReadVector3();
+            firstAttack = reader.ReadBoolean();
             finalAttack = reader.ReadBoolean();
         }
     }

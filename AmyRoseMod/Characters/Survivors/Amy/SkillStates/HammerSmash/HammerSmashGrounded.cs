@@ -26,8 +26,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             muzzleString = "LargeSwingDown";
             playbackRateParam = "Slash.playbackRate";
 
-            impactSound = AmyAssets.hammerHitSoundEvent.index;
-
             base.OnEnter();
             base.StartAimMode(duration * 1.3f);
         }
@@ -61,7 +59,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             damageCoefficient = Mathf.Lerp(AmyStaticValues.secondaryHammerChargeMinimumDamageCoefficient, AmyStaticValues.secondaryHammerChargeMaximumDamageCoefficient, charge);
             procCoefficient = charge == 1 ? AmyStaticValues.secondaryHammerChargeMaximumProcCoefficient : AmyStaticValues.secondaryHammerChargeMinimumProcCoefficient;
             pushForce = charge == 1  ? AmyStaticValues.secondaryHammerMaxLaunchForce : AmyStaticValues.secondaryHammerMinLaunchForce;
-            impactSound = AmyAssets.hammerHitHeavySoundEvent.index;
         }
 
         protected override void PushForceToTargetedLaunch()
