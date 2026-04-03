@@ -19,5 +19,10 @@ description todo
 - RiskOfOptions
 - StandaloneAncientScepter (Upgrades special skill)
 
-# Collaborators
-- todo
+# Credits
+| Name | Platform | Contribution|
+| ---- | ---- | ------|
+**Woodmeister** (woodie5273) | Discord | Commissioned this mod |
+**Gerdan Virrey** | Fiverr | Created the models for Amy and her skins |
+**Sno** (snonepe) | Discord | Created all animations |
+**Sandwich** (sandwich1661) | Discord | Wrote the logbook |

@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using static HedgehogUtils.Boost.SkillDefs;
-using static RoR2.TeleporterInteraction;
+using static HedgehogUtils.Helpers;
 
 namespace AmyRoseMod.Characters.Survivors.Amy
 {
@@ -78,12 +78,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 new CustomRendererInfo
                 {
                     childName = "Model",
-                    material = assetBundle.LoadMaterial("matAmyBase").SetHopooMaterial().SetSpecular(0.15f)
+                    material = assetBundle.LoadMaterial("matAmyBase").SetSpecular(0.3f).GoldFresnel(assetBundle.LoadAsset<Texture>("texAmyFresnelMask"))
                 },
                 new CustomRendererInfo
                 {
                     childName = "Eyes",
-                    material = assetBundle.LoadMaterial("matAmyEyes").SetHopooMaterial().SetSpecular(0.15f)
+                    material = assetBundle.LoadMaterial("matAmyEyes").SetSpecular(0.15f).SpecularIgnoreAlpha()
                 }
         };
 
@@ -461,6 +461,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             });
             Skills.AddSkillsToFamily(voicelinesGenericSkill.skillFamily, voicelinesEnable, voicelinesDisable);
+
+            AmyVoicelineComponent voiceline = bodyPrefab.AddComponent<AmyVoicelineComponent>();
+            voiceline.voicelinesEnableSkillDef = voicelinesEnable;
+            AmyVoicelineComponent.stageRankingModFound = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(StageRanking.StageRankingPlugin.PluginGUID);
         }
 
         private void InitializeSuperSkills()
@@ -549,8 +553,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             List<SkinDef> skins = new List<SkinDef>();
 
-            amySuperMaterial = assetBundle.LoadMaterial("matAmySuper").SetHopooMaterial().SetSpecular(0.15f).SetEmission(0.8f);
-            amySuperEyesMaterial = assetBundle.LoadMaterial("matAmyEyesSuper").SetHopooMaterial().SetSpecular(0.15f);
+            assetBundle.LoadMaterial("matAmyBase").SetSpecular(0.3f).GoldFresnel(assetBundle.LoadAsset<Texture>("texAmyFresnelMask")).SetFloat("_FresnelPower", 1.8f);
+
+            amySuperMaterial = assetBundle.LoadMaterial("matAmySuper").SetSpecular(0.3f).SetEmission(0.8f).GoldFresnel(assetBundle.LoadAsset<Texture>("texAmyFresnelMask"));
+            amySuperMaterial.SetFloat("_FresnelPower", 1.8f);
+            amySuperEyesMaterial = assetBundle.LoadMaterial("matAmyEyesSuper").SetSpecular(0.15f).SpecularIgnoreAlpha();
 
             #region DefaultSkin
             //this creates a SkinDef with all default fields
@@ -598,13 +605,13 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 AmyUnlockables.decompileSkinUnlockableDef);
 
             /* SKIN MATERIAL EDIT NOTES
-             * texAmyBase.SetHopooMaterial().SetSpecular(0.15f);
-             * texAmyBaseSuper.SetHopooMaterial().SetSpecular(0.15f).SetEmission(0.8f);
-             * texAmyDefaultOutfit.SetHopooMaterial().SetSpecular(0.15f).GoldFresnel(texAmyDefaultOutfitFresnelMask);
-             * texAmyPaladinOutfit.SetHopooMaterial().SetSpecular(0.15f).MetalFresnel(texAmyPaladinOutfitFresnelMask);
-             * texAmyFortuneTellerOutfit.SetHopooMaterial().SetSpecular(0.15f).GoldFresnel(texAmyFortuneTellerOutfitFresnelMask);
-             * texAmyMalware.SetHopooMaterial().SetSpecular(0.15f).SetKeyword("FORCE_SPEC");
-             * texAmyRustyOutfit.SetHopooMaterial().SetSpecular(0.15f).SetEmission(0.8f).SetKeyword("FORCE_SPEC");
+             * texAmyBase.SetSpecular(0.3f);
+             * texAmyBaseSuper.SetSpecular(0.3f).SetEmission(0.8f);
+             * texAmyDefaultOutfit.SetSpecular(0.3f).GoldFresnel(texAmyDefaultOutfitFresnelMask);
+             * texAmyPaladinOutfit.SetSpecular(0.3f).MetalFresnel(texAmyPaladinOutfitFresnelMask);
+             * texAmyFortuneTellerOutfit.SetSpecular(0.3f).GoldFresnel(texAmyFortuneTellerOutfitFresnelMask);
+             * texAmyMalware.SetSpecular(0.3f).SpecularIgnoreAlpha();
+             * texAmyRustyOutfit.SetSpecular(0.3f).SetEmission(0.8f).SpecularIgnoreAlpha();
              */
 
             ////adding the mesh replacements as above. 
