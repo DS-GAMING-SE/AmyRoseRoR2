@@ -10,6 +10,7 @@ using EmotesAPI;
 using HedgehogUtils;
 using HedgehogUtils.Forms;
 using HedgehogUtils.Forms.SuperForm;
+using HG;
 using R2API.Networking;
 using RiskOfOptions;
 using RoR2;
@@ -78,7 +79,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 new CustomRendererInfo
                 {
                     childName = "Model",
-                    material = assetBundle.LoadMaterial("matAmyBase").SetSpecular(0.3f).GoldFresnel(assetBundle.LoadAsset<Texture>("texAmyFresnelMask"))
+                    material = assetBundle.LoadMaterial("matAmyBase").SetSpecular(0.3f).GoldFresnel(assetBundle.LoadAsset<Texture>("texAmyFresnelMask"), 1.8f)
                 },
                 new CustomRendererInfo
                 {
@@ -553,12 +554,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             List<SkinDef> skins = new List<SkinDef>();
 
-            assetBundle.LoadMaterial("matAmyBase").SetSpecular(0.3f).GoldFresnel(assetBundle.LoadAsset<Texture>("texAmyFresnelMask")).SetFloat("_FresnelPower", 1.8f);
-
-            amySuperMaterial = assetBundle.LoadMaterial("matAmySuper").SetSpecular(0.3f).SetEmission(0.8f).GoldFresnel(assetBundle.LoadAsset<Texture>("texAmyFresnelMask"));
-            amySuperMaterial.SetFloat("_FresnelPower", 1.8f);
-            amySuperEyesMaterial = assetBundle.LoadMaterial("matAmyEyesSuper").SetSpecular(0.15f).SpecularIgnoreAlpha();
-
             #region DefaultSkin
             //this creates a SkinDef with all default fields
             SkinDef defaultSkin = Skins.CreateSkinDef("DEFAULT_SKIN",
@@ -566,17 +561,24 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject);
 
-            //these are your Mesh Replacements. The order here is based on your CustomRendererInfos from earlier
-                //pass in meshes as they are named in your assetbundle
-            //currently not needed as with only 1 skin they will simply take the default meshes
-                //uncomment this when you have another skin
-            //defaultSkin.meshReplacements = Modules.Skins.getMeshReplacements(assetBundle, defaultRendererinfos,
-            //    "meshHenrySword",
-            //    "meshHenryGun",
-            //    "meshHenry");
-
-            //add new skindef to our list of skindefs. this is what we'll be passing to the SkinController
             skins.Add(defaultSkin);
+
+            #region Super Form
+            amySuperMaterial = assetBundle.LoadMaterial("matAmySuper").SetSpecular(0.3f).SetEmission(0.8f).GoldFresnel(assetBundle.LoadAsset<Texture>("texAmyFresnelMask"), 1.8f);
+            amySuperEyesMaterial = assetBundle.LoadMaterial("matAmyEyesSuper").SetSpecular(0.15f).SpecularIgnoreAlpha();
+            CharacterModel.RendererInfo[] defaultSkinSuperRenderer = ArrayUtils.Clone(defaultRendererinfos);
+            defaultSkinSuperRenderer[0].defaultMaterial = amySuperMaterial;
+            defaultSkinSuperRenderer[1].defaultMaterial = amySuperEyesMaterial;
+            Mesh[] defaultSkinSuperMeshes = new Mesh[2];
+            RenderReplacements defaultSkinSuper = new RenderReplacements
+            {
+                rendererInfo = defaultSkinSuperRenderer,
+                mesh = defaultSkinSuperMeshes
+            };
+            Forms.AddSkinForForm(defaultSkin.nameToken,
+                defaultSkinSuper,
+                ref SuperFormDef.superFormDef);
+            #endregion
             #endregion
 
             //uncomment this when you have a mastery skin

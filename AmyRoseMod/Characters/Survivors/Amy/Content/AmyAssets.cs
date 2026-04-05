@@ -363,6 +363,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
                     scepterMultiLockOrbFlash = assetBundle.LoadEffect("AmyScepterMultiLockOrbFlash", true, 0.35f);
                     scepterMultiLockOrbFlash.GetComponent<ParticleSystemRenderer>().sharedMaterial = scepterHeartImpactMaterial;
+                    scepterMultiLockOrbEffect.AddComponent<NetworkIdentity>();
 
                     AddNewEffectDef(scepterMultiLockOrbEffect);
                 };
@@ -502,7 +503,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
         private static GameObject CreateMultiLockExplosion(GameObject original, string name, Color color1, Color color2, float radius)
         {
-            GameObject prefab = PrefabAPI.InstantiateClone(original, name);
+            GameObject prefab = PrefabAPI.InstantiateClone(original, name, false);
             if (!prefab)
                 return prefab;
             prefab.GetComponent<EffectComponent>().soundName = "";
