@@ -30,7 +30,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             masterySkinUnlockableDef = Modules.Content.CreateAndAddUnlockbleDef(
                 AmyMasteryAchievement.unlockableIdentifier,
                 Modules.Tokens.GetAchievementNameToken(AmyMasteryAchievement.unlockableIdentifier),
-                AmySurvivor.instance.assetBundle.LoadAsset<Sprite>("texMainSkinIcon"));
+                AmySurvivor.instance.assetBundle.LoadAsset<Sprite>("texDefaultSkinIcon"));
             masterySkinUnlockableConfig = CreateUnlockableConfig("Mastery");
             masterySkinUnlockableConfig.SettingChanged += new EventHandler(delegate (object o, EventArgs a)
             { UnlockableConfigChanged(masterySkinUnlockableConfig.Value, ref masterySkinUnlockableDef, AmyMasteryAchievement.unlockableIdentifier); });
@@ -48,7 +48,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             meridianSkinUnlockableDef = Modules.Content.CreateAndAddUnlockbleDef(
                 AmyMeridianEventTriggerAchievement.unlockableIdentifier,
                 Modules.Tokens.GetAchievementNameToken(AmyMeridianEventTriggerAchievement.unlockableIdentifier),
-                AmySurvivor.instance.assetBundle.LoadAsset<Sprite>("texMainSkinIcon"));
+                AmySurvivor.instance.assetBundle.LoadAsset<Sprite>("texDefaultSkinIcon"));
             meridianSkinUnlockableConfig = CreateUnlockableConfig("Prime Meridian");
             meridianSkinUnlockableConfig.SettingChanged += new EventHandler(delegate (object o, EventArgs a)
             { UnlockableConfigChanged(meridianSkinUnlockableConfig.Value, ref meridianSkinUnlockableDef, AmyMeridianEventTriggerAchievement.unlockableIdentifier); });
@@ -66,7 +66,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             purgeSkinUnlockableDef = Modules.Content.CreateAndAddUnlockbleDef(
                 AmyPurgeAchievement.unlockableIdentifier,
                 Modules.Tokens.GetAchievementNameToken(AmyPurgeAchievement.unlockableIdentifier),
-                AmySurvivor.instance.assetBundle.LoadAsset<Sprite>("texMainSkinIcon"));
+                AmySurvivor.instance.assetBundle.LoadAsset<Sprite>("texDefaultSkinIcon"));
             purgeSkinUnlockableConfig = CreateUnlockableConfig("Purge");
             purgeSkinUnlockableConfig.SettingChanged += new EventHandler(delegate (object o, EventArgs a)
             { UnlockableConfigChanged(purgeSkinUnlockableConfig.Value, ref purgeSkinUnlockableDef, AmyPurgeAchievement.unlockableIdentifier); });

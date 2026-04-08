@@ -6,6 +6,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using RoR2;
+using AmyRoseMod.Characters.Survivors.Amy.Components;
 
 namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
@@ -18,15 +19,16 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
-            if (base.isAuthority)
-            {
-                characterBody.TriggerJumpEventGlobally();
-            }
             if (NetworkServer.active)
             {
                 base.characterBody.AddTimedBuff(AmyBuffs.hammerSmashSpeedBuff, AmyStaticValues.secondaryHammerAirJumpBuffDuration);
             }
             Util.PlaySound("Play_amyrose_rebound", base.gameObject);
+            AmyVoicelineComponent.TryPlayVoiceline(gameObject, "Play_amyrose_voiceline_rebound", HedgehogUtils.Voicelines.VoicelinePriority.Skill);
+            if (base.isAuthority)
+            {
+                characterBody.TriggerJumpEventGlobally();
+            }
             PrepareStats();
             duration = baseDuration / attackSpeedStat;
             if (base.isAuthority)

@@ -465,7 +465,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             AmyVoicelineComponent voiceline = bodyPrefab.AddComponent<AmyVoicelineComponent>();
             voiceline.voicelinesEnableSkillDef = voicelinesEnable;
-            AmyVoicelineComponent.stageRankingModFound = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(StageRanking.StageRankingPlugin.PluginGUID);
+            voiceline.Initialize();
         }
 
         private void InitializeSuperSkills()
@@ -557,7 +557,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             #region DefaultSkin
             //this creates a SkinDef with all default fields
             SkinDef defaultSkin = Skins.CreateSkinDef("DEFAULT_SKIN",
-                assetBundle.LoadAsset<Sprite>("texMainSkinIcon"),
+                assetBundle.LoadAsset<Sprite>("texDefaultSkinIcon"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject);
 

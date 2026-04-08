@@ -1,6 +1,9 @@
 ﻿using HedgehogUtils.Voicelines;
+using HG;
 using RoR2;
+using RoR2.Audio;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -9,6 +12,20 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
     public class AmyVoicelineComponent : VoicelineComponent
     {
         public static bool stageRankingModFound = false;
+
+        #region Voicelines
+        public static NetworkSoundEventDef bossStart1;
+        public static NetworkSoundEventDef bossStart2;
+        public static NetworkSoundEventDef[] bossStarts;
+        #endregion
+        public void Initialize()
+        {
+            stageRankingModFound = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(StageRanking.StageRankingPlugin.PluginGUID);
+            bossStart1 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_boss_start_1");
+            bossStart2 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_boss_start_2");
+            bossStarts = new[] { bossStart1, bossStart2 }; 
+            soundBankFilePath = Assembly.GetExecutingAssembly().Location.Replace("AmyRoseMod.dll", @"Soundbanks\AmyRoseVoicelinesBank.bnk");
+        }
         public override void SubscribeEvents()
         {
             VoicelineManager.OnStageStart += OnStageStart;
@@ -16,6 +33,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
             VoicelineManager.OnBossDefeated += OnBossDefeated;
             VoicelineManager.OnFinalBossStart += OnFinalBossStart;
             VoicelineManager.OnFinalBossDefeated += OnFinalBossDefeated;
+            characterBody.onJump += new CharacterBody.JumpDelegate(OnJump);
             if (stageRankingModFound) SubscribeStageRanking();
         }
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
@@ -30,6 +48,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
             VoicelineManager.OnBossDefeated -= OnBossDefeated;
             VoicelineManager.OnFinalBossStart -= OnFinalBossStart;
             VoicelineManager.OnFinalBossDefeated -= OnFinalBossDefeated;
+            characterBody.onJump -= new CharacterBody.JumpDelegate(OnJump);
             if (stageRankingModFound) UnsubscribeStageRanking();
         }
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
@@ -37,13 +56,17 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
         {
             StageRanking.StageRankingPanel.OnStageRankingPanelEnd -= OnStageRanking;
         }
+        private void OnJump()
+        {
+            PlayVoiceline("Play_amyrose_voiceline_jump", VoicelinePriority.Any);
+        }
         private void OnStageStart(Stage stage, List<NetworkedVoiceline> networkedVoicelines)
         {
             if (Stage.instance.sceneDef.cachedName == "solusweb") { Chat.AddMessage("not getting stuck here"); return; }
         }
         private void OnBossStart(BodyIndex boss, List<NetworkedVoiceline> networkedVoicelines)
         {
-            Chat.AddMessage($"generic boss start");
+            networkedVoicelines.Add(new NetworkedVoiceline(this, bossStarts.GetRandom().index, VoicelinePriority.PriorityDialogue));
         }
         private void OnBossDefeated(BodyIndex boss, List<NetworkedVoiceline> networkedVoicelines)
         {
@@ -86,7 +109,34 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
         private void OnStageRanking(StageRanking.Ranking ranking)
         {
-            Chat.AddMessage($"ranking {ranking.ToString()}");
+            switch (ranking)
+            {
+                case StageRanking.Ranking.S:
+                    PlayVoiceline("Play_amyrose_voiceline_ranking_s", VoicelinePriority.Dialogue);
+                    break;
+                /*case StageRanking.Ranking.A:
+                    PlayVoiceline("Play_amyrose_voiceline_ranking_s", VoicelinePriority.Dialogue);
+                    break;
+                case StageRanking.Ranking.B:
+                    PlayVoiceline("Play_amyrose_voiceline_ranking_s", VoicelinePriority.Dialogue);
+                    break;
+                case StageRanking.Ranking.C:
+                    PlayVoiceline("Play_amyrose_voiceline_ranking_s", VoicelinePriority.Dialogue);
+                    break;
+                case StageRanking.Ranking.D:
+                    PlayVoiceline("Play_amyrose_voiceline_ranking_s", VoicelinePriority.Dialogue);
+                    break;*/
+            }
+        }
+
+        public static bool TryPlayVoiceline(GameObject gameObject, string soundString, VoicelinePriority priority)
+        {
+            if (gameObject.TryGetComponent<VoicelineComponent>(out var voiceline) && voiceline.enabled)
+            {
+                voiceline.PlayVoiceline(soundString, priority);
+                return true;
+            }
+            return false;
         }
     }
 }

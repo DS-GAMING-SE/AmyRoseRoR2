@@ -7,6 +7,7 @@ using System.Text;
 using UnityEngine.Networking;
 using UnityEngine;
 using Unity.Collections;
+using AmyRoseMod.Characters.Survivors.Amy.Components;
 
 namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
@@ -37,6 +38,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 SmallHop(base.characterMotor, 20f);
             }
             Util.PlaySound("Play_amyrose_multilock_end", base.gameObject);
+            AmyVoicelineComponent.TryPlayVoiceline(gameObject, "Play_amyrose_voiceline_multilock", HedgehogUtils.Voicelines.VoicelinePriority.PrioritySkill);
         }
         public override void FixedUpdate()
         {
