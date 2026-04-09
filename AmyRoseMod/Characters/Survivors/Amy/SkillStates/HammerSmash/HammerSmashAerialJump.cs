@@ -24,7 +24,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 base.characterBody.AddTimedBuff(AmyBuffs.hammerSmashSpeedBuff, AmyStaticValues.secondaryHammerAirJumpBuffDuration);
             }
             Util.PlaySound("Play_amyrose_rebound", base.gameObject);
-            AmyVoicelineComponent.TryPlayVoiceline(gameObject, "Play_amyrose_voiceline_rebound", HedgehogUtils.Voicelines.VoicelinePriority.Skill);
+            HedgehogUtils.Voicelines.VoicelineComponent.TryPlayVoiceline(gameObject, "Play_amyrose_voiceline_rebound", HedgehogUtils.Voicelines.VoicelinePriority.Skill);
             if (base.isAuthority)
             {
                 characterBody.TriggerJumpEventGlobally();

@@ -38,7 +38,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 SmallHop(base.characterMotor, 20f);
             }
             Util.PlaySound("Play_amyrose_multilock_end", base.gameObject);
-            AmyVoicelineComponent.TryPlayVoiceline(gameObject, "Play_amyrose_voiceline_multilock", HedgehogUtils.Voicelines.VoicelinePriority.PrioritySkill);
+            HedgehogUtils.Voicelines.VoicelineComponent.TryPlayVoiceline(gameObject, "Play_amyrose_voiceline_multilock", HedgehogUtils.Voicelines.VoicelinePriority.PrioritySkill);
         }
         public override void FixedUpdate()
         {

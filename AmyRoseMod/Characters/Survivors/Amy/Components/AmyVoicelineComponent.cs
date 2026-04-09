@@ -24,7 +24,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
             bossStart1 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_boss_start_1");
             bossStart2 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_boss_start_2");
             bossStarts = new[] { bossStart1, bossStart2 }; 
-            soundBankFilePath = Assembly.GetExecutingAssembly().Location.Replace("AmyRoseMod.dll", @"Soundbanks\AmyRoseVoicelinesBank.bnk");
         }
         public override void SubscribeEvents()
         {
@@ -127,16 +126,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
                     PlayVoiceline("Play_amyrose_voiceline_ranking_s", VoicelinePriority.Dialogue);
                     break;*/
             }
-        }
-
-        public static bool TryPlayVoiceline(GameObject gameObject, string soundString, VoicelinePriority priority)
-        {
-            if (gameObject.TryGetComponent<VoicelineComponent>(out var voiceline) && voiceline.enabled)
-            {
-                voiceline.PlayVoiceline(soundString, priority);
-                return true;
-            }
-            return false;
         }
     }
 }

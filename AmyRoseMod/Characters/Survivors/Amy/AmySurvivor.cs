@@ -17,6 +17,7 @@ using RoR2;
 using RoR2.Skills;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using static HedgehogUtils.Boost.SkillDefs;
@@ -464,8 +465,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             Skills.AddSkillsToFamily(voicelinesGenericSkill.skillFamily, voicelinesEnable, voicelinesDisable);
 
             AmyVoicelineComponent voiceline = bodyPrefab.AddComponent<AmyVoicelineComponent>();
+            string voicelineSoundBankPath = Assembly.GetExecutingAssembly().Location.Replace("AmyRoseMod.dll", @"Soundbanks\AmyRoseVoicelinesBank.bnk");
+            voiceline.soundBankFilePath = voicelineSoundBankPath;
             voiceline.voicelinesEnableSkillDef = voicelinesEnable;
             voiceline.Initialize();
+            HedgehogUtils.Voicelines.VoicelineDisplayComponent.AddDisplayPrefabVoicelineComponent(displayPrefab, bodyPrefab, voicelinesGenericSkill.skillFamily, voicelinesEnable, voicelineSoundBankPath, 
+                "Play_amyrose_voiceline_lobby_1", "Play_amyrose_voiceline_lobby_2", "Play_amyrose_voiceline_lobby_3", "Play_amyrose_voiceline_lobby_4");
         }
 
         private void InitializeSuperSkills()
