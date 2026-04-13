@@ -469,8 +469,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             voiceline.soundBankFilePath = voicelineSoundBankPath;
             voiceline.voicelinesEnableSkillDef = voicelinesEnable;
             voiceline.Initialize();
-            HedgehogUtils.Voicelines.VoicelineDisplayComponent.AddDisplayPrefabVoicelineComponent(displayPrefab, bodyPrefab, voicelinesGenericSkill.skillFamily, voicelinesEnable, voicelineSoundBankPath, 
-                "Play_amyrose_voiceline_lobby_1", "Play_amyrose_voiceline_lobby_2", "Play_amyrose_voiceline_lobby_3", "Play_amyrose_voiceline_lobby_4");
+            HedgehogUtils.Voicelines.VoicelineDisplayComponent.AddDisplayPrefabVoicelineComponent(displayPrefab, bodyPrefab, voicelinesGenericSkill.skillFamily, voicelinesEnable, voicelineSoundBankPath,
+                AmyVoicelineComponent.lobby1, AmyVoicelineComponent.lobby2, AmyVoicelineComponent.lobby3, AmyVoicelineComponent.lobby4);
         }
 
         private void InitializeSuperSkills()

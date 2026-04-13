@@ -14,6 +14,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
         public static bool stageRankingModFound = false;
 
         #region Voicelines
+        public static NetworkSoundEventDef lobby1;
+        public static NetworkSoundEventDef lobby2;
+        public static NetworkSoundEventDef lobby3;
+        public static NetworkSoundEventDef lobby4;
+
         public static NetworkSoundEventDef bossStart1;
         public static NetworkSoundEventDef bossStart2;
         public static NetworkSoundEventDef[] bossStarts;
@@ -21,6 +26,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
         public void Initialize()
         {
             stageRankingModFound = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(StageRanking.StageRankingPlugin.PluginGUID);
+            lobby1 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_lobby_1");
+            lobby2 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_lobby_2");
+            lobby3 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_lobby_3");
+            lobby4 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_lobby_4");
+
             bossStart1 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_boss_start_1");
             bossStart2 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_boss_start_2");
             bossStarts = new[] { bossStart1, bossStart2 }; 
@@ -33,7 +43,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
             VoicelineManager.OnFinalBossStart += OnFinalBossStart;
             VoicelineManager.OnFinalBossDefeated += OnFinalBossDefeated;
             characterBody.onJump += new CharacterBody.JumpDelegate(OnJump);
-            if (stageRankingModFound) SubscribeStageRanking();
+            if (stageRankingModFound && Util.HasEffectiveAuthority(gameObject)) SubscribeStageRanking();
         }
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
         private void SubscribeStageRanking()
@@ -48,7 +58,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
             VoicelineManager.OnFinalBossStart -= OnFinalBossStart;
             VoicelineManager.OnFinalBossDefeated -= OnFinalBossDefeated;
             characterBody.onJump -= new CharacterBody.JumpDelegate(OnJump);
-            if (stageRankingModFound) UnsubscribeStageRanking();
+            if (stageRankingModFound && Util.HasEffectiveAuthority(gameObject)) UnsubscribeStageRanking();
         }
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
         private void UnsubscribeStageRanking()
