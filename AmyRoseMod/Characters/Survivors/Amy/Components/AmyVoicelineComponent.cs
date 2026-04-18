@@ -18,9 +18,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
         public static NetworkSoundEventDef lobby2;
         public static NetworkSoundEventDef lobby3;
         public static NetworkSoundEventDef lobby4;
+        public static NetworkSoundEventDef lobby5;
 
         public static NetworkSoundEventDef bossStart1;
         public static NetworkSoundEventDef bossStart2;
+        public static NetworkSoundEventDef bossStart3;
+        public static NetworkSoundEventDef bossStart4;
         public static NetworkSoundEventDef[] bossStarts;
         #endregion
         public void Initialize()
@@ -30,10 +33,13 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
             lobby2 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_lobby_2");
             lobby3 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_lobby_3");
             lobby4 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_lobby_4");
+            lobby5 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_lobby_5");
 
             bossStart1 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_boss_start_1");
             bossStart2 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_boss_start_2");
-            bossStarts = new[] { bossStart1, bossStart2 }; 
+            bossStart3 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_boss_start_3");
+            bossStart4 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_boss_start_4");
+            bossStarts = new[] { bossStart1, bossStart2, bossStart3, bossStart4 }; 
         }
         public override void SubscribeEvents()
         {
@@ -123,18 +129,18 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
                 case StageRanking.Ranking.S:
                     PlayVoiceline("Play_amyrose_voiceline_ranking_s", VoicelinePriority.Dialogue);
                     break;
-                /*case StageRanking.Ranking.A:
-                    PlayVoiceline("Play_amyrose_voiceline_ranking_s", VoicelinePriority.Dialogue);
+                case StageRanking.Ranking.A:
+                    PlayVoiceline("Play_amyrose_voiceline_ranking_a", VoicelinePriority.Dialogue);
                     break;
                 case StageRanking.Ranking.B:
-                    PlayVoiceline("Play_amyrose_voiceline_ranking_s", VoicelinePriority.Dialogue);
+                    PlayVoiceline("Play_amyrose_voiceline_ranking_b", VoicelinePriority.Dialogue);
                     break;
                 case StageRanking.Ranking.C:
-                    PlayVoiceline("Play_amyrose_voiceline_ranking_s", VoicelinePriority.Dialogue);
+                    PlayVoiceline("Play_amyrose_voiceline_ranking_c", VoicelinePriority.Dialogue);
                     break;
                 case StageRanking.Ranking.D:
-                    PlayVoiceline("Play_amyrose_voiceline_ranking_s", VoicelinePriority.Dialogue);
-                    break;*/
+                    PlayVoiceline("Play_amyrose_voiceline_ranking_d", VoicelinePriority.Dialogue);
+                    break;
             }
         }
     }

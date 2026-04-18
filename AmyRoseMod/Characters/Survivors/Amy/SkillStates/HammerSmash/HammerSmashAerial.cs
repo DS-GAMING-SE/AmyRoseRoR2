@@ -1,6 +1,7 @@
 ﻿using  AmyRoseMod.Characters.Survivors.Amy;
 using  AmyRoseMod.Characters.Survivors.Amy.SkillStates;
 using EntityStates;
+using HedgehogUtils.Voicelines;
 using R2API;
 using RoR2;
 using System;
@@ -86,6 +87,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                     PlayHitEffect(data);
                 }
             }
+            VoicelineComponent.TryPlayVoiceline(gameObject, charge == 1 ? "Play_amyrose_voiceline_secondary_charged" : "Play_amyrose_voiceline_secondary", VoicelinePriority.Skill);
         }
 
         public virtual void PrepareStats()

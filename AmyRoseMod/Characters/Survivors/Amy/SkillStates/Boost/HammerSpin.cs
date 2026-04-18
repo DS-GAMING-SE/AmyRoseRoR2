@@ -1,9 +1,10 @@
-﻿using AmyRoseMod.Modules.BaseStates;
-using AmyRoseMod.Characters.Survivors.Amy.Components;
+﻿using AmyRoseMod.Characters.Survivors.Amy.Components;
 using AmyRoseMod.Characters.Survivors.Amy.Content;
 using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
+using AmyRoseMod.Modules.BaseStates;
 using EntityStates;
 using HedgehogUtils.Boost;
+using HedgehogUtils.Voicelines;
 using R2API;
 using RoR2;
 using RoR2.Audio;
@@ -119,6 +120,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             }
             emh = EffectManager.GetAndActivatePooledEffect(spinEffectPrefab, FindModelChild("MainHurtbox"), true);
             spinEffectInstance = emh.gameObject;
+
+            VoicelineComponent.TryPlayVoiceline(gameObject, "Play_amyrose_voiceline_charge", VoicelinePriority.Skill);
         }
 
         protected virtual void PrepareBaseStats()

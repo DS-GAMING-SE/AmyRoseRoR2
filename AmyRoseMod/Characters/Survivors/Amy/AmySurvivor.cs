@@ -470,7 +470,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             voiceline.voicelinesEnableSkillDef = voicelinesEnable;
             voiceline.Initialize();
             HedgehogUtils.Voicelines.VoicelineDisplayComponent.AddDisplayPrefabVoicelineComponent(displayPrefab, bodyPrefab, voicelinesGenericSkill.skillFamily, voicelinesEnable, voicelineSoundBankPath,
-                AmyVoicelineComponent.lobby1, AmyVoicelineComponent.lobby2, AmyVoicelineComponent.lobby3, AmyVoicelineComponent.lobby4);
+                AmyVoicelineComponent.lobby1, AmyVoicelineComponent.lobby2, AmyVoicelineComponent.lobby3, AmyVoicelineComponent.lobby4, AmyVoicelineComponent.lobby5);
         }
 
         private void InitializeSuperSkills()

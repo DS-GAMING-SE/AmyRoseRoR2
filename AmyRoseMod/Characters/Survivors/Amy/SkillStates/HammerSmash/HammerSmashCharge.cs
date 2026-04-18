@@ -7,6 +7,7 @@ using R2API;
 using RoR2;
 using System;
 using UnityEngine;
+using HedgehogUtils.Voicelines;
 
 namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 {
@@ -45,6 +46,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             chargeTime = baseChargeTime / characterBody.attackSpeed;
             PlayAnimation("FullBody, Override", "BufferEmpty");
             PlayAnimation("UpperBody, Override", "SecondaryCharge");
+            VoicelineComponent.TryPlayVoiceline(gameObject, "Play_amyrose_voiceline_charge", VoicelinePriority.Skill);
 
             if (base.isAuthority)
             {

@@ -1,7 +1,8 @@
-﻿using AmyRoseMod.Modules.BaseStates;
-using AmyRoseMod.Characters.Survivors.Amy.Content;
+﻿using AmyRoseMod.Characters.Survivors.Amy.Content;
 using AmyRoseMod.Characters.Survivors.Amy.SkillStates;
+using AmyRoseMod.Modules.BaseStates;
 using EntityStates;
+using HedgehogUtils.Voicelines;
 using R2API;
 using RoR2;
 using System;
@@ -28,6 +29,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
             base.OnEnter();
             base.StartAimMode(duration * 1.3f);
+
+            VoicelineComponent.TryPlayVoiceline(gameObject, charge == 1 ? "Play_amyrose_voiceline_secondary_charged" : "Play_amyrose_voiceline_secondary", VoicelinePriority.PrioritySkill);
         }
 
         protected virtual void PrepareAnimationStats()
