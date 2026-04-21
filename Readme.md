@@ -14,10 +14,18 @@ description todo
 | Special - **Multi-Lock** | <img src="https://github.com/DS-GAMING-SE/AmyRoseRoR2/blob/master/AmyRoseUnityProject/Assets/AmyRoseAssets/AmyRoseBundle/Icons/texSpecialMultiLockIcon.png?raw=true" width="128"> | Enter **target painting mode**, then bounce between targets dealing 1100% damage. Can target up to **5**.<details>todo</details> |
 
 # Compatible Mods
-- CustomEmotesAPI
-- LookingGlass
-- RiskOfOptions
-- StandaloneAncientScepter (Upgrades special skill)
+- [CustomEmotesAPI](https://thunderstore.io/package/MetrosexualFruitcake/CustomEmotesAPI/)
+- [LookingGlass](https://thunderstore.io/package/DropPod/LookingGlass/)
+- [RiskOfOptions](https://thunderstore.io/package/Rune580/Risk_Of_Options/)
+- [StandaloneAncientScepter](https://thunderstore.io/package/amogus_lovers/StandaloneAncientScepter/) (Upgrades special skill)
 
-# Collaborators
-- todo
+# Credits
+| Name | Platform | Contribution|
+| ---- | ---- | ------|
+**Woodmeister** (woodie5273) | Discord | Commissioned this mod |
+**DS Gaming** (ds_gaming) | Discord | Code, icons, vfx |
+**Gerdan Virrey** | Fiverr | Models for Amy and her skins |
+**Sno** (snonepe) | Discord | Animations |
+**Sandwich** (sandwich1661) | Discord | Wrote the logbook and some voice lines |
+**Izziibel** | Youtube | Voice acting |
+**SunFun** (fun_justfun) | Twitter | Designed the "Rose" skin and drew the thumbnail for the release trailer |
