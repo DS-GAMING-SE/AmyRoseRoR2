@@ -29,13 +29,23 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
         public static NetworkSoundEventDef bossStart3;
         public static NetworkSoundEventDef bossStart4;
         public static NetworkSoundEventDef[] bossStarts;
+
+        public static NetworkSoundEventDef transform1;
+        public static NetworkSoundEventDef transform2;
+        public static NetworkSoundEventDef[] transforms;
         #region Final Bosses
         public static NetworkSoundEventDef finalBossStartGeneric;
         public static NetworkSoundEventDef finalBossStartGenericEmeralds;
         public static NetworkSoundEventDef finalBossCards;
 
+        public static NetworkSoundEventDef mithrixHammer;
+        public static NetworkSoundEventDef mithrixDontKnowMe;
+
         public static NetworkSoundEventDef voidlingTitan;
         public static NetworkSoundEventDef voidlingWorlds;
+
+        public static NetworkSoundEventDef falseSonElectricPunk;
+        public static NetworkSoundEventDef falseSonLightning;
 
         public static NetworkSoundEventDef solusWingBackHome;
         public static NetworkSoundEventDef solusWingEggman;
@@ -62,14 +72,24 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
             bossStart2 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_boss_start_2");
             bossStart3 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_boss_start_3");
             bossStart4 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_boss_start_4");
-            bossStarts = new[] { bossStart1, bossStart2, bossStart3, bossStart4 }; 
+            bossStarts = new[] { bossStart1, bossStart2, bossStart3, bossStart4 };
+
+            transform1 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_transform_1");
+            transform2 = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_transform_2");
+            transforms = new[] { transform1, transform2 };
 
             finalBossStartGeneric = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_final_boss_start");
             finalBossStartGenericEmeralds = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_final_boss_start_emeralds");
             finalBossCards = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_final_boss_cards");
 
+            mithrixHammer = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_mithrix_hammer");
+            mithrixDontKnowMe = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_mithrix_dont_know_me");
+
             voidlingTitan = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_voidling_titan");
             voidlingWorlds = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_voidling_worlds");
+
+            falseSonElectricPunk = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_false_son_electric_punk");
+            falseSonLightning = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_false_son_lightning");
 
             solusWingBackHome = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_solus_wing_back_home");
             solusWingEggman = Modules.Content.CreateAndAddNetworkSoundEventDef("Play_amyrose_voiceline_solus_wing_eggman");
@@ -84,13 +104,15 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
         }
         public override void SubscribeEvents()
         {
+            AkSoundEngine.SetSwitch("Multiplayer", PlayerCharacterMasterController.instances.Count > 1 ? "Multiplayer" : "Singleplayer", base.gameObject);
             formComponent = base.GetComponent<FormComponent>();
+            HedgehogUtils.Forms.EntityStates.GenericTransformationBase.OnGenericTransform += OnTransform;
             VoicelineManager.OnStageStart += OnStageStart;
             VoicelineManager.OnBossStart += OnBossStart;
-            VoicelineManager.OnBossDefeated += OnBossDefeated;
             VoicelineManager.OnFinalBossStart += OnFinalBossStart;
             VoicelineManager.OnFinalBossDefeated += OnFinalBossDefeated;
             characterBody.onJump += new CharacterBody.JumpDelegate(OnJump);
+            GlobalEventManager.onClientDamageNotified += TakeMajorDamage;
             if (stageRankingModFound && Util.HasEffectiveAuthority(gameObject)) SubscribeStageRanking();
         }
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
@@ -100,12 +122,13 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
         }
         public override void UnsubscribeEvents()
         {
+            HedgehogUtils.Forms.EntityStates.GenericTransformationBase.OnGenericTransform -= OnTransform;
             VoicelineManager.OnStageStart -= OnStageStart;
             VoicelineManager.OnBossStart -= OnBossStart;
-            VoicelineManager.OnBossDefeated -= OnBossDefeated;
             VoicelineManager.OnFinalBossStart -= OnFinalBossStart;
             VoicelineManager.OnFinalBossDefeated -= OnFinalBossDefeated;
             characterBody.onJump -= new CharacterBody.JumpDelegate(OnJump);
+            GlobalEventManager.onClientDamageNotified -= TakeMajorDamage;
             if (stageRankingModFound && Util.HasEffectiveAuthority(gameObject)) UnsubscribeStageRanking();
         }
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
@@ -113,9 +136,28 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
         {
             StageRanking.StageRankingPanel.OnStageRankingPanelEnd -= OnStageRanking;
         }
+        private void TakeMajorDamage(DamageDealtMessage damage)
+        {
+            if (damage.victim && damage.victim == base.gameObject && !damage.isSilent && damage.damage >= characterBody.maxHealth * 0.34f)
+            {
+                PlayVoiceline("Play_amyrose_voiceline_damage", VoicelinePriority.Skill);
+            }
+        }
+        public override void OnDeathStart()
+        {
+            base.OnDeathStart();
+            PlayVoiceline("Play_amyrose_voiceline_death", VoicelinePriority.Dialogue);
+        }
         private void OnJump()
         {
             PlayVoiceline("Play_amyrose_voiceline_jump", VoicelinePriority.Any);
+        }
+        private void OnTransform(FormComponent formComponent, FormDef form)
+        {
+            if (Util.HasEffectiveAuthority(gameObject) && formComponent == this.formComponent && form == SuperFormDef.superFormDef)
+            {
+                PlayNetworkedVoiceline(transforms.GetRandom().index, VoicelinePriority.Dialogue);
+            }
         }
         private void OnStageStart(Stage stage, List<NetworkedVoiceline> networkedVoicelines)
         {
@@ -129,16 +171,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
         {
             networkedVoicelines.Add(new NetworkedVoiceline(this, bossStarts.GetRandom().index, VoicelinePriority.PriorityDialogue));
         }
-        private void OnBossDefeated(BodyIndex boss, List<NetworkedVoiceline> networkedVoicelines)
-        {
-            
-        }
         private void OnFinalBossStart(FinalBoss finalBoss, List<NetworkedVoiceline> networkedVoicelines)
         {
             switch (finalBoss)
             {
                 case FinalBoss.Mithrix1:
-                    Chat.AddMessage("hammer");
+                    networkedVoicelines.Add(new NetworkedVoiceline(this, mithrixHammer.index, VoicelinePriority.PriorityDialogue));
                     return;
                 case FinalBoss.Voidling1:
                     networkedVoicelines.Add(new NetworkedVoiceline(this, voidlingTitan.index, VoicelinePriority.PriorityDialogue));
@@ -147,10 +185,10 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
                     networkedVoicelines.Add(new NetworkedVoiceline(this, voidlingWorlds.index, VoicelinePriority.PriorityDialogue));
                     return;
                 case FinalBoss.FalseSon1:
-                    Chat.AddMessage("electric punk");
+                    networkedVoicelines.Add(new NetworkedVoiceline(this, falseSonElectricPunk.index, VoicelinePriority.PriorityDialogue));
                     return;
                 case FinalBoss.FalseSon2:
-                    Chat.AddMessage("faster than lightning");
+                    networkedVoicelines.Add(new NetworkedVoiceline(this, falseSonLightning.index, VoicelinePriority.PriorityDialogue));
                     return;
                 case FinalBoss.SolusWing:
                     networkedVoicelines.Add(new NetworkedVoiceline(this, solusWingBackHome.index, VoicelinePriority.PriorityDialogue));
@@ -186,7 +224,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Components
                 networkedVoicelines.Add(new NetworkedVoiceline(this, solusWingEggman.index, VoicelinePriority.PriorityDialogue));
                 return;
             }
-            if (finalBoss == FinalBoss.Mithrix1) Chat.AddMessage("you don't know me");
+            if (finalBoss == FinalBoss.Mithrix1)
+            {
+                networkedVoicelines.Add(new NetworkedVoiceline(this, mithrixDontKnowMe.index, VoicelinePriority.PriorityDialogue));
+                return;
+            }
             if (finalBoss == FinalBoss.Mithrix4 || finalBoss == FinalBoss.Voidling3 || finalBoss == FinalBoss.FalseSon3 || finalBoss == FinalBoss.SolusWing || finalBoss == FinalBoss.SolusHeart3 || finalBoss == FinalBoss.LunarScavenger || finalBoss == FinalBoss.Arraign2) 
             {
                 networkedVoicelines.Add(new NetworkedVoiceline(this, finalBossDefeats.GetRandom().index, VoicelinePriority.PriorityDialogue));
