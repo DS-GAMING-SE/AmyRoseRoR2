@@ -3,6 +3,7 @@ using AmyRoseMod.Characters.Survivors.Amy.Content;
 using EntityStates;
 using HedgehogUtils;
 using HedgehogUtils.Boost;
+using HG;
 using RoR2;
 using RoR2.Audio;
 using RoR2.Orbs;
@@ -38,10 +39,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         protected float predictedTimeUntilArrival;
 
-        protected AmyOrbs.MultiLockOrb orb;
-
-        protected CharacterModel characterModel;
-
         public MultiLockCameraProvider camera;
 
         public virtual Type nextStateType { get { return typeof(MultiLockEnd); } }
@@ -65,7 +62,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             }
             if (NetworkServer.active)
             {
-                FireOrb();
                 base.characterBody.AddBuff(RoR2Content.Buffs.Intangible);
                 base.characterBody.AddBuff(DLC3Content.Buffs.Untargetable);
             }
@@ -79,18 +75,16 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
             {
                 targetLastPosition = base.transform.position;
             }
-            if (base.modelLocator && base.modelLocator.modelTransform)
-            {
-                characterModel = base.modelLocator.modelTransform.GetComponent<CharacterModel>();
-                if (characterModel)
-                {
-                    characterModel.invisibilityCount++;
-                }
-            }
+            modelLocator.autoUpdateModelTransform = false;
 
             if (firstAttack)
             {
                 Util.PlaySound("Play_amyrose_multilock_start", base.gameObject);
+                PlayAnimation("FullBody, Override", "Spin", "Roll.playbackRate", 0.25f);
+            }
+            else
+            {
+                PlayAnimation("FullBody, Override", "SpinLoop", "Roll.playbackRate", 0.25f);
             }
         }
 
@@ -120,7 +114,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 {
                     base.characterMotor.velocity = Vector3.zero;
                 }
-                if (fixedAge >= predictedTimeUntilArrival) // on orb hits
+            }
+            if (fixedAge >= predictedTimeUntilArrival + 0.05f) // on orb hits
+            {
+                OnHit();
+                if (base.isAuthority)
                 {
                     if (targets.Count > 1)
                     {
@@ -135,6 +133,17 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                     SetNextStateToEnd();
                     return;
                 }
+            }
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (modelLocator.modelTransform)
+            {
+                Vector3 direction = targetLastPosition - orbStartPosition;
+                direction.y = 0;
+                modelLocator.modelTransform.SetPositionAndRotation(Vector3.Lerp(orbStartPosition, targetLastPosition, age / predictedTimeUntilArrival), Quaternion.LookRotation(direction));
             }
         }
 
@@ -153,13 +162,47 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 }
             }
         }
-
-        public virtual void FireOrb()
+        public virtual void OnHit()
         {
-            if (!target) { return; }
-            orb = AmyOrbs.CreateMultiLockOrb<AmyOrbs.MultiLockOrb>(AmyStaticValues.specialMultiLockDamageCoefficient * damageStat, base.gameObject, this.outer, Util.CheckRoll(this.critStat, base.characterBody.master), 
-                AmyAssets.multiLockProjectilePrefab, orbSpeed, orbStartPosition, target, OrbStorageUtility.Get("Prefabs/Effects/OrbEffects/HuntressGlaiveOrbEffect"));
-            OrbManager.instance.AddOrb(orb);
+            if (target)
+            {
+                if (NetworkServer.active)
+                {
+                    FireProjectile();
+                    StunTarget();
+                }
+                CreateOnHitVFX();
+            }
+        }
+        protected virtual GameObject GetProjectilePrefab()
+        {
+            return AmyAssets.multiLockProjectilePrefab;
+        }
+        protected virtual void FireProjectile()
+        {
+            GameObject projectilePrefab = GetProjectilePrefab();
+            if (projectilePrefab)
+            {
+                Vector3 forward = targetLastPosition - orbStartPosition;
+                forward.y = 0;
+                RoR2.Projectile.ProjectileManager.instance.FireProjectile(projectilePrefab, targetLastPosition,
+                    Quaternion.LookRotation(forward.normalized, Vector3.up), gameObject, AmyStaticValues.specialMultiLockDamageCoefficient * damageStat, 0, Util.CheckRoll(this.critStat, base.characterBody.master), DamageColorIndex.Default, target.gameObject);
+            }
+        }
+        protected virtual void CreateOnHitVFX()
+        {
+            EffectManager.SimpleEffect(AmyAssets.multiLockHeartSpawnEffect, targetLastPosition, Quaternion.identity, false);
+        }
+
+        protected void StunTarget()
+        {
+            if (target.healthComponent && target.healthComponent.gameObject.TryGetComponent<SetStateOnHurt>(out SetStateOnHurt stun))
+            {
+                if (stun.targetStateMachine && stun.canBeStunned && stun.spawnedOverNetwork)
+                {
+                    stun.SetStun(AmyStaticValues.specialMultiLockDetonationTime);
+                }
+            }
         }
 
         public virtual void SetNextStateToOrb()
@@ -183,10 +226,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public override void OnExit()
         {
-            if (characterModel)
-            {
-                characterModel.invisibilityCount--;
-            }
             if (NetworkServer.active)
             {
                 base.characterBody.RemoveBuff(RoR2Content.Buffs.Intangible);
@@ -197,10 +236,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                 base.characterDirection.forward = (targetLastPosition - orbStartPosition).normalized;
                 base.characterDirection.moveVector = (targetLastPosition - orbStartPosition).normalized;
             }
+            PlayAnimation("FullBody, Override", "BufferEmpty");
+            modelLocator.autoUpdateModelTransform = true;
             if (camera)
             {
                 camera.EndCameraMove();
-                Destroy(camera);
             }
             base.OnExit();
         }
@@ -247,7 +287,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         
         public static MultiLockCameraProvider StartCameraMove(GameObject user, Vector3 orbStartPosition, Vector3 targetPosition, float lerpTime)
         {
-            MultiLockCameraProvider provider = user.AddComponent<MultiLockCameraProvider>();
+            MultiLockCameraProvider provider = user.EnsureComponent<MultiLockCameraProvider>();
             provider.orbStartPosition = orbStartPosition;
             provider.targetPosition = targetPosition;
             provider.user = user;

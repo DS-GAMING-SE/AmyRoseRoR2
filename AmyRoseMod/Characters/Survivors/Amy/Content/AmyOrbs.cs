@@ -18,7 +18,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Content
 {
     public static class AmyOrbs
     {
-        public static T CreateMultiLockOrb<T>(float damage, GameObject attacker, EntityStateMachine bodyState, bool crit, GameObject projectilePrefab, float speed, Vector3 origin, HurtBox target, GameObject orbEffectPrefab) where T : MultiLockOrb
+        /*public static T CreateMultiLockOrb<T>(float damage, GameObject attacker, EntityStateMachine bodyState, bool crit, GameObject projectilePrefab, float speed, Vector3 origin, HurtBox target, GameObject orbEffectPrefab) where T : MultiLockOrb
         {
             if (!target) { return null; }
             MultiLockOrb orb = new MultiLockOrb
@@ -102,7 +102,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy.Content
                 return target.transform.position + (Vector3.up * target.collider.bounds.extents.y * 1.2f);
             }
         }
-
+        */
         public class MultiLockScepterBuffOrb : Orb
         {
             public int buffMaxStacks = AmyStaticValues.scepterSpecialMultiLockBuffMaxStack;

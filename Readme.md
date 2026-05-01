@@ -28,4 +28,5 @@ description todo
 **Sno** (snonepe) | Discord | Animations |
 **Sandwich** (sandwich1661) | Discord | Wrote the logbook and some voice lines |
 **Izziibel** | Youtube | Voice acting |
-**SunFun** (fun_justfun) | Twitter | Designed the "Rose" skin and drew the thumbnail for the release trailer |
+**SunFun** (fun_justfun) | Twitter | Created the "Rose" skin's design and drew the thumbnail for the release trailer |
+**SashiroGoldenHeart** (GoldenSashiro) | Twitter | Created the "Malware" skin's design |

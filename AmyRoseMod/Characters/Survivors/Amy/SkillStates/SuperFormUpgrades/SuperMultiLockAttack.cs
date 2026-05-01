@@ -23,16 +23,16 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates.SuperFormUpgrades
         public override Type nextStateType { get { return typeof(SuperMultiLockEnd); } }
         public override void OnEnter()
         {
-            base.OnEnter();
             orbSpeed = AmyStaticValues.superSpecialMultiLockOrbSpeed;
+            base.OnEnter();
         }
-        
-        public override void FireOrb()
+        protected override GameObject GetProjectilePrefab()
         {
-            if (!target) { return; }
-            orb = AmyOrbs.CreateMultiLockOrb<AmyOrbs.MultiLockOrb>(AmyStaticValues.specialMultiLockDamageCoefficient * damageStat, base.gameObject, this.outer, Util.CheckRoll(this.critStat, base.characterBody.master), 
-                AmyAssets.superMultiLockProjectilePrefab, orbSpeed, orbStartPosition, target, OrbStorageUtility.Get("Prefabs/Effects/OrbEffects/HuntressGlaiveOrbEffect"));
-            OrbManager.instance.AddOrb(orb);
+            return AmyAssets.superMultiLockProjectilePrefab;
+        }
+        protected override void CreateOnHitVFX()
+        {
+            EffectManager.SimpleEffect(AmyAssets.superMultiLockHeartSpawnEffect, targetLastPosition, Quaternion.identity, false);
         }
     }
 }
