@@ -315,17 +315,17 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             };
 
             // Boost
-            amyBoostFlashEffect = HedgehogUtils.Assets.CreateNewBoostFlash("AmyBoostFlash", 1, 1f,
-                new Color(1, 1, 1), AmySurvivor.amyColor, new Color(0.5f, 0.07f, 0.3f), AmySurvivor.amyColor);
-            amyBoostAuraEffect = HedgehogUtils.Assets.CreateNewBoostAura("AmyBoostAura", 1, 0.4f,
-                new Color(1, 1, 1), AmySurvivor.amyColor, new Color(0.5f, 0.07f, 0.3f), AmySurvivor.amyColor);
-            superAmyBoostFlashEffect = HedgehogUtils.Assets.CreateNewBoostFlash("AmySuperBoostFlash", 1.3f, 1.6f,
-                new Color(1, 1, 1), AmySurvivor.superAmyColor, new Color(1f, 0.2f, 0.3f), AmySurvivor.superAmyColor);
-            superAmyBoostAuraEffect = HedgehogUtils.Assets.CreateNewBoostAura("AmySuperBoostAura", 1.3f, 0.8f,
-                new Color(1, 1, 1), AmySurvivor.superAmyColor, new Color(1f, 0.2f, 0.3f), AmySurvivor.superAmyColor);
+            amyBoostFlashEffect = HedgehogUtils.Assets.CreateBoostFlashEffect("AmyBoostFlash", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"), AmySurvivor.amyColor);
+            //amyBoostFlashEffect = HedgehogUtils.Assets.CreateNewBoostFlash("AmyBoostFlash", 1, 1f, new Color(1, 1, 1), AmySurvivor.amyColor, new Color(0.5f, 0.07f, 0.3f), AmySurvivor.amyColor);
+            amyBoostAuraEffect = HedgehogUtils.Assets.CreateBoostAuraEffect("AmyBoostAura", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"), AmySurvivor.amyColor);
+            //amyBoostAuraEffect = HedgehogUtils.Assets.CreateNewBoostAura("AmyBoostAura", 1, 0.4f, new Color(1, 1, 1), AmySurvivor.amyColor, new Color(0.5f, 0.07f, 0.3f), AmySurvivor.amyColor);
+            superAmyBoostFlashEffect = HedgehogUtils.Assets.CreateBoostFlashEffect("AmySuperBoostFlash", assetBundle.LoadAsset<Texture>("texRampAmySuperEnergy"), AmySurvivor.amyColor2);
+            //superAmyBoostFlashEffect = HedgehogUtils.Assets.CreateNewBoostFlash("AmySuperBoostFlash", 1.3f, 1.6f, new Color(1, 1, 1), AmySurvivor.superAmyColor, new Color(1f, 0.2f, 0.3f), AmySurvivor.superAmyColor);
+            superAmyBoostAuraEffect = HedgehogUtils.Assets.CreateBoostAuraEffect("AmySuperBoostAura", assetBundle.LoadAsset<Texture>("texRampAmySuperEnergy"), AmySurvivor.amyColor2);
+            //superAmyBoostAuraEffect = HedgehogUtils.Assets.CreateNewBoostAura("AmySuperBoostAura", 1.3f, 0.8f, new Color(1, 1, 1), AmySurvivor.superAmyColor, new Color(1f, 0.2f, 0.3f), AmySurvivor.superAmyColor);
 
             // Multi-Lock Heart Material
-            AsyncOperationHandle<Material> asyncMultiLockHeartMaterial = Addressables.LoadAssetAsync<Material>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_Base_Grandparent.matGrandParentSunCore_mat);
+            AsyncOperationHandle <Material> asyncMultiLockHeartMaterial = Addressables.LoadAssetAsync<Material>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_Base_Grandparent.matGrandParentSunCore_mat);
             asyncMultiLockHeartMaterial.Completed += delegate (AsyncOperationHandle<Material> x)
             {
                 multiLockHeartMaterial = CreateMultiLockHeart(x.Result, assetBundle.LoadAsset<Texture>("texRampAmyEnergy"));

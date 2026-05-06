@@ -405,7 +405,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                     alpha.Restart();
                 }
             }
-            else { Destroy(spinEffectInstance); }
             base.OnExit();
         }
 
