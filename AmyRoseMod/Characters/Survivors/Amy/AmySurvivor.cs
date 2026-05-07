@@ -612,8 +612,6 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 AmyUnlockables.decompileSkinUnlockableDef);
 
             /* SKIN MATERIAL EDIT NOTES
-             * texAmyBase.SetSpecular(0.3f);
-             * texAmyBaseSuper.SetSpecular(0.3f).SetEmission(0.8f);
              * texAmyDefaultOutfit.SetSpecular(0.3f).GoldFresnel(texAmyDefaultOutfitFresnelMask);
              * texAmyPaladinOutfit.SetSpecular(0.3f).MetalFresnel(texAmyPaladinOutfitFresnelMask);
              * texAmyFortuneTellerOutfit.SetSpecular(0.3f).GoldFresnel(texAmyFortuneTellerOutfitFresnelMask);

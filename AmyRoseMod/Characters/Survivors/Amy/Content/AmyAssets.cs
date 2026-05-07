@@ -258,7 +258,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             superHammerHitImpactEffect = _assetBundle.LoadEffect("AmySuperHammerHitEffect", false, 0);
             superHammerHitImpactEffect.AddComponent<DestroyOnParticleEnd>().trackedParticleSystem = superHammerHitImpactEffect.transform.Find("HammerHitHeartImpact").GetComponent<ParticleSystem>();
             multiLockHeartSpawnEffect = _assetBundle.LoadEffect("AmyMultiLockSpawnHeartEffect", false, 0.7f);
+            multiLockHeartSpawnEffect.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Medium;
             superMultiLockHeartSpawnEffect = _assetBundle.LoadEffect("AmySuperMultiLockSpawnHeartEffect", false, 0.7f);
+            superMultiLockHeartSpawnEffect.GetComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Medium;
 
             // Tracer Glow Material
             AsyncOperationHandle<Material> asyncTracerMaterial = Addressables.LoadAssetAsync<Material>(RoR2BepInExPack.GameAssetPaths.Version_1_39_0.RoR2_Base_Common_VFX.matTracerBright_mat);
@@ -315,13 +317,13 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             };
 
             // Boost
-            amyBoostFlashEffect = HedgehogUtils.Assets.CreateBoostFlashEffect("AmyBoostFlash", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"), AmySurvivor.amyColor);
+            amyBoostFlashEffect = HedgehogUtils.Assets.CreateBoostFlashEffect("AmyBoostFlash", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"), Color.white, AmySurvivor.amyColor, true, 1f);
             //amyBoostFlashEffect = HedgehogUtils.Assets.CreateNewBoostFlash("AmyBoostFlash", 1, 1f, new Color(1, 1, 1), AmySurvivor.amyColor, new Color(0.5f, 0.07f, 0.3f), AmySurvivor.amyColor);
-            amyBoostAuraEffect = HedgehogUtils.Assets.CreateBoostAuraEffect("AmyBoostAura", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"), AmySurvivor.amyColor);
+            amyBoostAuraEffect = HedgehogUtils.Assets.CreateBoostAuraEffect("AmyBoostAura", assetBundle.LoadAsset<Texture>("texRampAmyEnergy"), Color.white, AmySurvivor.amyColor, AmySurvivor.amyColor2, 1f);
             //amyBoostAuraEffect = HedgehogUtils.Assets.CreateNewBoostAura("AmyBoostAura", 1, 0.4f, new Color(1, 1, 1), AmySurvivor.amyColor, new Color(0.5f, 0.07f, 0.3f), AmySurvivor.amyColor);
-            superAmyBoostFlashEffect = HedgehogUtils.Assets.CreateBoostFlashEffect("AmySuperBoostFlash", assetBundle.LoadAsset<Texture>("texRampAmySuperEnergy"), AmySurvivor.amyColor2);
+            superAmyBoostFlashEffect = HedgehogUtils.Assets.CreateBoostFlashEffect("AmySuperBoostFlash", assetBundle.LoadAsset<Texture>("texRampAmySuperEnergy"), Color.white, AmySurvivor.superAmyColor, true, 1.25f);
             //superAmyBoostFlashEffect = HedgehogUtils.Assets.CreateNewBoostFlash("AmySuperBoostFlash", 1.3f, 1.6f, new Color(1, 1, 1), AmySurvivor.superAmyColor, new Color(1f, 0.2f, 0.3f), AmySurvivor.superAmyColor);
-            superAmyBoostAuraEffect = HedgehogUtils.Assets.CreateBoostAuraEffect("AmySuperBoostAura", assetBundle.LoadAsset<Texture>("texRampAmySuperEnergy"), AmySurvivor.amyColor2);
+            superAmyBoostAuraEffect = HedgehogUtils.Assets.CreateBoostAuraEffect("AmySuperBoostAura", assetBundle.LoadAsset<Texture>("texRampAmySuperEnergy"), Color.white, AmySurvivor.superAmyColor ,AmySurvivor.amyColor2, 1.25f);
             //superAmyBoostAuraEffect = HedgehogUtils.Assets.CreateNewBoostAura("AmySuperBoostAura", 1.3f, 0.8f, new Color(1, 1, 1), AmySurvivor.superAmyColor, new Color(1f, 0.2f, 0.3f), AmySurvivor.superAmyColor);
 
             // Multi-Lock Heart Material
@@ -468,8 +470,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             Material newMat = new Material(input);
             newMat.SetTexture("_RemapTex", ramp);
             newMat.SetFloat("_FresnelPower", -1f);
-            newMat.SetFloat("_AlphaBoost", 7.2f);
-            newMat.SetFloat("_AlphaBias", 0.5f);
+            newMat.SetFloat("_AlphaBoost", 6.5f);
+            newMat.SetFloat("_AlphaBias", 0.6f);
             return newMat;
         }
 

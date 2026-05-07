@@ -100,7 +100,7 @@ PrefabInstance:
     - target: {fileID: 7315419987065360615, guid: 273ed6c5a58441749bffe0fdbe1be3f0,
         type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8045717902982014093, guid: 273ed6c5a58441749bffe0fdbe1be3f0,
         type: 3}
