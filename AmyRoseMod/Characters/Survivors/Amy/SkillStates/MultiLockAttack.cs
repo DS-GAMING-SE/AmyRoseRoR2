@@ -41,6 +41,8 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public MultiLockCameraProvider camera;
 
+        protected bool hit;
+
         public virtual Type nextStateType { get { return typeof(MultiLockEnd); } }
 
         public override void OnEnter()
@@ -115,8 +117,9 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
                     base.characterMotor.velocity = Vector3.zero;
                 }
             }
-            if (fixedAge >= predictedTimeUntilArrival + 0.05f) // on orb hits
+            if (!hit && fixedAge >= predictedTimeUntilArrival + 0.05f) // on orb hits
             {
+                hit = true;
                 OnHit();
                 if (base.isAuthority)
                 {
@@ -166,9 +169,12 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
         {
             if (target)
             {
-                if (NetworkServer.active)
+                if (base.isAuthority)
                 {
                     FireProjectile();
+                }
+                if (NetworkServer.active)
+                {
                     StunTarget();
                 }
                 CreateOnHitVFX();
@@ -226,6 +232,11 @@ namespace AmyRoseMod.Characters.Survivors.Amy.SkillStates
 
         public override void OnExit()
         {
+            if (!hit)
+            {
+                hit = true;
+                OnHit();
+            }
             if (NetworkServer.active)
             {
                 base.characterBody.RemoveBuff(RoR2Content.Buffs.Intangible);
