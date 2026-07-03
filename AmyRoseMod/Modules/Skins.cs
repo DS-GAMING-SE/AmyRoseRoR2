@@ -1,4 +1,5 @@
-﻿using R2API;
+﻿using AmyRoseMod.Characters.Survivors.Amy;
+using R2API;
 using RoR2;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,7 @@ namespace AmyRoseMod.Modules
             skinDef.projectileGhostReplacements = skinDefInfo.ProjectileGhostReplacements;
             skinDef.minionSkinReplacements = skinDefInfo.MinionSkinReplacements;
             skinDef.nameToken = skinDefInfo.NameToken;
-            skinDef.name = skinDefInfo.Name;
+            skinDef.name = AmySurvivor.AMY_PREFIX + skinDefInfo.Name;
 
             On.RoR2.SkinDef.Awake -= DoNothing;
 

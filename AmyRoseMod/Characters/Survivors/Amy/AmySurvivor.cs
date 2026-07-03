@@ -580,7 +580,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 rendererInfo = defaultSkinSuperRenderer,
                 mesh = defaultSkinSuperMeshes
             };
-            Forms.AddSkinForForm(defaultSkin.nameToken,
+            Forms.AddSkinForForm(defaultSkin.name,
                 defaultSkinSuper,
                 ref SuperFormDef.superFormDef);
             #endregion
@@ -590,22 +590,22 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             #region MasterySkin
 
             ////creating a new skindef as we did before
-            SkinDef ridersSkin = Modules.Skins.CreateSkinDef(AMY_PREFIX + "RIDERS_SKIN_NAME",
+            SkinDef ridersSkin = Modules.Skins.CreateSkinDef("RIDERS_SKIN_NAME",
                 assetBundle.LoadAsset<Sprite>("texRidersSkinIcon"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject,
                 AmyUnlockables.masterySkinUnlockableDef);
-            SkinDef paladinSkin = Modules.Skins.CreateSkinDef(AMY_PREFIX + "PALADIN_SKIN_NAME",
+            SkinDef paladinSkin = Modules.Skins.CreateSkinDef("PALADIN_SKIN_NAME",
                 assetBundle.LoadAsset<Sprite>("texPaladinSkinIcon"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject,
                 AmyUnlockables.grandMasterySkinUnlockableDef);
-            SkinDef fortuneTellerSkin = Modules.Skins.CreateSkinDef(AMY_PREFIX + "FORTUNE_TELLER_SKIN_NAME",
+            SkinDef fortuneTellerSkin = Modules.Skins.CreateSkinDef("FORTUNE_TELLER_SKIN_NAME",
                 assetBundle.LoadAsset<Sprite>("texFortuneTellerSkinIcon"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject,
                 AmyUnlockables.masterySkinUnlockableDef);
-            SkinDef malwareSkin = Modules.Skins.CreateSkinDef(AMY_PREFIX + "MALWARE_SKIN_NAME",
+            SkinDef malwareSkin = Modules.Skins.CreateSkinDef("MALWARE_SKIN_NAME",
                 assetBundle.LoadAsset<Sprite>("texMalwareSkinIcon"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject,
