@@ -11,6 +11,10 @@ namespace AmyRoseMod.Modules
     {
         internal static SkinDef CreateSkinDef(string skinName, Sprite skinIcon, CharacterModel.RendererInfo[] defaultRendererInfos, GameObject root, UnlockableDef unlockableDef = null)
         {
+            return CreateSkinDef(AmySurvivor.AMY_PREFIX + skinName, AmySurvivor.AMY_PREFIX + skinName, skinIcon, defaultRendererInfos, root, unlockableDef);
+        }
+        internal static SkinDef CreateSkinDef(string skinName, string skinNameToken, Sprite skinIcon, CharacterModel.RendererInfo[] defaultRendererInfos, GameObject root, UnlockableDef unlockableDef = null)
+        {
             SkinDefInfo skinDefInfo = new SkinDefInfo
             {
                 BaseSkins = Array.Empty<SkinDef>(),
@@ -40,7 +44,7 @@ namespace AmyRoseMod.Modules
             skinDef.projectileGhostReplacements = skinDefInfo.ProjectileGhostReplacements;
             skinDef.minionSkinReplacements = skinDefInfo.MinionSkinReplacements;
             skinDef.nameToken = skinDefInfo.NameToken;
-            skinDef.name = AmySurvivor.AMY_PREFIX + skinDefInfo.Name;
+            skinDef.name = skinDefInfo.Name;
 
             On.RoR2.SkinDef.Awake -= DoNothing;
 

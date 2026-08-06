@@ -343,39 +343,15 @@ namespace AmyRoseMod.Characters.Survivors.Amy
             Skills.CreateGenericSkillWithSkillFamily(bodyPrefab, SkillSlot.Utility);
 
             //here's a skilldef of a typical movement skill.
-            utilityBoost = Skills.CreateSkillDef<AmySkillDefs.AmyBoostSkillDef>(new SkillDefInfo
-            {
-                skillName = "AmyBoost",
-                skillNameToken = AMY_PREFIX + "UTILITY_BOOST_NAME",
-                skillDescriptionToken = AMY_PREFIX + "UTILITY_BOOST_DESCRIPTION",
-                keywordTokens = new string[] { AMY_PREFIX + "HAMMER_SPIN_KEYWORD", HedgehogUtils.Language.launchKeyword, AMY_PREFIX + "DIZZY_KEYWORD" },
-                skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityBoostIcon"),
-
-                activationState = new EntityStates.SerializableEntityStateType(typeof(Boost)),
-                activationStateMachineName = "Body",
-                interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
-
-                baseRechargeInterval = 0f,
-                baseMaxStock = 1,
-
-                rechargeStock = 0,
-                requiredStock = 1,
-                stockToConsume = 0,
-
-                resetCooldownTimerOnUse = false,
-                fullRestockOnAssign = true,
-                dontAllowPastMaxStocks = false,
-                mustKeyPress = true,
-                beginSkillCooldownOnSkillEnd = false,
-
-                isCombatSkill = false,
-                canceledFromSprinting = false,
-                cancelSprintingOnActivation = false,
-                forceSprintDuringState = true,
-            });
-            utilityBoost.boostIdleState = new EntityStates.SerializableEntityStateType(typeof(BoostIdle));
-            utilityBoost.brakeState = new EntityStates.SerializableEntityStateType(typeof(Brake));
-            utilityBoost.boostHUDColor = amyColor;
+            utilityBoost = CreateBoostSkillDef<AmySkillDefs.AmyBoostSkillDef>(
+                AMY_PREFIX + "UTILITY_BOOST_NAME",
+                AMY_PREFIX + "UTILITY_BOOST_DESCRIPTION",
+                assetBundle.LoadAsset<Sprite>("texUtilityBoostIcon"),
+                new EntityStates.SerializableEntityStateType(typeof(Boost)),
+                new EntityStates.SerializableEntityStateType(typeof(BoostIdle)),
+                new EntityStates.SerializableEntityStateType(typeof(Brake)),
+                amyColor);
+            utilityBoost.keywordTokens = new string[] { AMY_PREFIX + "HAMMER_SPIN_KEYWORD", HedgehogUtils.Language.launchKeyword, AMY_PREFIX + "DIZZY_KEYWORD" };
 
             Skills.AddUtilitySkills(bodyPrefab, utilityBoost);
 
@@ -561,7 +537,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
 
             #region DefaultSkin
             //this creates a SkinDef with all default fields
-            SkinDef defaultSkin = Skins.CreateSkinDef("DEFAULT_SKIN",
+            SkinDef defaultSkin = Skins.CreateSkinDef(AMY_PREFIX + "DEFAULT_SKIN", "DEFAULT_SKIN",
                 assetBundle.LoadAsset<Sprite>("texDefaultSkinIcon"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject);
@@ -580,9 +556,7 @@ namespace AmyRoseMod.Characters.Survivors.Amy
                 rendererInfo = defaultSkinSuperRenderer,
                 mesh = defaultSkinSuperMeshes
             };
-            Forms.AddSkinForForm(defaultSkin.name,
-                defaultSkinSuper,
-                ref SuperFormDef.superFormDef);
+            Forms.AddSkinForForm(defaultSkin, defaultSkinSuper, ref SuperFormDef.superFormDef);
             #endregion
             #endregion
 
